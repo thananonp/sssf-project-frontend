@@ -1,15 +1,8 @@
 import React, {Component} from "react";
 import {Route, Switch, useRouteMatch} from "react-router";
 import {Link, useParams} from "react-router-dom";
-
-// export default class Staff extends Component {
-//     render() {
-//         return (
-//             Staffs()
-//         )
-//     }
-// }
-
+import Login from "./Login";
+import Register from "./Register";
 
 export function Staffs() {
     let {path, url} = useRouteMatch();
@@ -19,13 +12,10 @@ export function Staffs() {
             <h2>Topics</h2>
             <ul>
                 <li>
-                    <Link to={`${url}/rendering`}>Rendering with React</Link>
+                    <Link to={`${url}/register`}>Register</Link>
                 </li>
                 <li>
-                    <Link to={`${url}/components`}>Components</Link>
-                </li>
-                <li>
-                    <Link to={`${url}/props-v-state`}>Props v. State</Link>
+                    <Link to={`${url}/login`}>Login</Link>
                 </li>
             </ul>
 
@@ -47,10 +37,19 @@ export function Topic() {
     // of the URL indicates a placeholder that we can
     // get from `useParams()`.
     let {topicId} = useParams();
+    if(topicId === "register"){
+        return (
+            <div>
+                <Register/>
+            </div>
+        );
+    }if(topicId === "login"){
+        return (
+            <div>
+                <Login/>
+            </div>
+        );
+    }
 
-    return (
-        <div>
-            <h3>{topicId}</h3>
-        </div>
-    );
+
 }
