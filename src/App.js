@@ -17,36 +17,62 @@ import Book from "./pages/Book";
 import Author from "./pages/Author";
 import Publisher from "./pages/Publisher";
 import UserSetting from "./pages/UserSetting";
+import StaffHome from "./pages/StaffHome";
+import BookAdd from "./pages/BookAdd";
+import AuthorAdd from "./pages/AuthorAdd";
+import PublisherAdd from "./pages/PublisherAdd";
 
 export default function App() {
     return (
         <Router>
             <div>
                 <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/staff">Staff</Link>
-                        </li>
-                        <li>
-                            <Link to="/user">Users</Link>
-                        </li>
-                    </ul>
+                    <Link to="/">Home</Link>
+
+                    {/*<ul>*/}
+                    {/*    <li>*/}
+                    {/*        <Link to="/">Home</Link>*/}
+                    {/*    </li>*/}
+                    {/*    <li>*/}
+                    {/*        <Link to="/staff">Staff</Link>*/}
+                    {/*    </li>*/}
+                    {/*    <li>*/}
+                    {/*        <Link to="/user">Users</Link>*/}
+                    {/*    </li>*/}
+                    {/*</ul>*/}
                 </nav>
 
                 <Switch>
+                    <Route path="/book/add">
+                        <BookAdd/>
+                    </Route>
+
                     <Route path="/book/:id">
                         <Book/>
+                    </Route>
+
+                    <Route path="/author/add">
+                        <AuthorAdd/>
                     </Route>
 
                     <Route path="/author/:id">
                         <Author/>
                     </Route>
 
+                    <Route path="/publisher/add">
+                        <PublisherAdd/>
+                    </Route>
+
                     <Route path="/publisher/:id">
                         <Publisher/>
+                    </Route>
+
+                    <Route path="/staff/home">
+                        <StaffHome/>
+                    </Route>
+
+                    <Route path="/staff/setting">
+                        <UserSetting/>
                     </Route>
 
                     <Route path="/staff">

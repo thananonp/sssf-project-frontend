@@ -6,7 +6,6 @@ const UserLogin = () => {
     const history = useHistory()
     const loginUser = (e) =>{
         e.preventDefault()
-        alert("Logged in")
         history.push('/user/home')
     }
 

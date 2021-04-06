@@ -4,7 +4,7 @@ import {Button} from "react-bootstrap";
 const Landing = () => {
     return (
         <div>
-            <p>Welcome to library system</p>
+            <h1>Welcome to library system</h1>
             <Link to="/staff"><Button>Staff login</Button></Link>
             <Link to="/user"><Button>User login</Button></Link>
 
