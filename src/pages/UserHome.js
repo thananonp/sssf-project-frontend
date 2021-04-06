@@ -8,18 +8,22 @@ const UserHome = (props) => {
     const [search, setSearch] = useState('')
     const history = useHistory()
     const logout = () => {
-        alert("Logging out")
         history.push('/')
     }
 
-    const handleSearch = (e) =>{
+    const editUser = () => {
+        history.push('/user/setting')
+
+    }
+
+    const handleSearch = (e) => {
         // alert("Searching")
         // console.log(e.target.value)
         setSearch(e.target.value)
 
     }
 
-    const toSearch = () =>{
+    const toSearch = () => {
         alert(`search query ${search}`)
         props.newSearchQuery(search)
         history.push('/search')
@@ -28,9 +32,11 @@ const UserHome = (props) => {
     const date = new Date(timeElapsed);
     return (
         <div>
-            <h1>Welcome John</h1>
-
-            <Button onClick={logout}>Logout</Button>
+            <div>
+                <h1>Welcome John</h1>
+                <Button onClick={editUser}>Setting</Button>
+                <Button onClick={logout}>Logout</Button>
+            </div>
 
             <h3>Currently Borrowed Book</h3>
             <Table striped bordered hover>
@@ -78,6 +84,6 @@ const UserHome = (props) => {
 const mapDispatchToProps = {
     newSearchQuery
 }
-const connectedUserHome = connect(null,mapDispatchToProps)(UserHome)
+const connectedUserHome = connect(null, mapDispatchToProps)(UserHome)
 
 export default connectedUserHome

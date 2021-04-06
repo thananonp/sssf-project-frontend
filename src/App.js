@@ -16,6 +16,7 @@ import Search from "./pages/Search";
 import Book from "./pages/Book";
 import Author from "./pages/Author";
 import Publisher from "./pages/Publisher";
+import UserSetting from "./pages/UserSetting";
 
 export default function App() {
     return (
@@ -54,6 +55,9 @@ export default function App() {
 
                     <Route path="/user/home">
                         <UserHome/>
+                    </Route>
+                    <Route path="/user/setting">
+                        <UserSetting/>
                     </Route>
 
                     <Route path="/user">

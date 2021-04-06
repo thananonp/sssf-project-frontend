@@ -18,7 +18,7 @@ const UserLogin = () => {
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" />
                     <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
+                        Currently mocked just click submit
                     </Form.Text>
                 </Form.Group>
 
