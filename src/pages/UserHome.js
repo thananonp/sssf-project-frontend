@@ -1,8 +1,10 @@
 import {Button, FormControl, InputGroup, Table} from "react-bootstrap";
 import {useHistory} from "react-router";
 import {useState} from "react";
+import {newSearchQuery} from "../reducers/searchQueryReducer";
+import {connect} from "react-redux";
 
-const UserHome = () => {
+const UserHome = (props) => {
     const [search, setSearch] = useState('')
     const history = useHistory()
     const logout = () => {
@@ -14,10 +16,13 @@ const UserHome = () => {
         // alert("Searching")
         // console.log(e.target.value)
         setSearch(e.target.value)
+
     }
 
     const toSearch = () =>{
         alert(`search query ${search}`)
+        props.newSearchQuery(search)
+        history.push('/search')
     }
     const timeElapsed = Date.now();
     const date = new Date(timeElapsed);
@@ -70,5 +75,9 @@ const UserHome = () => {
         </div>
     )
 }
+const mapDispatchToProps = {
+    newSearchQuery
+}
+const connectedUserHome = connect(null,mapDispatchToProps)(UserHome)
 
-export default UserHome
+export default connectedUserHome

@@ -8,10 +8,11 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import UserLogin from "./page/UserLogin";
-import StaffLogin from "./page/StaffLogin";
-import Landing from "./page/Landing";
-import UserHome from "./page/UserHome";
+import UserLogin from "./pages/UserLogin";
+import StaffLogin from "./pages/StaffLogin";
+import Landing from "./pages/Landing";
+import UserHome from "./pages/UserHome";
+import Search from "./pages/Search";
 
 export default function App() {
     return (
@@ -42,6 +43,9 @@ export default function App() {
 
                     <Route path="/user">
                         <UserLogin/>
+                    </Route>
+                    <Route path="/search">
+                        <Search/>
                     </Route>
 
 
