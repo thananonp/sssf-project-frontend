@@ -8,11 +8,13 @@ const AuthorAdd = () => {
     const email = useField('email')
 
     const history = useHistory()
+
     const handleSubmit = (e) => {
         e.preventDefault()
         alert(`Add author ${firstName.value} ${lastName.value} ${email.value}`)
         history.push('/staff/home')
     }
+
     return (
         <div>
             <h1>Add new author</h1>

@@ -21,6 +21,7 @@ import StaffHome from "./pages/StaffHome";
 import BookAdd from "./pages/BookAdd";
 import AuthorAdd from "./pages/AuthorAdd";
 import PublisherAdd from "./pages/PublisherAdd";
+import AuthorEdit from "./pages/AuthorEdit";
 
 export default function App() {
     return (
@@ -53,6 +54,10 @@ export default function App() {
 
                     <Route path="/author/add">
                         <AuthorAdd/>
+                    </Route>
+
+                    <Route path="/author/edit">
+                        <AuthorEdit/>
                     </Route>
 
                     <Route path="/author/:id">
