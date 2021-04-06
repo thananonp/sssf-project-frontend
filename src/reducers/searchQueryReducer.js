@@ -8,7 +8,7 @@ export const newSearchQuery = (query) => {
     }
 }
 
-const searchQueryReducer = (state = 'lll', action) => {
+const searchQueryReducer = (state = '', action) => {
     switch (action.type) {
         case 'NEW': {
             console.log(action)

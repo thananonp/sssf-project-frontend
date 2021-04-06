@@ -13,6 +13,9 @@ import StaffLogin from "./pages/StaffLogin";
 import Landing from "./pages/Landing";
 import UserHome from "./pages/UserHome";
 import Search from "./pages/Search";
+import Book from "./pages/Book";
+import Author from "./pages/Author";
+import Publisher from "./pages/Publisher";
 
 export default function App() {
     return (
@@ -33,6 +36,18 @@ export default function App() {
                 </nav>
 
                 <Switch>
+                    <Route path="/book/:id">
+                        <Book/>
+                    </Route>
+
+                    <Route path="/author/:id">
+                        <Author/>
+                    </Route>
+
+                    <Route path="/publisher/:id">
+                        <Publisher/>
+                    </Route>
+
                     <Route path="/staff">
                         <StaffLogin/>
                     </Route>
