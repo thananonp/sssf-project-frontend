@@ -8,20 +8,24 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import UserLogin from "./pages/UserLogin";
-import StaffLogin from "./pages/StaffLogin";
+import UserLogin from "./pages/User/UserLogin";
+import StaffLogin from "./pages/Staff/StaffLogin";
 import Landing from "./pages/Landing";
-import UserHome from "./pages/UserHome";
+import UserHome from "./pages/User/UserHome";
 import Search from "./pages/Search";
-import Book from "./pages/Book";
-import Author from "./pages/Author";
-import Publisher from "./pages/Publisher";
-import UserSetting from "./pages/UserSetting";
-import StaffHome from "./pages/StaffHome";
-import BookAdd from "./pages/BookAdd";
-import AuthorAdd from "./pages/AuthorAdd";
-import PublisherAdd from "./pages/PublisherAdd";
-import AuthorEdit from "./pages/AuthorEdit";
+import Book from "./pages/book/Book";
+import Author from "./pages/author/Author";
+import Publisher from "./pages/Publisher/Publisher";
+import UserSetting from "./pages/User/UserSetting";
+import StaffHome from "./pages/Staff/StaffHome";
+import BookAdd from "./pages/book/BookAdd";
+import AuthorAdd from "./pages/author/AuthorAdd";
+import PublisherAdd from "./pages/Publisher/PublisherAdd";
+import AuthorEdit from "./pages/author/AuthorEdit";
+import BookEdit from "./pages/book/BookEdit";
+import PublisherEdit from "./pages/Publisher/PublisherEdit";
+import StaffSetting from "./pages/Staff/StaffSetting";
+import UserManage from "./pages/User/UserManage";
 
 export default function App() {
     return (
@@ -47,6 +51,9 @@ export default function App() {
                     <Route path="/book/add">
                         <BookAdd/>
                     </Route>
+                    <Route path="/book/edit">
+                        <BookEdit/>
+                    </Route>
 
                     <Route path="/book/:id">
                         <Book/>
@@ -64,6 +71,10 @@ export default function App() {
                         <Author/>
                     </Route>
 
+                    <Route path="/publisher/edit">
+                        <PublisherEdit/>
+                    </Route>
+
                     <Route path="/publisher/add">
                         <PublisherAdd/>
                     </Route>
@@ -77,13 +88,16 @@ export default function App() {
                     </Route>
 
                     <Route path="/staff/setting">
-                        <UserSetting/>
+                        <StaffSetting/>
                     </Route>
 
                     <Route path="/staff">
                         <StaffLogin/>
                     </Route>
 
+                    <Route path="/user/manage">
+                        <UserManage/>
+                    </Route>
                     <Route path="/user/home">
                         <UserHome/>
                     </Route>
@@ -94,10 +108,10 @@ export default function App() {
                     <Route path="/user">
                         <UserLogin/>
                     </Route>
+
                     <Route path="/search">
                         <Search/>
                     </Route>
-
 
                     <Route path="/">
                         <Landing/>

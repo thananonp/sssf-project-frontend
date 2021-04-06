@@ -1,5 +1,5 @@
 import {useHistory, useParams} from "react-router";
-import {useField} from "../hooks";
+import {useField} from "../../hooks";
 import {Button, Col, Container, Form, Modal, Row, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
@@ -12,7 +12,7 @@ const Author = (props) => {
         alert(`delete ${id}`)
     }
 
-    const MydModalWithGrid = (props) => {
+    const EditModal = (props) => {
         const handleSubmit = (e) => {
             e.preventDefault()
             alert(`Add author ${firstName.value} ${lastName.value} ${email.value}`)
@@ -66,8 +66,9 @@ const Author = (props) => {
 
     return (
         <div>
+            <Link to='/staff/home'><p> ← Back to staff</p></Link>
             <h1>View, Edit and Delete Author</h1>
-            <MydModalWithGrid show={modalShow} onHide={() => setModalShow(false)}/>
+            <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
             <Table striped bordered hover>
                 <thead>

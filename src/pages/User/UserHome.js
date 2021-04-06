@@ -1,7 +1,7 @@
 import {Button, FormControl, InputGroup, Table} from "react-bootstrap";
 import {useHistory} from "react-router";
 import {useState} from "react";
-import {newSearchQuery} from "../reducers/searchQueryReducer";
+import {newSearchQuery} from "../../reducers/searchQueryReducer";
 import {connect} from "react-redux";
 
 const UserHome = (props) => {
