@@ -26,25 +26,16 @@ import BookEdit from "./pages/book/BookEdit";
 import PublisherEdit from "./pages/Publisher/PublisherEdit";
 import StaffSetting from "./pages/Staff/StaffSetting";
 import UserManage from "./pages/User/UserManage";
+import StaffRegister from "./pages/Staff/StaffRegister";
+import UserRegister from "./pages/User/UserRegister";
 
 export default function App() {
     return (
         <Router>
             <div>
                 <nav>
-                    <Link to="/">Home</Link>
+                    <Link to="/"><h1>Home</h1></Link>
 
-                    {/*<ul>*/}
-                    {/*    <li>*/}
-                    {/*        <Link to="/">Home</Link>*/}
-                    {/*    </li>*/}
-                    {/*    <li>*/}
-                    {/*        <Link to="/staff">Staff</Link>*/}
-                    {/*    </li>*/}
-                    {/*    <li>*/}
-                    {/*        <Link to="/user">Users</Link>*/}
-                    {/*    </li>*/}
-                    {/*</ul>*/}
                 </nav>
 
                 <Switch>
@@ -83,6 +74,10 @@ export default function App() {
                         <Publisher/>
                     </Route>
 
+                    <Route path="/staff/register">
+                        <StaffRegister/>
+                    </Route>
+
                     <Route path="/staff/home">
                         <StaffHome/>
                     </Route>
@@ -95,6 +90,9 @@ export default function App() {
                         <StaffLogin/>
                     </Route>
 
+                    <Route path="/user/register">
+                        <UserRegister/>
+                    </Route>
                     <Route path="/user/manage">
                         <UserManage/>
                     </Route>

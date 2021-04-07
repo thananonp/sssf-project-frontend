@@ -77,8 +77,10 @@ const UserManage = (props) => {
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Publisher Name</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
                     <th>Email address</th>
+                    <th>Book Due</th>
                     <th colSpan={2}>Action</th>
                 </tr>
                 </thead>
@@ -87,6 +89,8 @@ const UserManage = (props) => {
                     <td>1</td>
                     <td>Mark</td>
                     <td>Otto</td>
+                    <td>Otto@asdf</td>
+                    <td>-</td>
                     <td>
                         <Link onClick={() => setModalShow(true)}>
                             Edit
@@ -102,6 +106,8 @@ const UserManage = (props) => {
                     <td>2</td>
                     <td>Jacob</td>
                     <td>Thornton</td>
+                    <td>Thornton@fdas</td>
+                    <td>2 days</td>
                     <td>
                         <Link onClick={() => setModalShow(true)}>
                             Edit
@@ -117,6 +123,8 @@ const UserManage = (props) => {
                     <td>3</td>
                     <td>Larry</td>
                     <td>the Bird</td>
+                    <td>the Bird@ofiashf</td>
+                    <td>1 day</td>
                     <td>
                         <Link onClick={() => setModalShow(true)}>
                             Edit
