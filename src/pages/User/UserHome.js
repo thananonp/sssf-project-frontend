@@ -2,12 +2,14 @@ import {Button, Col, Container, FormControl, InputGroup, Row, Table} from "react
 import {useHistory} from "react-router";
 import {useState} from "react";
 import {newSearchQuery} from "../../reducers/searchQueryReducer";
+import {logoutWithoutCredential} from "../../reducers/loginReducer"
 import {connect} from "react-redux";
 
 const UserHome = (props) => {
     const [search, setSearch] = useState('')
     const history = useHistory()
     const logout = () => {
+        props.logoutWithoutCredential()
         history.push('/')
     }
 
@@ -89,7 +91,7 @@ const UserHome = (props) => {
     )
 }
 const mapDispatchToProps = {
-    newSearchQuery
+    newSearchQuery,logoutWithoutCredential
 }
 const connectedUserHome = connect(null, mapDispatchToProps)(UserHome)
 

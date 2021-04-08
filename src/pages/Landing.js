@@ -13,6 +13,7 @@ const Landing = (props) => {
         props.newSearchQuery(search.value)
         history.push('/search')
     }
+
     return (
         <Container fluid>
             <h1>Welcome to library system</h1>

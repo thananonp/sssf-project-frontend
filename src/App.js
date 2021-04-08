@@ -28,15 +28,13 @@ import StaffSetting from "./pages/Staff/StaffSetting";
 import UserManage from "./pages/User/UserManage";
 import StaffRegister from "./pages/Staff/StaffRegister";
 import UserRegister from "./pages/User/UserRegister";
+import NavBar from "./pages/NavBar";
 
 export default function App() {
     return (
         <Router>
             <div>
-                <nav>
-                    <Link to="/"><h1>Home</h1></Link>
-
-                </nav>
+                <NavBar/>
 
                 <Switch>
                     {/*Book*/}
