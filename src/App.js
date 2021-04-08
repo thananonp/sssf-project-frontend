@@ -39,9 +39,11 @@ export default function App() {
                 </nav>
 
                 <Switch>
+                    {/*Book*/}
                     <Route path="/book/add">
                         <BookAdd/>
                     </Route>
+
                     <Route path="/book/edit">
                         <BookEdit/>
                     </Route>
@@ -50,6 +52,7 @@ export default function App() {
                         <Book/>
                     </Route>
 
+                    {/*Author*/}
                     <Route path="/author/add">
                         <AuthorAdd/>
                     </Route>
@@ -62,6 +65,7 @@ export default function App() {
                         <Author/>
                     </Route>
 
+                    {/*Publisher*/}
                     <Route path="/publisher/edit">
                         <PublisherEdit/>
                     </Route>
@@ -74,6 +78,7 @@ export default function App() {
                         <Publisher/>
                     </Route>
 
+                    {/*Staff*/}
                     <Route path="/staff/register">
                         <StaffRegister/>
                     </Route>
@@ -90,6 +95,7 @@ export default function App() {
                         <StaffLogin/>
                     </Route>
 
+                    {/*User*/}
                     <Route path="/user/register">
                         <UserRegister/>
                     </Route>
@@ -107,6 +113,7 @@ export default function App() {
                         <UserLogin/>
                     </Route>
 
+                    {/*Common*/}
                     <Route path="/search">
                         <Search/>
                     </Route>
