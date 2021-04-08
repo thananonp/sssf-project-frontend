@@ -1,6 +1,8 @@
-import {Button, Form} from "react-bootstrap";
+import {Button, Container, Form} from "react-bootstrap";
 import {useField} from "../../hooks";
 import {useHistory} from "react-router";
+import {Link} from "react-router-dom";
+import ReturnStaff from "../ReturnStaff";
 
 const AuthorAdd = () => {
     const firstName = useField('text')
@@ -15,10 +17,17 @@ const AuthorAdd = () => {
         history.push('/staff/home')
     }
 
+    const resetForm = () => {
+        firstName.reset()
+        lastName.reset()
+        email.reset()
+    }
+
     return (
-        <div>
+        <Container>
+            <ReturnStaff/>
             <h1>Add new author</h1>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicFirstName">
                     <Form.Label>First Name</Form.Label>
                     <Form.Control value={firstName.value} type={firstName.type} onChange={firstName.onChange}/>
@@ -34,8 +43,11 @@ const AuthorAdd = () => {
                 <Button variant="primary" type="submit">
                     Submit
                 </Button>
+                <Button variant="secondary" type="reset">
+                    Reset
+                </Button>
             </Form>
-        </div>
+        </Container>
     )
 }
 

@@ -1,6 +1,8 @@
 import {useField} from "../../hooks";
 import {useHistory} from "react-router";
-import {Button, Form} from "react-bootstrap";
+import {Button, Container, Form} from "react-bootstrap";
+import {Link} from "react-router-dom";
+import ReturnStaff from "../ReturnStaff";
 
 const PublisherAdd = () => {
     const name = useField('text')
@@ -12,10 +14,16 @@ const PublisherAdd = () => {
         alert(`Add publisher ${name.value}  ${email.value}`)
         history.push('/staff/home')
     }
+    const resetForm = () => {
+        name.reset()
+        email.reset()
+    }
     return (
-        <div>
-            <h1>Add new author</h1>
-            <Form onSubmit={handleSubmit}>
+        <Container>
+            <ReturnStaff/>
+
+            <h1>Add new publisher</h1>
+            <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicFirstName">
                     <Form.Label>Publisher Name</Form.Label>
                     <Form.Control value={name.value} type={name.type} onChange={name.onChange}/>
@@ -27,8 +35,11 @@ const PublisherAdd = () => {
                 <Button variant="primary" type="submit">
                     Submit
                 </Button>
+                <Button variant="secondary" type="reset">
+                    Reset
+                </Button>
             </Form>
-        </div>
+        </Container>
     )
 }
 

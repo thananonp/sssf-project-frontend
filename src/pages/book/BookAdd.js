@@ -1,6 +1,8 @@
 import {useField} from "../../hooks";
 import {useHistory} from "react-router";
-import {Button, Form} from "react-bootstrap";
+import {Button, Container, Form} from "react-bootstrap";
+import {Link} from "react-router-dom";
+import ReturnStaff from "../ReturnStaff";
 
 const BookAdd = () => {
     const author = useField('text')
@@ -14,10 +16,20 @@ const BookAdd = () => {
         alert(`Add author ${author.value} ${title.value} ${publisher.value}${dateOfPublication.value}`)
         history.push('/staff/home')
     }
+    const resetForm = () => {
+        author.reset()
+        title.reset()
+        publisher.reset()
+        dateOfPublication.reset()
+    }
+
     return (
-        <div>
+
+        <Container>
+            <ReturnStaff/>
+
             <h1>Add new book</h1>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicTitle">
                     <Form.Label>Title</Form.Label>
                     <Form.Control value={title.value} type={title.type} onChange={title.onChange}/>
@@ -37,8 +49,11 @@ const BookAdd = () => {
                 <Button variant="primary" type="submit">
                     Submit
                 </Button>
+                <Button variant="secondary" type="reset">
+                    Reset
+                </Button>
             </Form>
-        </div>
+        </Container>
     )
 }
 

@@ -18,6 +18,11 @@ const PublisherEdit = (props) => {
             setModalShow(false)
         }
 
+        const resetForm = () => {
+            name.reset()
+            email.reset()
+        }
+
         const name = useField('text')
         const email = useField('email')
 
@@ -47,6 +52,9 @@ const PublisherEdit = (props) => {
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
+                    <Button variant="secondary" onClick={resetForm}>
+                        Reset
+                    </Button>
                     <Button variant="primary" onClick={handleSubmit}>
                         Submit
                     </Button>
@@ -56,7 +64,7 @@ const PublisherEdit = (props) => {
     }
 
     return (
-        <div>
+        <Container>
             <Link to='/staff/home'><p> ← Back to staff</p></Link>
             <h1>View, Edit and Delete Publisher</h1>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
@@ -77,8 +85,8 @@ const PublisherEdit = (props) => {
                     <td>Otto</td>
                     <td>
                         <Link onClick={() => setModalShow(true)}>
-                        Edit
-                    </Link>
+                            Edit
+                        </Link>
                     </td>
                     <td>
                         <Link onClick={() => deletePublisher(1)}>
@@ -120,7 +128,7 @@ const PublisherEdit = (props) => {
             </Table>
 
 
-        </div>
+        </Container>
     )
 }
 

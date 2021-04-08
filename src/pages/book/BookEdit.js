@@ -68,7 +68,7 @@ const BookEdit = (props) => {
     }
 
     return (
-        <div>
+        <Container>
             <Link to='/staff/home'><p> ← Back to staff</p></Link>
             <h1>View, Edit and Delete Book</h1>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
@@ -140,7 +140,7 @@ const BookEdit = (props) => {
             </Table>
 
 
-        </div>
+        </Container>
     )
 }
 

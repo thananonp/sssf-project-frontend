@@ -1,5 +1,5 @@
 import {useHistory} from "react-router";
-import {Button, Form} from "react-bootstrap";
+import {Button, Container, Form} from "react-bootstrap";
 
 
 const UserLogin = () => {
@@ -10,7 +10,7 @@ const UserLogin = () => {
     }
 
     return (
-        <div>
+        <Container>
             <h1>User</h1>
             <Form onSubmit={loginUser}>
                 <Form.Group controlId="formBasicEmail">
@@ -32,7 +32,7 @@ const UserLogin = () => {
                     Submit
                 </Button>
             </Form>
-        </div>
+        </Container>
     )
 }
 

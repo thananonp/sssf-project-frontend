@@ -19,6 +19,12 @@ const Author = (props) => {
             setModalShow(false)
         }
 
+        const resetForm = () => {
+            firstName.reset()
+            lastName.reset()
+            email.reset()
+        }
+
         const firstName = useField('text')
         const lastName = useField('text')
         const email = useField('email')
@@ -56,6 +62,9 @@ const Author = (props) => {
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
+                    <Button variant="secondary" onClick={resetForm}>
+                        Reset
+                    </Button>
                     <Button variant="primary" onClick={handleSubmit}>
                         Submit
                     </Button>
@@ -65,7 +74,7 @@ const Author = (props) => {
     }
 
     return (
-        <div>
+        <Container>
             <Link to='/staff/home'><p> ← Back to staff</p></Link>
             <h1>View, Edit and Delete Author</h1>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
@@ -133,7 +142,7 @@ const Author = (props) => {
             </Table>
 
 
-        </div>
+        </Container>
     )
 }
 

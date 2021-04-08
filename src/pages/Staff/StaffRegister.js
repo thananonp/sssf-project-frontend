@@ -8,18 +8,25 @@ const StaffRegister = () => {
     const firstName = useField('text')
     const lastName = useField('text')
     const password = useField('password')
+    const confirmPassword = useField('password')
 
     const handleSubmit = (e) => {
         e.preventDefault()
         alert("New staff registered")
         history.push('/staff/home')
     }
-
+    const resetForm = () => {
+        email.reset()
+        firstName.reset()
+        lastName.reset()
+        password.reset()
+        confirmPassword.reset()
+    }
     return (
         <div>
             <h1>Register New Staff</h1>
             <Container>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type={email.type} placeholder="Enter email" value={email.value}
@@ -43,7 +50,15 @@ const StaffRegister = () => {
                     <Form.Control type={password.type} placeholder="Password" value={password.value}
                                   onChange={password.onChange}/>
                 </Form.Group>
+                <Form.Group controlId="formBasicConfirmPassword">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control type={confirmPassword.type} placeholder="Password" value={confirmPassword.value}
+                                  onChange={confirmPassword.onChange}/>
+                </Form.Group>
                 <Button type="submit">Submit</Button>
+                <Button variant="secondary" type="reset">
+                    Reset
+                </Button>
             </Form>
         </Container>
 </div>

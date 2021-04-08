@@ -1,4 +1,4 @@
-import {Button, FormControl, InputGroup, Table} from "react-bootstrap";
+import {Button, Col, Container, FormControl, InputGroup, Row, Table} from "react-bootstrap";
 import {useHistory} from "react-router";
 import {useState} from "react";
 import {newSearchQuery} from "../../reducers/searchQueryReducer";
@@ -31,12 +31,29 @@ const UserHome = (props) => {
     const timeElapsed = Date.now();
     const date = new Date(timeElapsed);
     return (
-        <div>
-            <div>
-                <h1>Welcome John</h1>
-                <Button onClick={editUser}>Setting</Button>
-                <Button onClick={logout}>Logout</Button>
-            </div>
+        <Container>
+            <Row>
+                <Col><h2>Welcome Lilly</h2>
+                </Col>
+                <Col>
+                    <div className="float-right">
+                        <Button onClick={editUser}>Setting</Button>
+                        <Button onClick={logout}>Logout</Button>
+                    </div>
+                </Col>
+            </Row>
+            <br/>
+            <InputGroup className="mb-3">
+                <FormControl
+                    onChange={handleSearch}
+                    placeholder="Search books, publishers and writers..."
+                    aria-label="Search library"
+                    aria-describedby="basic-addon2"
+                />
+                <InputGroup.Append>
+                    <Button onClick={toSearch} variant="outline-secondary">Search</Button>
+                </InputGroup.Append>
+            </InputGroup>
 
             <h3>Currently Borrowed Book</h3>
             <Table striped bordered hover>
@@ -67,18 +84,8 @@ const UserHome = (props) => {
                 </tbody>
             </Table>
 
-            <InputGroup className="mb-3">
-                <FormControl
-                    onChange={handleSearch}
-                    placeholder="Search books, publishers and writers..."
-                    aria-label="Search library"
-                    aria-describedby="basic-addon2"
-                />
-                <InputGroup.Append>
-                    <Button onClick={toSearch} variant="outline-secondary">Search</Button>
-                </InputGroup.Append>
-            </InputGroup>
-        </div>
+
+        </Container>
     )
 }
 const mapDispatchToProps = {

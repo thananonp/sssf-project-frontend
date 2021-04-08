@@ -3,6 +3,7 @@ import {useField} from "../../hooks";
 import {Button, Col, Container, Form, Modal, Row, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
+import ReturnStaff from "../ReturnStaff";
 
 const UserManage = (props) => {
     const [modalShow, setModalShow] = useState(false);
@@ -16,6 +17,13 @@ const UserManage = (props) => {
         const handleSubmit = (e) => {
             e.preventDefault()
             setModalShow(false)
+        }
+
+        const resetForm = () => {
+            email.reset()
+            firstName.reset()
+            lastName.reset()
+            password.reset()
         }
 
         const email = useField('email')
@@ -59,6 +67,9 @@ const UserManage = (props) => {
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
+                    <Button variant="secondary" onClick={resetForm}>
+                        Reset
+                    </Button>
                     <Button variant="primary" onClick={handleSubmit}>
                         Submit
                     </Button>
@@ -68,8 +79,8 @@ const UserManage = (props) => {
     }
 
     return (
-        <div>
-            <Link to='/staff/home'><p> ← Back to staff</p></Link>
+        <Container>
+            <ReturnStaff/>
             <h1>Manage user</h1>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
@@ -140,7 +151,7 @@ const UserManage = (props) => {
             </Table>
 
 
-        </div>
+        </Container>
     )
 }
 
