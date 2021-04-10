@@ -48,11 +48,13 @@ const BookEdit = (props) => {
                             </Form.Group>
                             <Form.Group controlId="formBasicPublisher">
                                 <Form.Label>Publisher</Form.Label>
-                                <Form.Control value={publisher.value} type={publisher.type} onChange={publisher.onChange}/>
+                                <Form.Control value={publisher.value} type={publisher.type}
+                                              onChange={publisher.onChange}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicDateOfPublication">
                                 <Form.Label>Date of Publication</Form.Label>
-                                <Form.Control value={dateOfPublication.value} type={dateOfPublication.type} onChange={dateOfPublication.onChange}/>
+                                <Form.Control value={dateOfPublication.value} type={dateOfPublication.type}
+                                              onChange={dateOfPublication.onChange}/>
                             </Form.Group>
 
                         </Form>
@@ -93,8 +95,8 @@ const BookEdit = (props) => {
                     <td>2012</td>
                     <td>
                         <Link onClick={() => setModalShow(true)}>
-                        Edit
-                    </Link>
+                            Edit
+                        </Link>
                     </td>
                     <td>
                         <Link onClick={() => deleteBook(1)}>

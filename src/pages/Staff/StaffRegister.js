@@ -1,8 +1,10 @@
 import {Button, Container, Form} from "react-bootstrap";
 import {useField} from "../../hooks";
 import {useHistory} from "react-router";
+import {loginWithoutCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
+import {connect} from "react-redux";
 
-const StaffRegister = () => {
+const StaffRegister = (props) => {
     const history = useHistory()
     const email = useField('email')
     const firstName = useField('text')
@@ -13,6 +15,7 @@ const StaffRegister = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         alert("New staff registered")
+        props.loginWithoutCredential()
         history.push('/staff/home')
     }
     const resetForm = () => {
@@ -65,4 +68,9 @@ const StaffRegister = () => {
 )
 }
 
-export default StaffRegister
+const mapDispatchToProps = {
+    loginWithoutCredential
+}
+const connectedStaffRegister = connect(null, mapDispatchToProps)(StaffRegister)
+
+export default connectedStaffRegister

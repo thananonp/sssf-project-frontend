@@ -15,11 +15,13 @@ import {useState} from "react";
 import {newSearchQuery} from "../../reducers/searchQueryReducer";
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
+import {logoutWithoutCredential} from "../../reducers/loginReducer";
 
 const UserHome = (props) => {
     const [search, setSearch] = useState('')
     const history = useHistory()
     const logout = () => {
+        props.logoutWithoutCredential()
         history.push('/')
     }
 
@@ -130,7 +132,7 @@ const UserHome = (props) => {
     )
 }
 const mapDispatchToProps = {
-    newSearchQuery
+    newSearchQuery, logoutWithoutCredential
 }
 const connectedUserHome = connect(null, mapDispatchToProps)(UserHome)
 

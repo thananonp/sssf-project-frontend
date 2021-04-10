@@ -1,8 +1,10 @@
 import {Button, Container, Form} from "react-bootstrap";
 import {useField} from "../../hooks";
 import {useHistory} from "react-router";
+import {loginWithoutCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
+import {connect} from "react-redux";
 
-const UserRegister = () => {
+const UserRegister = (props ) => {
     const history = useHistory()
     const email = useField('email')
     const firstName = useField('text')
@@ -13,6 +15,7 @@ const UserRegister = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         alert("New User registered")
+        props.loginWithoutCredential()
         history.push('/user/home')
     }
 
@@ -69,4 +72,9 @@ const UserRegister = () => {
 )
 }
 
-export default UserRegister
+const mapDispatchToProps = {
+    loginWithoutCredential
+}
+const connectedUserRegister = connect(null, mapDispatchToProps)(UserRegister)
+
+export default connectedUserRegister

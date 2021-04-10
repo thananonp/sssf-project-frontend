@@ -1,12 +1,15 @@
 import {useHistory} from "react-router";
 import {Button, Container, Form} from "react-bootstrap";
+import {loginWithoutCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
+import {connect} from "react-redux";
 
 
-const UserLogin = () => {
+const UserLogin = (props) => {
     const history = useHistory()
     const loginUser = (e) =>{
         e.preventDefault()
         history.push('/user/home')
+        props.loginWithoutCredential()
     }
 
     return (
@@ -36,4 +39,9 @@ const UserLogin = () => {
     )
 }
 
-export default UserLogin
+const mapDispatchToProps = {
+    loginWithoutCredential,logoutWithoutCredential
+}
+const connectedUserLogin = connect(null, mapDispatchToProps)(UserLogin)
+
+export default connectedUserLogin
