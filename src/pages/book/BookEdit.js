@@ -3,7 +3,7 @@ import {useField} from "../../hooks";
 import {Button, Col, Container, Form, Modal, Row, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
-import {gql, useQuery} from "@apollo/client";
+import {gql, useMutation, useQuery} from "@apollo/client";
 
 const getBooks = gql`
     query{
@@ -46,11 +46,56 @@ const getBooks = gql`
     }
 `
 
+const EDITBOOK = gql`
+    mutation EditBook(
+        $title: String,
+        $category: ID!,
+        $author: ID!,
+        $publisher: ID!,
+        $dateOfPublication: String,
+        $pageCount: Int,
+        $description: String){
+        editBook(
+            title:$title,
+            category:$category,
+            author:$author,
+            publisher:$publisher,
+            dateOfPublication:$dateOfPublication,
+            pageCount:$pageCount,
+            description:$description,
+        ) {
+            id
+            title
+            category{
+                id
+                title
+            }
+            author{
+                id
+                name
+            }
+            publisher{
+                id
+                name
+            }
+            dateOfPublication
+            pageCount
+            description
+            borrowedBy{
+                id
+                firstName
+            }
+        }
+    }
+
+`
+
 const BookEdit = (props) => {
     const [modalShow, setModalShow] = useState(false);
     const [editId, setEditId] = useState(0);
     const history = useHistory()
     const {loading, error, data} = useQuery(getBooks)
+    const [editBook] = useMutation(EDITBOOK)
 
 
     const deleteBook = (id) => {
@@ -60,7 +105,24 @@ const BookEdit = (props) => {
     const EditModal = (props) => {
         const handleSubmit = (e) => {
             e.preventDefault()
-            setModalShow(false)
+            editBook({
+                variables: {
+                    title: title.value,
+                    category: category.value,
+                    author: author.value,
+                    publisher: publisher.value,
+                    dateOfPublication: dateOfPublication.value,
+                    pageCount: Number(pageCount.value),
+                    description: description.value
+                }
+            }).then(result => {
+                console.log(result)
+                alert(`Edited Book: ${result.data.addBook.title}`)
+                setModalShow(false)
+            }).catch(e => {
+                alert(e)
+                console.error(e)
+            })
         }
 
 
@@ -71,7 +133,9 @@ const BookEdit = (props) => {
         const dateOfPublication = useField('date')
         const pageCount = useField('number')
         const description = useField('text')
+
         if (modalShow) {
+
             const editData = data.books.find(book => book.id === editId)
             console.log("EditData", editData)
             title.value = editData.title
@@ -81,9 +145,6 @@ const BookEdit = (props) => {
             dateOfPublication.value = editData.dateOfPublication
             pageCount.value = editData.pageCount
             description.value = editData.description
-
-
-            console.log(data)
             return (
                 <Modal {...props}
                        aria-labelledby="contained-modal-title-vcenter"
