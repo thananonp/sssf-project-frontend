@@ -16,13 +16,13 @@ const ADD_BOOK = gql`
         $description: String
     ){
         addBook(
-            title:"Direct",
-            category:"60707bffad9ee150642bc152",
-            author:"60707ef285c91957f0b010cf",
-            publisher:"607081bad0d7fb2b90afdfc2"
-            dateOfPublication:"2013-01-23"
-            pageCount:123,
-            description:"Direct 1"
+            title:$title,
+            category:$category,
+            author:$author,
+            publisher:$publisher,
+            dateOfPublication:$dateOfPublication,
+            pageCount:$pageCount,
+            description:$description,
         ){id
             title
             category{
@@ -81,25 +81,24 @@ const BookAdd = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log({
-            title: title.value,
-            category: category.value,
-            author: author.value,
-            publisher: publisher.value,
-            dateOfPublication: dateOfPublication.value,
-            pageCount: pageCount.value,
-            description: description.value
+            "title": title.value,
+            "category": category.value,
+            "author": author.value,
+            "publisher": publisher.value,
+            "dateOfPublication": dateOfPublication.value,
+            "pageCount": pageCount.value,
+            "description": description.value
         })
 
-        addBook({
-            variables: {
-                title: title.value,
-                category: category.value,
-                author: author.value,
-                publisher: publisher.value,
-                dateOfPublication: dateOfPublication.value,
-                pageCount: pageCount.value,
-                description: description.value
-            }
+        addBook( {
+                "title": title.value,
+                "category": category.value,
+                "author": author.value,
+                "publisher": publisher.value,
+                "dateOfPublication": dateOfPublication.value,
+                "pageCount": pageCount.value,
+                "description": description.value
+
         }).then(result => {
             console.log(result)
         }).catch(e => {
