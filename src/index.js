@@ -9,20 +9,7 @@ import store from './helpers/store'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import client from "./helpers/apollo";
-import {ApolloProvider, gql} from '@apollo/client';
-
-client
-.query({
-    query: gql`
-        query{
-            staffs{
-                id
-                firstName
-            }
-        }
-        `
-})
-.then(result => console.log("CLIENT",result)).catch(e => console.error(e));
+import {ApolloProvider} from '@apollo/client';
 
 ReactDOM.render(
     <ApolloProvider client={client}>
