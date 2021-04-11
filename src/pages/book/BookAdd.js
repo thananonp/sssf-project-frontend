@@ -6,7 +6,7 @@ import ReturnStaff from "../ReturnStaff";
 import {useMutation, useQuery, gql} from "@apollo/client";
 
 const ADD_BOOK = gql`
-    mutation addBook(
+    mutation AddBook(
         $title: String,
         $category: ID!,
         $author: ID!,
@@ -86,19 +86,20 @@ const BookAdd = () => {
             "author": author.value,
             "publisher": publisher.value,
             "dateOfPublication": dateOfPublication.value,
-            "pageCount": pageCount.value,
+            "pageCount": Number(pageCount.value),
             "description": description.value
         })
+        addBook({
+            variables: {
+                title: title.value,
+                category: category.value,
+                author: author.value,
+                publisher: publisher.value,
+                dateOfPublication: dateOfPublication.value,
+                pageCount: Number(pageCount.value),
+                description: description.value
 
-        addBook( {
-                "title": title.value,
-                "category": category.value,
-                "author": author.value,
-                "publisher": publisher.value,
-                "dateOfPublication": dateOfPublication.value,
-                "pageCount": pageCount.value,
-                "description": description.value
-
+            }
         }).then(result => {
             console.log(result)
         }).catch(e => {
@@ -156,7 +157,7 @@ const BookAdd = () => {
                 </Form.Group>
                 <Form.Group controlId="formBasicPublisher">
                     <Form.Label>Publisher</Form.Label>
-                    <Form.Control as="select" onChange={author.onChange}>
+                    <Form.Control as="select" onChange={publisher.onChange}>
                         <option>Select publisher</option>
                         {data.publishers.map(publisher => {
                             return (
@@ -173,7 +174,7 @@ const BookAdd = () => {
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Page Count</Form.Label>
-                    <Form.Control value={pageCount.value} type={pageCount.type}
+                    <Form.Control value={pageCount.value} type="number"
                                   onChange={pageCount.onChange}/>
                 </Form.Group>
                 <Form.Group controlId="exampleForm.ControlTextarea1">
