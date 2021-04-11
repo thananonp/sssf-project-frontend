@@ -47,7 +47,7 @@ const ADD_BOOK = gql`
 
         }}`
 
-const FORBOOKQUERY = gql`
+const categoriesAuthorsPublishers = gql`
     query data {
         categories {
             id
@@ -73,22 +73,13 @@ const BookAdd = () => {
     const dateOfPublication = useField('date')
     const pageCount = useField('number')
     const description = useField('text')
-    const {loading, error, data} = useQuery(FORBOOKQUERY)
+    const {loading, error, data} = useQuery(categoriesAuthorsPublishers)
     const [addBook] = useMutation(ADD_BOOK)
 
     const history = useHistory()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log({
-            "title": title.value,
-            "category": category.value,
-            "author": author.value,
-            "publisher": publisher.value,
-            "dateOfPublication": dateOfPublication.value,
-            "pageCount": Number(pageCount.value),
-            "description": description.value
-        })
         addBook({
             variables: {
                 title: title.value,
@@ -102,12 +93,16 @@ const BookAdd = () => {
             }
         }).then(result => {
             console.log(result)
+            alert(`Added Book: ${result.data.addBook.title}`)
+            resetForm()
         }).catch(e => {
+            alert(e)
             console.error(e)
         })
         // history.push('/staff/home')
     }
     const resetForm = () => {
+        console.log("reset")
         title.reset()
         author.reset()
         publisher.reset()
