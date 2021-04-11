@@ -8,14 +8,30 @@ import reportWebVitals from './reportWebVitals';
 import store from './helpers/store'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import client from "./helpers/apollo";
+import {ApolloProvider, gql} from '@apollo/client';
 
+client
+.query({
+    query: gql`
+        query{
+            staffs{
+                id
+                firstName
+            }
+        }
+        `
+})
+.then(result => console.log("CLIENT",result)).catch(e => console.error(e));
 
 ReactDOM.render(
-    <BrowserRouter>
-        <Provider store={store}>
-            <App/>
-        </Provider>
-    </BrowserRouter>,
+    <ApolloProvider client={client}>
+        <BrowserRouter>
+            <Provider store={store}>
+                <App/>
+            </Provider>
+        </BrowserRouter> </ApolloProvider>
+    ,
     document.getElementById('root')
 );
 
