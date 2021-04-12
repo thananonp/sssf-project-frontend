@@ -122,15 +122,63 @@ const BookEdit = (props) => {
     }
 
     const EditModal = (props) => {
+        let editedCategory
+        let editedAuthor
+        let editedPublisher
+
         const handleSubmit = (e) => {
+            // console.log("category.type", category.type)
+            // console.log("category.id", category.value.id)
+            // console.log("category", category.value)
+            // console.log("category.length", category.value.length)
+            // console.log("category.value.length",category.value.length)
+            // console.log("category.value",category.value)
+            // console.log("author.value.length",author.value.length)
+            // console.log("author.value",author.value)
+            // console.log("publisher.value.length ",publisher.value.length )
+            // console.log("publisher.value ",publisher.value )
+
+            if (category.value.length === undefined) {
+                editedCategory = category.value.id
+                console.log("fuck")
+            } else {
+                editedCategory = category.value
+                console.log("fuck")
+
+            }
+
+            if (author.value.length === undefined) {
+                editedAuthor = author.value.id
+            } else {
+                editedAuthor = author.value
+            }
+
+            if (publisher.value.length === undefined) {
+                editedPublisher = publisher.value.id
+            } else {
+                editedPublisher = publisher.value
+            }
+            // console.log(editedCategory)
+            // console.log(editedAuthor)
+            // console.log(editedPublisher)
+            // console.log("Edit", {
+            //     id: editId,
+            //     title: title.value,
+            //     category: editedCategory,
+            //     author: editedAuthor,
+            //     publisher: editedPublisher,
+            //     dateOfPublication: dateOfPublication.value,
+            //     pageCount: Number(pageCount.value),
+            //     description: description.value
+            // })
             e.preventDefault()
             editBook({
                 variables: {
                     id: editId,
                     title: title.value,
-                    category: category.value,
-                    author: author.value,
-                    publisher: publisher.value,
+                    category: editedCategory,
+                    author: editedAuthor,
+                    publisher: editedPublisher,
                     dateOfPublication: dateOfPublication.value,
                     pageCount: Number(pageCount.value),
                     description: description.value
@@ -139,6 +187,7 @@ const BookEdit = (props) => {
                 console.log(result)
                 setModalShow(false)
                 alert(`Edited Book: ${result.data.editBook.title}`)
+                window.location.reload(false);
             }).catch(e => {
                 alert(e)
                 console.error(e)
@@ -188,10 +237,18 @@ const BookEdit = (props) => {
                                 <Form.Control as="select" onChange={category.onChange}>
                                     <option>Select category</option>
                                     {data.categories.map(categoryMap => {
-                                        if (category.value.id === categoryMap.id) {
-                                            return (<option value={categoryMap.id}
-                                                            selected>{categoryMap.title}</option>)
+                                        // console.log("categoryMap",categoryMap)
+                                        if (category.value !== null) {
+                                            if (category.value.id === categoryMap.id) {
+                                                return (<option value={categoryMap.id}
+                                                                selected>{categoryMap.title}</option>)
 
+                                            } else {
+                                                return (
+                                                    <option value={categoryMap.id}>{categoryMap.title}</option>
+
+                                                )
+                                            }
                                         } else {
                                             return (
                                                 <option value={categoryMap.id}>{categoryMap.title}</option>
@@ -206,9 +263,15 @@ const BookEdit = (props) => {
                                 <Form.Control as="select" onChange={author.onChange}>
                                     <option>Select author</option>
                                     {data.authors.map(authorMap => {
-                                        if (author.value.id === authorMap.id) {
-                                            return (<option value={authorMap.id}
-                                                            selected>{authorMap.name}</option>)
+                                        if (author.value !== null) {
+                                            if (author.value.id === authorMap.id) {
+                                                return (<option value={authorMap.id}
+                                                                selected>{authorMap.name}</option>)
+                                            } else {
+                                                return (
+                                                    <option value={authorMap.id}>{authorMap.name}</option>
+                                                )
+                                            }
                                         } else {
                                             return (
                                                 <option value={authorMap.id}>{authorMap.name}</option>
@@ -222,9 +285,15 @@ const BookEdit = (props) => {
                                 <Form.Control as="select" onChange={publisher.onChange}>
                                     <option>Select publisher</option>
                                     {data.publishers.map(publisherMap => {
-                                        if (publisher.value.id === publisherMap.id) {
-                                            return (<option value={publisherMap.id}
-                                                            selected>{publisherMap.name}</option>)
+                                        if (publisher.value !== null) {
+                                            if (publisher.value.id === publisherMap.id) {
+                                                return (<option value={publisherMap.id}
+                                                                selected>{publisherMap.name}</option>)
+                                            } else {
+                                                return (
+                                                    <option value={publisherMap.id}>{publisherMap.name}</option>
+                                                )
+                                            }
                                         } else {
                                             return (
                                                 <option value={publisherMap.id}>{publisherMap.name}</option>
@@ -284,17 +353,20 @@ const BookEdit = (props) => {
                 </tr>
                 </thead>
                 <tbody>
-                {data.books.map(book => {
+                {data.books.map((book, index) => {
+                    // console.log(book)
                     return (
                         <tr>
-                            <td>{book.author.name}</td>
+                            <td>{index + 1}</td>
                             <td>{book.title}</td>
-                            <td>{book.category.title}</td>
-                            <td>{book.author.name}</td>
-                            <td>{book.publisher.name}</td>
+                            {book.category.title !== null ? <td>{book.category.title}</td> :
+                                <td>No category defined</td>}
+                            {book.author !== null ? <td>{book.author.name}</td> : <td>No author defined</td>}
+                            {book.publisher.name !== null ? <td>{book.publisher.name}</td> :
+                                <td>No publisher defined</td>}
                             <td>{book.dateOfPublication}</td>
                             <td>{book.pageCount}</td>
-                            {book.borrowedBy ? <td>{book.borrowedBy.firstName}</td> : <td></td>}
+                            {book.borrowedBy ? <td>{book.borrowedBy.firstName}</td> : <td>-</td>}
                             <td><Link onClick={() => {
                                 setEditId(book.id)
                                 setModalShow(true)
