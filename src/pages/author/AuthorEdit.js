@@ -3,39 +3,100 @@ import {useField} from "../../hooks";
 import {Button, Col, Container, Form, Modal, Row, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
+import {gql} from "@apollo/client/core";
+import {useMutation, useQuery} from "@apollo/client";
+
+const EDIT_AUTHOR = gql`
+    mutation EditBook(
+        $id:ID!
+        $name:String!,
+        $biography: String!
+    ){
+        editAuthor(
+            id:$id
+            name:$name,
+            biography:$biography
+        ){
+            id
+            name
+        }
+    }
+`
+
+const DELETE_AUTHOR = gql`
+    mutation DeleteAuthor($id:ID!){
+        deleteAuthor(
+            id:$id
+        ){
+            id
+        }
+    }
+`
+const AUTHORS = gql`
+    query {
+        authors{
+            id
+            name
+            biography
+        }
+    }
+`
 
 const Author = (props) => {
     const [modalShow, setModalShow] = useState(false);
+    const [editId, setEditId] = useState(0)
     const history = useHistory()
+    const [editAuthor] = useMutation(EDIT_AUTHOR)
+    const [deleteAuthor] = useMutation(DELETE_AUTHOR)
+    const {loading, error, data} = useQuery(AUTHORS)
+    console.log(data)
 
-    const deleteAuthor = (id) => {
+    const deleteAuthorFun = (id) => {
         alert(`delete ${id}`)
+        deleteAuthor({variables: {id}})
+        window.location.reload(false);
     }
 
     const EditModal = (props) => {
+        const name = useField('text')
+        const biography = useField('text')
+
         const handleSubmit = (e) => {
             e.preventDefault()
-            alert(`Add author ${firstName.value} ${lastName.value} ${email.value}`)
-            setModalShow(false)
+            editAuthor({
+                variables: {
+                    id: editId,
+                    name: name.value,
+                    biography: biography.value
+                }
+            }).then(result => {
+                alert(`Edited Author: ${result.data.editAuthor.name}`)
+                console.log(result)
+                window.location.reload(false);
+                setModalShow(false)
+            }).catch(e => {
+                alert(e)
+                console.error(e)
+            })
         }
 
         const resetForm = () => {
-            firstName.reset()
-            lastName.reset()
-            email.reset()
+            name.reset()
+            biography.reset()
         }
 
-        const firstName = useField('text')
-        const lastName = useField('text')
-        const email = useField('email')
-
-        console.log("?")
         return (
             <Modal {...props}
                    aria-labelledby="contained-modal-title-vcenter"
                    size="lg"
                    backdrop="static"
-                   keyboard={false}>
+                   keyboard={false}
+                   onEnter={() => {
+                       const editData = data.authors.find(author => author.id === editId)
+                       name.setValue(editData.name)
+                       biography.setValue(editData.biography)
+                   }
+                   }>
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                         Edit Author
@@ -45,18 +106,16 @@ const Author = (props) => {
                     <Container>
                         <Form>
                             <Form.Group controlId="formBasicFirstName">
-                                <Form.Label>First Name</Form.Label>
-                                <Form.Control value={firstName.value} type={firstName.type}
-                                              onChange={firstName.onChange}/>
+                                <Form.Label>Author Name</Form.Label>
+                                <Form.Control value={name.value} type={name.type}
+                                              onChange={name.onChange}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicLastName">
-                                <Form.Label>Last Name</Form.Label>
-                                <Form.Control value={lastName.value} type={lastName.type} onChange={lastName.onChange}/>
+                                <Form.Label>Biography</Form.Label>
+                                <Form.Control value={biography.value} type={biography.type}
+                                              onChange={biography.onChange} as="textarea" rows={3}/>
                             </Form.Group>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Email address</Form.Label>
-                                <Form.Control value={email.value} type={email.type} onChange={email.onChange}/>
-                            </Form.Group>
+
 
                         </Form>
                     </Container>
@@ -73,6 +132,9 @@ const Author = (props) => {
         );
     }
 
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error :( {error}</p>;
     return (
         <Container>
             <Link to='/staff/home'><p> ← Back to staff</p></Link>
@@ -82,62 +144,33 @@ const Author = (props) => {
             <Table striped bordered hover>
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Biography</th>
                     <th colSpan={2}>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>
-                        <Link onClick={() => setModalShow(true)}>
-                        Edit
-                    </Link>
-                    </td>
-                    <td>
-                        <Link onClick={() => deleteAuthor(1)}>
-                            Delete
-                        </Link>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>
-                        <Link onClick={() => setModalShow(true)}>
-                            Edit
-                        </Link>
-                    </td>
-                    <td>
-                        <Link onClick={() => deleteAuthor(1)}>
-                            Delete
-                        </Link>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                    <td>
-                        <Link onClick={() => setModalShow(true)}>
-                            Edit
-                        </Link>
-                    </td>
-                    <td>
-                        <Link onClick={() => deleteAuthor(1)}>
-                            Delete
-                        </Link>
-                    </td>
-                </tr>
+                {data.authors.map(author => {
+                    return (
+                        <tr>
+                            <td>{author.name}</td>
+                            <td>{author.biography}</td>
+                            <td><Link onClick={() => {
+                                setEditId(author.id)
+                                setModalShow(true)
+                            }}>
+                                Edit
+                            </Link>
+                            </td>
+                            <td><Link onClick={() =>
+                                deleteAuthorFun(author.id)
+                            }>
+                                Delete
+                            </Link>
+                            </td>
+                        </tr>
+                    )
+                })}
                 </tbody>
             </Table>
 

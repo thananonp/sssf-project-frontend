@@ -154,16 +154,12 @@ const BookEdit = (props) => {
         const pageCount = useField('number')
         const description = useField('text')
 
-        console.log("TEST")
         return (
             <Modal {...props}
                    aria-labelledby="contained-modal-title-vcenter"
-                // size="lg"
                    dialogClassName="modal-90w"
                    onEnter={() => {
-                       console.log("OnEnter")
                        const editData = data.books.find(book => book.id === editId)
-                       console.log("EditData", editData)
                        title.setValue(editData.title)
                        category.setValue(editData.category)
                        author.setValue(editData.author)
