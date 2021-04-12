@@ -29,6 +29,9 @@ import UserManage from "./pages/User/UserManage";
 import StaffRegister from "./pages/Staff/StaffRegister";
 import UserRegister from "./pages/User/UserRegister";
 import NavBar from "./pages/NavBar";
+import Category from "./pages/Category/Category";
+import CategoryEdit from "./pages/Category/CategoryEdit";
+import CategoryAdd from "./pages/Category/CategoryAdd";
 
 export default function App() {
     return (
@@ -63,6 +66,18 @@ export default function App() {
                         <Author/>
                     </Route>
 
+                    {/*Category*/}
+                    <Route path="/category/edit">
+                        <CategoryEdit/>
+                    </Route>
+
+                    <Route path="/category/add">
+                        <CategoryAdd/>
+                    </Route>
+
+                    <Route path="/category/:id">
+                        <Category/>
+                    </Route>
                     {/*Publisher*/}
                     <Route path="/publisher/edit">
                         <PublisherEdit/>
