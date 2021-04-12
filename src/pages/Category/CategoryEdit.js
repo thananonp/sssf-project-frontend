@@ -102,7 +102,7 @@ const CategoryEdit = (props) => {
                    keyboard={false}>
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Edit Publisher
+                        Edit Category
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="show-grid">
@@ -133,7 +133,7 @@ const CategoryEdit = (props) => {
     return (
         <Container>
             <Link to='/staff/home'><p> ← Back to staff</p></Link>
-            <h1>View, Edit and Delete Publisher</h1>
+            <h1>View, Edit and Delete Category</h1>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
             <Table striped bordered hover>

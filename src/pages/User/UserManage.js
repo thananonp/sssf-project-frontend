@@ -4,18 +4,92 @@ import {Button, Col, Container, Form, Modal, Row, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import ReturnStaff from "../ReturnStaff";
+import {gql} from "@apollo/client/core";
+import {useMutation, useQuery} from "@apollo/client";
 
+const USERS = gql`
+    query{
+        users{
+            id
+            email
+            firstName
+            lastName
+        }
+    }
+`
+
+const EDIT_USER = gql`
+    mutation
+    EditUser(
+        $id:ID!,
+        $email:String,
+        $firstName:String,
+        $lastName:String,
+        $password:String
+    ){
+        editUser(
+            id:$id,
+            email:$email,
+            firstName:$firstName,
+            lastName:$lastName,
+            password:$password
+        ){
+            id
+            email
+        }
+    }
+`
+
+const DELETE_USER = gql`
+    mutation DeleteUser(
+        $id:ID!
+    ){
+        deleteUser(
+            id:$id
+        ){
+            id
+            email
+        }
+    }
+`
 const UserManage = (props) => {
     const [modalShow, setModalShow] = useState(false);
     const history = useHistory()
+    const [editUser] = useMutation(EDIT_USER)
+    const [deleteUser] = useMutation(DELETE_USER)
+    const {loading, error, data} = useQuery(USERS)
+    const [editId, setEditId] = useState('')
 
-    const deletePublisher = (id) => {
+    const deleteUserFun = (id) => {
         alert(`delete ${id}`)
+        deleteUser({
+            variables: {
+                id
+            }
+        })
+        window.location.reload(false);
     }
 
     const EditModal = (props) => {
         const handleSubmit = (e) => {
             e.preventDefault()
+            editUser({
+                variables: {
+                    id: editId,
+                    firstName: firstName.value,
+                    lastName: lastName.value,
+                    email: email.value,
+                    password: password.value
+                }
+            }).then(result => {
+                alert(`Edited user: ${result.data.editUser.firstName}`)
+                console.log(result)
+                window.location.reload(false);
+                setModalShow(false)
+            }).catch(e => {
+                alert(e)
+                console.error(e)
+            })
             setModalShow(false)
         }
 
@@ -37,32 +111,43 @@ const UserManage = (props) => {
                    aria-labelledby="contained-modal-title-vcenter"
                    size="lg"
                    backdrop="static"
+                   onEnter={() => {
+                       const editData = data.users.find(user => user.id === editId)
+                       firstName.setValue(editData.firstName)
+                       lastName.setValue(editData.lastName)
+                       email.setValue(editData.email)
+                   }
+                   }
                    keyboard={false}>
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Edit Publisher
+                        Edit User
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="show-grid">
                     <Container>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control type={email.type} placeholder="Enter email" value={email.value} onChange={email.onChange}/>
+                            <Form.Control type={email.type} placeholder="Enter email" value={email.value}
+                                          onChange={email.onChange}/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicFirstName">
                             <Form.Label>First Name</Form.Label>
-                            <Form.Control type={firstName.type} placeholder="Enter first name" value={firstName.value} onChange={firstName.onChange}/>
+                            <Form.Control type={firstName.type} placeholder="Enter first name" value={firstName.value}
+                                          onChange={firstName.onChange}/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicSurname">
                             <Form.Label>Last Name</Form.Label>
-                            <Form.Control type={lastName.type} placeholder="Enter last name" value={lastName.value} onChange={lastName.onChange}/>
+                            <Form.Control type={lastName.type} placeholder="Enter last name" value={lastName.value}
+                                          onChange={lastName.onChange}/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicPassword">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type={password.type} placeholder="Password" value={password.value} onChange={password.onChange}/>
+                            <Form.Control type={password.type} placeholder="Password" value={password.value}
+                                          onChange={password.onChange}/>
                         </Form.Group>
                     </Container>
                 </Modal.Body>
@@ -78,6 +163,9 @@ const UserManage = (props) => {
         );
     }
 
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error :( {error}</p>;
     return (
         <Container>
             <ReturnStaff/>
@@ -91,62 +179,34 @@ const UserManage = (props) => {
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email address</th>
-                    <th>Book Due</th>
+                    {/*<th>Book Due</th>*/}
                     <th colSpan={2}>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>Otto@asdf</td>
-                    <td>-</td>
-                    <td>
-                        <Link onClick={() => setModalShow(true)}>
-                            Edit
-                        </Link>
-                    </td>
-                    <td>
-                        <Link onClick={() => deletePublisher(1)}>
-                            Delete
-                        </Link>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>Thornton@fdas</td>
-                    <td>2 days</td>
-                    <td>
-                        <Link onClick={() => setModalShow(true)}>
-                            Edit
-                        </Link>
-                    </td>
-                    <td>
-                        <Link onClick={() => deletePublisher(2)}>
-                            Delete
-                        </Link>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>the Bird@ofiashf</td>
-                    <td>1 day</td>
-                    <td>
-                        <Link onClick={() => setModalShow(true)}>
-                            Edit
-                        </Link>
-                    </td>
-                    <td>
-                        <Link onClick={() => deletePublisher(3)}>
-                            Delete
-                        </Link>
-                    </td>
-                </tr>
+                {data.users.map((user, index) => {
+                    return (
+                        <tr>
+                            <td>{index + 1}</td>
+                            <td>{user.firstName}</td>
+                            <td>{user.lastName}</td>
+                            <td>{user.email}</td>
+                            <td><Link onClick={() => {
+                                setEditId(user.id)
+                                setModalShow(true)
+                            }}>
+                                Edit
+                            </Link>
+                            </td>
+                            <td><Link onClick={() =>
+                                deleteUserFun(user.id)
+                            }>
+                                Delete
+                            </Link>
+                            </td>
+                        </tr>
+                    )
+                })}
                 </tbody>
             </Table>
 
