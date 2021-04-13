@@ -44,7 +44,7 @@ const UserLogin = (props) => {
                 console.log(data)
                 if (data !== undefined) {
                     props.logInWithCredential(data.token)
-                    document.cookie = `token= ${data.token}; Max-Age=1200`;
+                    document.cookie = `token= ${data.token}`;
                     // localStorage.setItem('jwtToken', data.token)
                     history.push('/user/home')
                 }
