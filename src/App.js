@@ -32,8 +32,33 @@ import NavBar from "./pages/NavBar";
 import Category from "./pages/Category/Category";
 import CategoryEdit from "./pages/Category/CategoryEdit";
 import CategoryAdd from "./pages/Category/CategoryAdd";
+import {logInWithCredential, loginWithoutCredential, logoutWithoutCredential} from "./reducers/loginReducer";
+import {connect} from "react-redux";
 
-export default function App() {
+function App(props) {
+    function getCookie(cname) {
+        const name = cname + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    const jwtCookie = getCookie("token")
+    if (jwtCookie) {
+        props.logInWithCredential(jwtCookie)
+
+    }
+
+
     return (
         <Router>
             <div>
@@ -139,3 +164,11 @@ export default function App() {
         </Router>
     );
 }
+
+
+const mapDispatchToProps = {
+    logInWithCredential, loginWithoutCredential, logoutWithoutCredential
+}
+const connectedApp = connect(null, mapDispatchToProps)(App)
+
+export default connectedApp

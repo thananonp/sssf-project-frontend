@@ -40,6 +40,7 @@ const UserRegister = (props) => {
         if (password.value.length < 8 || confirmPassword.value.length < 8) {
             alert("Password length must be greater than 8 characters")
             return false
+
         } else if (password.value !== confirmPassword.value) {
             alert("Password does not match!")
             return false
@@ -53,7 +54,7 @@ const UserRegister = (props) => {
             }
 
         }).then(result => {
-            alert("New User registered")
+            alert(`User ${result.data.addUser.email} registered.\nPlease log in in the next page`)
             // props.loginWithoutCredential()
             history.push('/')
         }).catch(e => {

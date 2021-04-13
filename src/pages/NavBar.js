@@ -16,6 +16,7 @@ const NavBar = (props) => {
         props.logoutWithoutCredential()
         history.push('/')
     }
+    console.log(props.login)
     return (
         <nav>
             <Container fluid>
@@ -24,9 +25,9 @@ const NavBar = (props) => {
                     </Col>
                     <Col>
                         <div className="float-right">
-                            {props.login
+                            {props.login.login
                                 ? <Row>
-                                    <p>Logged in, Welcome Lilly</p>
+                                    <p>Logged in, Welcome {props.login.user.user.firstName}</p>
                                     <Button onClick={logoutUser}>Logout</Button>
                                 </Row>
                                 : <Form onSubmit={loginUser}>
