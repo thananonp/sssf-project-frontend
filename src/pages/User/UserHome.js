@@ -32,67 +32,81 @@ const UserHome = (props) => {
     }
     const timeElapsed = Date.now();
     const date = new Date(timeElapsed);
-    return (
-        <Container>
-            <Row>
-                <Col><h2>Welcome Lilly</h2>
-                </Col>
-                <Col>
-                    <div className="float-right">
-                        <Button onClick={editUser}>Setting</Button>
-                        <Button onClick={logout}>Logout</Button>
-                    </div>
-                </Col>
-            </Row>
-            <br/>
-            <InputGroup className="mb-3">
-                <FormControl
-                    onChange={handleSearch}
-                    placeholder="Search books, publishers and writers..."
-                    aria-label="Search library"
-                    aria-describedby="basic-addon2"
-                />
-                <InputGroup.Append>
-                    <Button onClick={toSearch} variant="outline-secondary">Search</Button>
-                </InputGroup.Append>
-            </InputGroup>
+    if (props.login.login) {
+        return (
+            <Container>
+                <Row>
+                    <Col><h2>Welcome {props.login.user.user.firstName}</h2>
+                    </Col>
+                    <Col>
+                        <div className="float-right">
+                            <Button onClick={editUser}>Setting</Button>
+                            <Button onClick={logout}>Logout</Button>
+                        </div>
+                    </Col>
+                </Row>
+                <br/>
+                <InputGroup className="mb-3">
+                    <FormControl
+                        onChange={handleSearch}
+                        placeholder="Search books, publishers and writers..."
+                        aria-label="Search library"
+                        aria-describedby="basic-addon2"
+                    />
+                    <InputGroup.Append>
+                        <Button onClick={toSearch} variant="outline-secondary">Search</Button>
+                    </InputGroup.Append>
+                </InputGroup>
 
-            <h3>Currently Borrowed Book</h3>
-            <Table striped bordered hover>
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Book Title</th>
-                    <th>Author</th>
-                    <th>Due Date</th>
-                    <th>Fine</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Twinkle Little Star</td>
-                    <td>John Lennon</td>
-                    <td>{date.toDateString()}</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Yski booki</td>
-                    <td>Number one</td>
-                    <td>{date.toDateString()}</td>
-                    <td>$ 12</td>
-                </tr>
-                </tbody>
-            </Table>
+                <h3>Currently Borrowed Book</h3>
+                <Table striped bordered hover>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Book Title</th>
+                        <th>Author</th>
+                        <th>Due Date</th>
+                        <th>Fine</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Twinkle Little Star</td>
+                        <td>John Lennon</td>
+                        <td>{date.toDateString()}</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Yski booki</td>
+                        <td>Number one</td>
+                        <td>{date.toDateString()}</td>
+                        <td>$ 12</td>
+                    </tr>
+                    </tbody>
+                </Table>
 
 
-        </Container>
-    )
+            </Container>
+        )
+    }
+    else{
+        alert("Please log in first!")
+        history.push('/')
+        return(
+            null
+        )
+    }
 }
 const mapDispatchToProps = {
-    newSearchQuery,logoutWithoutCredential
+    newSearchQuery, logoutWithoutCredential
 }
-const connectedUserHome = connect(null, mapDispatchToProps)(UserHome)
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
+const connectedUserHome = connect(mapStateToProps, mapDispatchToProps)(UserHome)
 
 export default connectedUserHome
