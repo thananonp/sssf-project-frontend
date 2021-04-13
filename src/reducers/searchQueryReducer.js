@@ -1,6 +1,6 @@
 const initialState = {
     query: '',
-    scope: 'all'
+    scope: 'title'
 }
 
 export const searchScope = (scope) => {

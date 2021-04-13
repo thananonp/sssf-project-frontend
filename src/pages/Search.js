@@ -3,12 +3,51 @@ import {newSearchQuery, searchScope} from "../reducers/searchQueryReducer";
 import {Button, Container, Form, FormControl, InputGroup, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
+import {gql} from "@apollo/client/core";
+import {useQuery} from "@apollo/client";
+
+const SEARCHBOOKS = gql`
+    query SearchBooks($query:String, $scope:String){
+        searchBooks(
+            query:$query,
+            scope:$scope
+        ){
+            id
+            title
+            category{
+                id
+                title
+            }
+            author{
+                id
+                name
+            }
+            publisher{
+                id
+                name
+            }
+            dateOfPublication
+            pageCount
+            description
+            borrowedBy{
+                id
+                firstName
+            }
+        }
+    }
+`
 
 const Search = (props) => {
     const [search, setSearch] = useState('')
     const [scope, setScope] = useState('')
     const timeElapsed = Date.now();
     const date = new Date(timeElapsed);
+    const {loading, error, data} = useQuery(SEARCHBOOKS, {
+        variables: {
+            query: props.searchQuery.query,
+            scope: props.searchQuery.scope
+        }
+    })
 
     const handleSearch = (e) => {
         setSearch(e.target.value)
@@ -23,6 +62,9 @@ const Search = (props) => {
         props.searchScope(e.target.value)
     }
 
+    console.log(data)
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error :( {error}</p>;
     return (
         <div>
             <Container fluid>
@@ -45,7 +87,7 @@ const Search = (props) => {
                     <Form.Group controlId="exampleForm.SelectCustomSizeSm">
 
                         <Form.Control as="select" onChange={setScopeSearch}>
-                            <option value='all'>Search everything</option>
+                            {/*<option value='all'>Search everything</option>*/}
                             <option value='title'>Title only</option>
                             <option value='author'>Author only</option>
                             <option value='publisher'>Publisher only</option>
@@ -59,24 +101,33 @@ const Search = (props) => {
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Book Title</th>
+                        <th>Title</th>
+                        <th>Category</th>
                         <th>Author</th>
                         <th>Publisher</th>
+                        <th>Date of Publication</th>
+                        <th>Page Count</th>
+                        <th>Availability</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><Link to="/book/1">Twinkle Little Star</Link></td>
-                        <td><Link to="/author/1">John Lennon</Link></td>
-                        <td><Link to="/publisher/1">Mock1</Link></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><Link to="/book/2">Yski booki</Link></td>
-                        <td><Link to="/author/2">Number one</Link></td>
-                        <td><Link to="/publisher/2">Mock2</Link></td>
-                    </tr>
+                    {data.searchBooks.map((book, index) => {
+                        // console.log(book)
+                        return (
+                            <tr>
+                                <td>{index + 1}</td>
+                                <td>{book.title}</td>
+                                {book.category.title !== null ? <td>{book.category.title}</td> :
+                                    <td>No category defined</td>}
+                                {book.author !== null ? <td>{book.author.name}</td> : <td>No author defined</td>}
+                                {book.publisher.name !== null ? <td>{book.publisher.name}</td> :
+                                    <td>No publisher defined</td>}
+                                <td>{book.dateOfPublication}</td>
+                                <td>{book.pageCount}</td>
+                                {book.borrowedBy ? <td>No</td> : <td>Yes</td>}
+                            </tr>
+                        )
+                    })}
                     </tbody>
                 </Table>
             </Container>
