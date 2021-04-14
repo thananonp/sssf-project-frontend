@@ -32,14 +32,25 @@ const UserLogin = (props) => {
                 if (!response.ok) {
                     if (response.status === 404) {
                         alert('Email not found, please retry')
+                        return false
                     }
                     if (response.status === 401) {
                         alert('Email and password do not match, please retry')
+                        return false
+                    }
+                    if (response.status === 400) {
+                        alert('Email and password do not match, please retry')
+                        return false
                     }
                 }
                 return response
             })
-            .then(response => response.json())
+            .then(response => {
+                    if (response !== false) {
+                        return response.json()
+                    }
+                }
+            )
             .then(data => {
                 console.log(data)
                 if (data !== undefined) {
@@ -57,8 +68,8 @@ const UserLogin = (props) => {
         // props.loginWithoutCredential()
     }
 
+// if(props.login.login && props.login.user)
     return (
-
         <Container>
             <h1>User</h1>
             <Form onSubmit={loginUser}>

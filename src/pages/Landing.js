@@ -39,19 +39,54 @@ const Landing = (props) => {
                         <ListGroup.Item>Sun<span className="float-right">Closed</span></ListGroup.Item>
                     </ListGroup>
                 </Card>
-                <Card style={{width: '18rem'}}>
-                    <Card.Header as="h5">New user</Card.Header>
-                    <Card.Body>
-                        <Card.Title>Are you new to the library website</Card.Title>
-                        <div>Already has an account
-                            <Link to="/user/login"><Button>Login</Button></Link>
-                        </div>
-                        <div>
-                            No account?
-                            <Link to="/user/register"><Button>Register here</Button></Link>
-                        </div>
-                    </Card.Body>
-                </Card>
+                {(props.login.login && props.login.user.type === "user")
+                    ? <Card style={{width: '18rem'}}>
+                        <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>
+                        <Card.Body>
+                            <Card.Title>Click here to go to your user page.
+                                <Link to="/user/home"><Button>User page</Button></Link>
+                            </Card.Title>
+                        </Card.Body>
+                    </Card>
+                    : <Card style={{width: '18rem'}}>
+                        <Card.Header as="h5">New user</Card.Header>
+                        <Card.Body>
+                            <Card.Title>Are you new to the library website</Card.Title>
+                            <div>Already has an account
+                                <Link to="/user/login"><Button>Login</Button></Link>
+                            </div>
+                            <div>
+                                No account?
+                                <Link to="/user/register"><Button>Register here</Button></Link>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                }
+
+                {(props.login.login && props.login.user.type === "staff")
+                    ? <Card style={{width: '18rem'}}>
+                        <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>
+                        <Card.Body>
+                            <Card.Title>Click here to go to your user page.
+                                <Link to="/user/home"><Button>User page</Button></Link>
+                            </Card.Title>
+                        </Card.Body>
+                    </Card>
+                    : <Card style={{width: '18rem'}}>
+                        <Card.Header as="h5">New user</Card.Header>
+                        <Card.Body>
+                            <Card.Title>Are you new to the library website</Card.Title>
+                            <div>Already has an account
+                                <Link to="/user/login"><Button>Login</Button></Link>
+                            </div>
+                            <div>
+                                No account?
+                                <Link to="/user/register"><Button>Register here</Button></Link>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                }
+
                 <Card style={{width: '18rem'}}>
                     <Card.Header as="h5">Staff</Card.Header>
                     <Card.Body>
@@ -74,6 +109,13 @@ const Landing = (props) => {
 const mapDispatchToProps = {
     newSearchQuery
 }
-const connectedLanding = connect(null, mapDispatchToProps)(Landing)
+
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
+
+const connectedLanding = connect(mapStateToProps, mapDispatchToProps)(Landing)
 
 export default connectedLanding
