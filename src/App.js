@@ -34,6 +34,7 @@ import CategoryEdit from "./pages/Category/CategoryEdit";
 import CategoryAdd from "./pages/Category/CategoryAdd";
 import {logInWithCredential, loginWithoutCredential, logoutWithoutCredential} from "./reducers/loginReducer";
 import {connect} from "react-redux";
+import UserChangePassword from "./pages/User/UserChangePassword";
 
 function App(props) {
     function getCookie(cname) {
@@ -134,6 +135,9 @@ function App(props) {
                     </Route>
 
                     {/*User*/}
+                    <Route path="/user/changepassword">
+                        <UserChangePassword/>
+                    </Route>
                     <Route path="/user/register">
                         <UserRegister/>
                     </Route>

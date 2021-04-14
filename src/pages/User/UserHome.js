@@ -30,6 +30,9 @@ const UserHome = (props) => {
         props.newSearchQuery(search)
         history.push('/search')
     }
+    const changePassword = () => {
+        history.push('/user/changepassword')
+    }
     const timeElapsed = Date.now();
     const date = new Date(timeElapsed);
     if (props.login.login) {
@@ -40,6 +43,7 @@ const UserHome = (props) => {
                     </Col>
                     <Col>
                         <div className="float-right">
+                            <Button onClick={changePassword}>Change Password</Button>
                             <Button onClick={editUser}>Setting</Button>
                             <Button onClick={logout}>Logout</Button>
                         </div>
