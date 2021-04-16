@@ -2,26 +2,134 @@ import {Button, Container, Form} from "react-bootstrap";
 import {useHistory} from "react-router";
 import ReturnStaff from "../ReturnStaff";
 import {useField} from "../../hooks";
+import {gql} from "@apollo/client/core";
+import React, {useEffect} from "react";
+import {useLazyQuery, useMutation} from "@apollo/client";
+import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
+import {connect} from "react-redux";
 
-const StaffSetting = () => {
+const STAFF_COMPARE_PASSWORD = gql`
+    query StaffComparePassword($id:ID!,$password:String!){
+        staffComparePassword(id:$id,password:$password)
+    }
+`
+
+
+const EDIT_STAFF = gql`
+    mutation editStaff(
+        $id: ID!,
+        $email: String
+        $firstName: String
+        $lastName: String
+    ){
+        editStaff(
+            id:  $id,
+            email:  $email,
+            firstName:  $firstName,
+            lastName:  $lastName
+        ) {
+            id
+            email
+        }
+    }
+`
+
+const StaffSetting = (props) => {
     const email = useField('email')
     const firstName = useField('text')
     const lastName = useField('text')
-    const password = useField('password')
-    const confirmPassword = useField('password')
+    const oldPassword = useField('password', '')
+
+    useEffect(() => {
+        if (props.login.login) {
+            email.setValue(props.login.user.user.email)
+            firstName.setValue(props.login.user.user.firstName)
+            lastName.setValue(props.login.user.user.lastName)
+        }
+    }, [])
+
+    const [editStaff] = useMutation(EDIT_STAFF)
+    let StaffComparePassword, loading, data;
+    [StaffComparePassword, {loading, data}] = useLazyQuery(STAFF_COMPARE_PASSWORD, {
+        onCompleted: (data) => {
+            console.log(data)
+            if (data.staffComparePassword) {
+                editStaff({
+                    variables: {
+                        id: props.login.user.user._id,
+                        firstName: firstName.value,
+                        lastName: lastName.value,
+                        email: email.value,
+                    }
+                }).then(result => {
+                    alert(`Staff ${result.data.editStaff.email} edited`)
+                    // props.loginWithoutCredential()
+                    const option = {
+                        method: 'post',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        body: `email=${email.value}&password=${oldPassword.value}`
+                    }
+                    console.log("option", option)
+                    console.log("url", process.env.REACT_APP_BACKEND_REST_URL + 'staff/authenticate')
+                    fetch(process.env.REACT_APP_BACKEND_REST_URL + 'staff/authenticate', option)
+                        .then(response => {
+                            console.log("response", response)
+                            if (!response.ok) {
+                                if (response.status === 404) {
+                                    alert('Email not found, please retry')
+                                    return false
+                                }
+                                if (response.status === 401) {
+                                    alert('Email and password do not match, please retry')
+                                    return false
+                                }
+                                if (response.status === 400) {
+                                    alert('Email and password do not match, please retry')
+                                    return false
+                                }
+                            }
+                            return response
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data)
+                            if (data !== undefined) {
+                                props.logInWithCredential(data.token)
+                                document.cookie = `token= ${data.token}`;
+                                // localStorage.setItem('jwtToken', data.token)
+                                history.push('/staff/home')
+                            }
+                        })
+                        .catch(e => {
+                            console.error(e)
+                            alert(e)
+                        })
+                }).catch(e => {
+                    alert(e)
+                    console.log(e)
+                })
+            } else {
+                alert("Password incorrect")
+            }
+        }
+    });
+
 
     const history = useHistory()
-    const updateInfo = () => {
-        alert("Info updated")
-        history.push('/staff/home')
+
+    const updateInfo = (e) => {
+        e.preventDefault()
+        StaffComparePassword({variables: {id: props.login.user.user._id, password: oldPassword.value}})
+
     }
 
     const resetForm = () => {
         email.reset()
         firstName.reset()
         lastName.reset()
-        password.reset()
-        confirmPassword.reset()
+        oldPassword.reset()
     }
     return (
         <Container>
@@ -46,14 +154,9 @@ const StaffSetting = () => {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" value={password.value}
-                                  onChange={password.onChange}/>
-                </Form.Group>
-                <Form.Group controlId="formBasicPasswordCheck">
                     <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" value={confirmPassword.value}
-                                  onChange={confirmPassword.onChange}/>
+                    <Form.Control type="password" placeholder="Password" value={oldPassword.value}
+                                  onChange={oldPassword.onChange}/>
                 </Form.Group>
 
                 <Button variant="primary" type="submit">
@@ -67,4 +170,15 @@ const StaffSetting = () => {
     )
 }
 
-export default StaffSetting
+const mapDispatchToProps = {
+    logoutWithoutCredential, logInWithCredential
+}
+
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
+
+const connectedStaffSetting = connect(mapStateToProps, mapDispatchToProps)(StaffSetting)
+export default connectedStaffSetting

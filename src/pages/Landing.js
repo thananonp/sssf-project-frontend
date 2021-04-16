@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {Button, Card, CardDeck, Col, Container, FormControl, InputGroup, ListGroup, Row} from "react-bootstrap";
+import {Button, Card, CardDeck, Container, FormControl, InputGroup, ListGroup} from "react-bootstrap";
 import {useField} from "../hooks";
 import {newSearchQuery} from "../reducers/searchQueryReducer";
 import {useHistory} from "react-router";
@@ -32,7 +32,7 @@ const Landing = (props) => {
                     <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>
                     <Card.Body>
                         <Card.Title>Click here to go to your staff page
-                            <Link to="/user/home"><Button>Staff page</Button></Link>
+                            <Link to="/staff/home"><Button>Staff page</Button></Link>
                         </Card.Title>
                     </Card.Body>
                 </Card>)

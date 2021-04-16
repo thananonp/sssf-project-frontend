@@ -8,18 +8,18 @@ import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
 
-const USER_COMPARE_PASSWORD = gql`
-    query UserComparePassword($id:ID!,$password:String!){
-        userComparePassword(id:$id,password:$password)
+const STAFF_COMPARE_PASSWORD = gql`
+    query StaffComparePassword($id:ID!,$password:String!){
+        staffComparePassword(id:$id,password:$password)
     }
 `
 
-const CHANGE_PASSWORD_USER = gql`
-    mutation ChangePasswordUser(
+const CHANGE_PASSWORD_STAFF = gql`
+    mutation ChangePasswordStaff(
         $id: ID!,
         $password: String!
     ){
-        changePasswordUser(
+        changePasswordStaff(
             id:  $id,
             password:  $password
         ) {
@@ -29,24 +29,24 @@ const CHANGE_PASSWORD_USER = gql`
     }
 `
 
-const UserSetting = (props) => {
+const StaffChangePassword = (props) => {
     const history = useHistory()
     const oldPassword = useField('password', '')
     const password = useField('password', '')
     const confirmPassword = useField('password', '')
     let userId
-    const [ChangePasswordUser] = useMutation(CHANGE_PASSWORD_USER)
-    let UserComparePassword, loading, data;
-    [UserComparePassword, {loading, data}] = useLazyQuery(USER_COMPARE_PASSWORD, {
+    const [ChangePasswordStaff] = useMutation(CHANGE_PASSWORD_STAFF)
+    let StaffComparePassword, loading, data;
+    [StaffComparePassword, {loading, data}] = useLazyQuery(STAFF_COMPARE_PASSWORD, {
         onCompleted: (data) => {
-            if (data.userComparePassword) {
-                ChangePasswordUser({
+            if (data.staffComparePassword) {
+                ChangePasswordStaff({
                     variables: {
                         id: props.login.user.user._id,
                         password: password.value
                     }
                 }).then(result => {
-                    alert(`User ${result.data.changePasswordUser.email} edited\nPlease sign in again.`)
+                    alert(`Staff ${result.data.changePasswordStaff.email} edited\nPlease sign in again.`)
                     props.logoutWithoutCredential()
                     document.cookie = `token=;max-age:1`;
                     // props.loginWithoutCredential()
@@ -70,7 +70,7 @@ const UserSetting = (props) => {
             return false
         }
         console.log({id: props.login.user.user._id, password: oldPassword.value})
-        UserComparePassword({variables: {id: props.login.user.user._id, password: oldPassword.value}})
+        StaffComparePassword({variables: {id: props.login.user.user._id, password: oldPassword.value}})
 
 
     }
@@ -84,8 +84,8 @@ const UserSetting = (props) => {
     if (props.login.login) {
         return (
             <Container>
-                <Link to='/user/home'><p> ← Back to user</p></Link>
-                <h1>User Setting</h1>
+                <Link to='/user/staff'><p> ← Back to staff</p></Link>
+                <h1>Staff Setting</h1>
                 <Form onSubmit={updateInfo} onReset={resetForm}>
 
                     <Form.Group controlId="formBasicPassword">
@@ -129,5 +129,5 @@ const mapStateToProps = (state) => {
     }
 }
 
-const connectedUserSetting = connect(mapStateToProps, mapDispatchToProps)(UserSetting)
+const connectedUserSetting = connect(mapStateToProps, mapDispatchToProps)(StaffChangePassword)
 export default connectedUserSetting

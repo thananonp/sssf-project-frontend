@@ -4,7 +4,7 @@ import {useField} from "../../hooks";
 import {Link} from "react-router-dom";
 import React, {useEffect} from "react";
 import {gql} from "@apollo/client/core";
-import {useLazyQuery, useMutation, useQuery} from "@apollo/client";
+import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
 
@@ -48,10 +48,8 @@ const UserSetting = (props) => {
     const firstName = useField('text')
     const lastName = useField('text')
     const oldPassword = useField('password', '')
-    // const password = useField('password', '')
-    // const confirmPassword = useField('password', '')
-    // let userId
-    const [UserComparePassword, {loading, data}] = useLazyQuery(USERCOMPAREPASSWORD, {
+    let UserComparePassword, loading, data;
+    [UserComparePassword, {loading, data}] = useLazyQuery(USERCOMPAREPASSWORD, {
         onCompleted: (data) => {
             console.log(data)
             if (data.userComparePassword) {
@@ -109,11 +107,8 @@ const UserSetting = (props) => {
                 alert("Password incorrect")
             }
         }
-    })
-    // const {loading, error, data} = useQuery(USER, {
-    //     // variables: {id: props.login.user.user._id, password:props.login.user.user.password}
-    //     variables: {id: userId || "111111111111111111111111"}
-    // })
+    });
+
 
     const [editUser] = useMutation(EDIT_USER)
     useEffect(() => {
@@ -129,43 +124,7 @@ const UserSetting = (props) => {
 
     const updateInfo = async (e) => {
         e.preventDefault()
-        // console.log(password.value.length)
-        // if (password.value.length < 8 || password.value.length < 8) {
-        //     alert("Password length must be greater than 8 characters")
-        //     return false
-        //
-        // } else if (password.value !== confirmPassword.value) {
-        //     alert("Password and Confirm Password does not match!")
-        //     return false
-        // }
         UserComparePassword({variables: {id: props.login.user.user._id, password: oldPassword.value}})
-        // .finally(
-        //     {
-        //         if(data) {
-        //             if (data.userComparePassword) {
-        //                 console.log("CHANGE PASSWORD")
-        //             }
-        //         }
-        //     }
-        // )
-
-        // if (data.userComparePassword) {
-        //     alert("yES")
-        // } else {
-        //     alert("NO")
-        // }
-
-        // console.log("dataLAzy", dataLazy)
-        // console.log("loadingLazy", loadingLazy)
-
-        // if () {
-        //     alert("yES")
-        // } else {
-        //     alert("NO")
-        // }
-        // if (password.length)
-        //     alert("Info updated")
-        // history.push('/user/home')
 
     }
 
@@ -173,27 +132,8 @@ const UserSetting = (props) => {
         email.reset()
         firstName.reset()
         lastName.reset()
-        // password.reset()
-        // confirmPassword.reset()
+        oldPassword.reset()
     }
-    //
-    // useEffect(()=>{
-    //     email.setValue()
-    //     firstName.setValue()
-    //     lastName.setValue()
-    //     password.setValue()
-    //     email.setValue()
-    // },[])
-
-
-    // if (loading) return <p>Loading...</p>;
-    // if (error) return <p>Error :( {error}</p>;
-    // console.log(data)
-    // if(data){
-    //     if(data.userComparePassword){
-    //         console.log("CHANGE PASSWORD")
-    //     }
-    // }
     if (props.login.login) {
         return (
             <Container>
@@ -246,9 +186,7 @@ const UserSetting = (props) => {
     } else {
         alert("Please log in first!")
         history.push('/')
-        return (
-            null
-        )
+        return null
     }
 }
 const mapDispatchToProps = {

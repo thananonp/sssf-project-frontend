@@ -2,14 +2,14 @@ import {Link} from "react-router-dom";
 import React from "react";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import {useHistory} from "react-router";
-import {logInWithCredential, loginWithoutCredential, logoutWithoutCredential} from "../reducers/loginReducer";
+import {logInWithCredential, logoutWithoutCredential} from "../reducers/loginReducer";
 import {connect} from "react-redux";
 import {useField} from "../hooks";
 
 const NavBar = (props) => {
     const history = useHistory()
     const email = useField('email', "user1@user.com")
-    const password = useField('password', "passworduser1")
+    const password = useField('password', "passworduser11")
     const loginUser = (e) => {
         e.preventDefault()
         if (password.value.length < 8) {
@@ -34,6 +34,10 @@ const NavBar = (props) => {
                     }
                     if (response.status === 401) {
                         alert('Email and password do not match, please retry')
+                    }
+                    if (response.status === 400) {
+                        alert('Email and password do not match, please retry')
+                        return false
                     }
                 }
                 return response

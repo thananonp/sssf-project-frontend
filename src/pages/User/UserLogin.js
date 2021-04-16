@@ -7,7 +7,7 @@ import {logInWithCredential} from "../../reducers/loginReducer";
 
 const UserLogin = (props) => {
     const email = useField('email', "user1@user.com")
-    const password = useField('password', "passworduser1")
+    const password = useField('password', "passworduser11")
     const history = useHistory()
 
     const loginUser = (e) => {
