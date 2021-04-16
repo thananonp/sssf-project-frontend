@@ -1,9 +1,9 @@
-import {useHistory, useParams} from "react-router";
+import {useHistory} from "react-router";
 import {useField} from "../../hooks";
-import {Button, Col, Container, Form, Modal, Row, Table} from "react-bootstrap";
+import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
-import ReturnStaff from "../ReturnStaff";
+import {ReturnStaff} from "../ReturnStaff";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 

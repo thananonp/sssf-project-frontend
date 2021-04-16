@@ -1,12 +1,12 @@
 import {Button, Container, Form} from "react-bootstrap";
 import {useHistory} from "react-router";
 import {useField} from "../../hooks";
-import {Link} from "react-router-dom";
 import React from "react";
 import {gql} from "@apollo/client/core";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
+import {ReturnUser} from "../ReturnStaff";
 
 const USER_COMPARE_PASSWORD = gql`
     query UserComparePassword($id:ID!,$password:String!){
@@ -84,7 +84,7 @@ const UserSetting = (props) => {
     if (props.login.login) {
         return (
             <Container>
-                <Link to='/user/home'><p> ← Back to user</p></Link>
+                <ReturnUser/>
                 <h1>User Setting</h1>
                 <Form onSubmit={updateInfo} onReset={resetForm}>
 

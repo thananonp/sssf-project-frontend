@@ -1,12 +1,18 @@
 import {Link} from "react-router-dom";
 import React from "react";
 
-const ReturnStaff = () => {
-    return(
+export const ReturnStaff = () => {
+    return (
         <div>
             <Link to='/staff/home'><p> ← Back to staff</p></Link>
         </div>
     )
 }
 
-export default ReturnStaff
+export const ReturnUser = () => {
+    return (
+        <div>
+            <Link to='/user/home'><p> ← Back to user</p></Link>
+        </div>
+    )
+}
