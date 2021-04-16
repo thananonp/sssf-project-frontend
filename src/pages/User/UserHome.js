@@ -26,7 +26,7 @@ const UserHome = (props) => {
     }
 
     const toSearch = () => {
-        alert(`search query ${search}`)
+        // alert(`search query ${search}`)
         props.newSearchQuery(search)
         history.push('/search')
     }

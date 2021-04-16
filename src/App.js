@@ -1,13 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
 import React from "react";
 
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import UserLogin from "./pages/User/UserLogin";
 import StaffLogin from "./pages/Staff/StaffLogin";
 import Landing from "./pages/Landing";
@@ -43,10 +37,10 @@ function App(props) {
         const ca = decodedCookie.split(';');
         for (let i = 0; i < ca.length; i++) {
             let c = ca[i];
-            while (c.charAt(0) == ' ') {
+            while (c.charAt(0) === ' ') {
                 c = c.substring(1);
             }
-            if (c.indexOf(name) == 0) {
+            if (c.indexOf(name) === 0) {
                 return c.substring(name.length, c.length);
             }
         }

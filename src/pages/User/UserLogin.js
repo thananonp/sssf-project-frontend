@@ -3,14 +3,13 @@ import {Button, Container, Form} from "react-bootstrap";
 import {connect} from "react-redux";
 import {useField} from "../../hooks";
 import {logInWithCredential} from "../../reducers/loginReducer";
-import store from "../../helpers/store";
 
 
 const UserLogin = (props) => {
     const email = useField('email', "user1@user.com")
     const password = useField('password', "passworduser1")
-
     const history = useHistory()
+
     const loginUser = (e) => {
         e.preventDefault()
         if (password.value.length < 8) {
@@ -24,8 +23,8 @@ const UserLogin = (props) => {
             },
             body: `email=${email.value}&password=${password.value}`
         }
-        console.log("option", option)
-        console.log("url", process.env.REACT_APP_BACKEND_REST_URL + 'user/authenticate')
+        // console.log("option", option)
+        // console.log("url", process.env.REACT_APP_BACKEND_REST_URL + 'user/authenticate')
         fetch(process.env.REACT_APP_BACKEND_REST_URL + 'user/authenticate', option)
             .then(response => {
                 console.log("response", response)
@@ -64,14 +63,12 @@ const UserLogin = (props) => {
                 console.error(e)
                 alert(e)
             })
-        // history.push('/user/home')
-        // props.loginWithoutCredential()
     }
 
 // if(props.login.login && props.login.user)
     return (
         <Container>
-            <h1>User</h1>
+            <h1>User Login</h1>
             <Form onSubmit={loginUser}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>

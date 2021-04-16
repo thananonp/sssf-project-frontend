@@ -1,14 +1,14 @@
 import {
     Button,
-    Card, CardDeck,
+    Card,
+    CardDeck,
     Col,
     Container,
     FormControl,
     InputGroup,
     ListGroup,
     ListGroupItem,
-    Row,
-    Table
+    Row
 } from "react-bootstrap";
 import {useHistory} from "react-router";
 import {useState} from "react";
@@ -38,28 +38,29 @@ const UserHome = (props) => {
     }
 
     const toSearch = () => {
-        alert(`search query ${search}`)
+        // alert(`search query ${search}`)
         props.newSearchQuery(search)
         history.push('/search')
     }
-    const timeElapsed = Date.now();
-    const date = new Date(timeElapsed);
+
+    const changePassword = () => {
+        history.push('/staff/changepassword')
+    }
+
     return (
         <Container>
             <h1>Staff</h1>
             <Row>
-                <h2>Welcome Lilly</h2>
-
-
-                <div className="float-right">
-                    <Button onClick={editStaff}>Setting</Button>
-                    <Button onClick={logout}>Logout</Button>
-                </div>
-
-
+                <Col><h2>Welcome {props.login.user.user.firstName}</h2>
+                </Col>
+                <Col>
+                    <div className="float-right">
+                        <Button onClick={changePassword}>Change Password</Button>
+                        <Button onClick={editStaff}>Setting</Button>
+                        <Button onClick={logout}>Logout</Button>
+                    </div>
+                </Col>
             </Row>
-
-
             <InputGroup className="mb-3">
                 <FormControl
                     onChange={handleSearch}
@@ -141,10 +142,16 @@ const UserHome = (props) => {
         </Container>
     )
 }
+
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
 const mapDispatchToProps =
     {
         newSearchQuery, logoutWithoutCredential
     }
-const connectedUserHome = connect(null, mapDispatchToProps)(UserHome)
+const connectedUserHome = connect(mapStateToProps, mapDispatchToProps)(UserHome)
 
 export default connectedUserHome
