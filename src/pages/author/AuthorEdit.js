@@ -72,6 +72,7 @@ const Author = (props) => {
                     biography: biography.value
                 }
             }).then(result => {
+                setModalShow(false)
                 window.alert(`Edited Author: ${result.data.editAuthor.name}`)
                 window.location.reload(false);
             }).catch(e => {

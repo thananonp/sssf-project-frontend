@@ -1,10 +1,11 @@
-import {useHistory, useParams} from "react-router";
+import {useHistory} from "react-router";
 import {useField} from "../../hooks";
-import {Button, Col, Container, Form, Modal, Row, Table} from "react-bootstrap";
+import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
+import {LoadingSpinner} from "../ReturnStaff";
 
 const PUBLISHERS = gql`
     query{
@@ -53,19 +54,30 @@ const PublisherEdit = (props) => {
     const [deletePublisher] = useMutation(DELETE_PUBLISHER)
     console.log(data)
 
-    const deletePublisherFun = (id) => {
-        alert(`delete ${id}`)
-        deletePublisher({variables: {id}}).then(result => {
-            console.log(result)
-            window.location.reload(false);
-            setModalShow(false)
-        }).catch(e => {
-            alert(e)
-            console.error(e)
-        })
+    const deletePublisherFun = async (id, name) => {
+        // alert(`delete ${id}`)
+        // deletePublisher({variables: {id}}).then(result => {
+        //     console.log(result)
+        //     window.location.reload(false);
+        //     setModalShow(false)
+        // }).catch(e => {
+        //     alert(e)
+        //     console.error(e)
+        // })
+        if (window.confirm(`Are you sure you want to delete publisher: ${name}`)) {
+            try {
+                await deletePublisher({variables: {id}})
+                window.location.reload(false);
+            } catch (e) {
+                window.alert(e)
+            }
+        }
     }
 
     const EditModal = (props) => {
+        const name = useField('text')
+        const description = useField('email')
+
         const handleSubmit = (e) => {
             e.preventDefault()
             editPublisher({
@@ -75,13 +87,12 @@ const PublisherEdit = (props) => {
                     description: description.value
                 }
             }).then(result => {
-                alert(`Edited Publisher: ${result.data.editPublisher.name}`)
-                console.log(result)
-                window.location.reload(false);
                 setModalShow(false)
+                window.alert(`Edited Publisher: ${result.data.editPublisher.name}`)
+                window.location.reload(false);
+                console.log(result)
             }).catch(e => {
-                alert(e)
-                console.error(e)
+                window.alert(e)
             })
         }
 
@@ -89,9 +100,6 @@ const PublisherEdit = (props) => {
             name.reset()
             description.reset()
         }
-
-        const name = useField('text')
-        const description = useField('email')
 
         return (
             <Modal {...props}
@@ -138,7 +146,7 @@ const PublisherEdit = (props) => {
     }
 
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
     return (
         <Container>
@@ -170,7 +178,7 @@ const PublisherEdit = (props) => {
                             </Link>
                             </td>
                             <td><Link onClick={() =>
-                                deletePublisherFun(publisher.id)
+                                deletePublisherFun(publisher.id, publisher.name)
                             }>
                                 Delete
                             </Link>
