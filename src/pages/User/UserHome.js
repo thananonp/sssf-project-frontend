@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
 import {clearToken} from "../../helpers/utils";
+import {Link} from "react-router-dom";
 
 const USER = gql`
     query User($id:ID!){
@@ -15,6 +16,7 @@ const USER = gql`
                 id
                 title
                 author{
+                    id
                     name
                 }
                 dateOfBorrow
@@ -101,9 +103,9 @@ const UserHome = (props) => {
                 <tbody>
                 {data.user.currentlyBorrowed
                     ? <tr>
-                        <td>{data.user.currentlyBorrowed.title}</td>
-                        <td>{data.user.currentlyBorrowed.author.name}</td>
-                        <td>{data.user.currentlyBorrowed.dateOfBorrow}</td>
+                        <td><Link to={`/book/${data.user.currentlyBorrowed.id}`}>{data.user.currentlyBorrowed.title}</Link></td>
+                        <td><Link to={`/author/${data.user.currentlyBorrowed.author.id}`}>{data.user.currentlyBorrowed.author.name}</Link></td>
+                        <td>{new Date(Number(data.user.currentlyBorrowed.dateOfBorrow)).toDateString()}</td>
                         <td>-</td>
                     </tr>
                     :

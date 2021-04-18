@@ -31,27 +31,13 @@ import {connect} from "react-redux";
 import UserChangePassword from "./pages/User/UserChangePassword";
 import StaffChangePassword from "./pages/Staff/StaffChangePassword";
 import BookBorrow from "./pages/book/BookBorrow";
+import {getToken} from "./helpers/utils";
 
 function App(props) {
-    function getCookie(cname) {
-        const name = cname + "=";
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const ca = decodedCookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) === 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
 
-    const jwtCookie = getCookie("token")
-    if (jwtCookie) {
-        props.logInWithCredential(jwtCookie)
+    const jwtToken = getToken()
+    if (jwtToken) {
+        props.logInWithCredential(jwtToken)
 
     }
 

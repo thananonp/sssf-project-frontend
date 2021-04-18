@@ -44,6 +44,9 @@ const Book = () => {
             <br/>
             <p>{data.book.description}</p>
             <ListGroup>
+                <ListGroup.Item>Category<span
+                    className="float-right"><Link to={`/category/${data.book.category.id}`}> {data.book.category.title} </Link></span>
+                </ListGroup.Item>
                 <ListGroup.Item>Written by<span
                     className="float-right"><Link to={`/author/${data.book.author.id}`}> {data.book.author.name} </Link></span>
                 </ListGroup.Item>
@@ -54,6 +57,9 @@ const Book = () => {
                     className="float-right">{data.book.dateOfPublication}</span>
                 </ListGroup.Item>
                 <ListGroup.Item>Page count <span className="float-right">{data.book.pageCount}</span></ListGroup.Item>
+                <ListGroup.Item>Availability <span
+                    className="float-right">{data.book.borrowedBy ? <td>No</td> : <td>Yes</td>}</span>
+                </ListGroup.Item>
             </ListGroup>
         </Container>
     )

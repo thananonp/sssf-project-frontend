@@ -4,6 +4,7 @@ import {Button, Container, Form, FormControl, InputGroup, Table} from "react-boo
 import {useState} from "react";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
+import {Link} from "react-router-dom";
 
 const SEARCHBOOKS = gql`
     query SearchBooks($query:String, $scope:String){
@@ -94,7 +95,7 @@ const Search = (props) => {
                     </Form.Group>
                 </Form>
 
-                <p>Found 2 search results</p>
+                <p>Found {data.searchBooks.length} search results</p>
 
                 <Table striped bordered hover>
                     <thead>
@@ -115,11 +116,15 @@ const Search = (props) => {
                         return (
                             <tr>
                                 <td>{index + 1}</td>
-                                <td>{book.title}</td>
-                                {book.category.title !== null ? <td>{book.category.title}</td> :
+                                <td><Link to={`/book/${book.id}`}>{book.title}</Link></td>
+                                {book.category.title !== null ?
+                                    <td><Link to={`/category/${book.category.id}`}>{book.category.title}</Link></td> :
                                     <td>No category defined</td>}
-                                {book.author !== null ? <td>{book.author.name}</td> : <td>No author defined</td>}
-                                {book.publisher.name !== null ? <td>{book.publisher.name}</td> :
+                                {book.author !== null ?
+                                    <td><Link to={`/author/${book.author.id}`}>{book.author.name}</Link></td> :
+                                    <td>No author defined</td>}
+                                {book.publisher.name !== null ?
+                                    <td><Link to={`/publisher/${book.publisher.id}`}>{book.publisher.name}</Link></td> :
                                     <td>No publisher defined</td>}
                                 <td>{book.dateOfPublication}</td>
                                 <td>{book.pageCount}</td>
@@ -127,12 +132,12 @@ const Search = (props) => {
                             </tr>
                         )
                     })}
-                    </tbody>
-                </Table>
-            </Container>
-        </div>
-    )
-}
+                        </tbody>
+                        </Table>
+                        </Container>
+                        </div>
+                        )
+                    }
 const mapDispatchToProps = {
     newSearchQuery, searchScope
 }
