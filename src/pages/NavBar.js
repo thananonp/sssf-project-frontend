@@ -5,6 +5,7 @@ import {useHistory} from "react-router";
 import {logInWithCredential, logoutWithoutCredential} from "../reducers/loginReducer";
 import {connect} from "react-redux";
 import {useField} from "../hooks";
+import {clearToken, setUpToken} from "../helpers/utils";
 
 const NavBar = (props) => {
     const history = useHistory()
@@ -47,8 +48,9 @@ const NavBar = (props) => {
                 console.log(data)
                 if (data !== undefined) {
                     props.logInWithCredential(data.token)
-                    document.cookie = `token= ${data.token}; Max-Age=1200`;
+                    // document.cookie = `token= ${data.token}; Max-Age=1200`;
                     // localStorage.setItem('jwtToken', data.token)
+                    setUpToken(data.token)
                     history.push('/user/home')
                 }
             })
@@ -61,6 +63,7 @@ const NavBar = (props) => {
     }
     const logoutUser = (e) => {
         props.logoutWithoutCredential()
+        clearToken()
         history.push('/')
     }
     console.log(props.login)

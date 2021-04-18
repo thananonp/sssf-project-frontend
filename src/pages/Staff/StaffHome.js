@@ -16,18 +16,19 @@ import {newSearchQuery} from "../../reducers/searchQueryReducer";
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
 import {logoutWithoutCredential} from "../../reducers/loginReducer";
+import {clearToken} from "../../helpers/utils";
 
 const UserHome = (props) => {
     const [search, setSearch] = useState('')
     const history = useHistory()
     const logout = () => {
         props.logoutWithoutCredential()
+        clearToken()
         history.push('/')
     }
 
     const editStaff = () => {
         history.push('/staff/setting')
-
     }
 
     const handleSearch = (e) => {

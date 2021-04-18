@@ -3,6 +3,7 @@ import {Button, Container, Form} from "react-bootstrap";
 import {connect} from "react-redux";
 import {useField} from "../../hooks";
 import {logInWithCredential} from "../../reducers/loginReducer";
+import {setUpToken} from "../../helpers/utils";
 
 
 const UserLogin = (props) => {
@@ -54,8 +55,8 @@ const UserLogin = (props) => {
                 console.log(data)
                 if (data !== undefined) {
                     props.logInWithCredential(data.token)
-                    document.cookie = `token= ${data.token}`;
-                    // localStorage.setItem('jwtToken', data.token)
+                    // document.cookie = `token= ${data.token}`;
+                    setUpToken(data.token)
                     history.push('/user/home')
                 }
             })

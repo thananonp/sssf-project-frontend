@@ -3,6 +3,7 @@ import {Button, Container, Form} from "react-bootstrap";
 import {logInWithCredential, loginWithoutCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
 import {useField} from "../../hooks";
+import {setUpToken} from "../../helpers/utils";
 
 const StaffLogin = (props) => {
     const email = useField('email', "staff1@staff.com")
@@ -53,7 +54,8 @@ const StaffLogin = (props) => {
                 console.log(data)
                 if (data !== undefined) {
                     props.logInWithCredential(data.token)
-                    document.cookie = `token= ${data.token}`;
+                    // document.cookie = `token= ${data.token}`;
+                    setUpToken(data.token)
                     // localStorage.setItem('jwtToken', data.token)
                     history.push('/staff/home')
                 }
@@ -99,7 +101,7 @@ const StaffLogin = (props) => {
 
 
 const mapDispatchToProps = {
-    loginWithoutCredential, logoutWithoutCredential,logInWithCredential
+    loginWithoutCredential, logoutWithoutCredential, logInWithCredential
 }
 const connectedStaffLogin = connect(null, mapDispatchToProps)(StaffLogin)
 
