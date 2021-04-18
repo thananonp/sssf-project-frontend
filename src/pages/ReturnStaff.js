@@ -23,17 +23,17 @@ export const LoadingSpinner = () => {
         <div>
             <Spinner animation="border" role="status">
                 <span className="sr-only">Loading...</span>
-            </Spinner>)
+            </Spinner>
         </div>)
 }
 
-export const NotificationAlert = ({success, failure}) => {
+export const NotificationAlert = ({success, failure, successText, failureText}) => {
     return (<div>
         <Alert show={success} variant="success">
-            Added new author
+            {successText}
         </Alert>
         <Alert show={failure} variant="danger">
-            Failed to add new author (Duplicated name)
+            {failureText}
         </Alert>
     </div>)
 }

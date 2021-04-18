@@ -1,7 +1,7 @@
-import {useField} from "../../hooks";
+import {useField, useNotification} from "../../hooks";
 import {useHistory} from "react-router";
 import {Button, Container, Form} from "react-bootstrap";
-import {ReturnStaff} from "../ReturnStaff";
+import {NotificationAlert, ReturnStaff} from "../ReturnStaff";
 import {gql} from "@apollo/client/core";
 import {useMutation} from "@apollo/client";
 
@@ -24,6 +24,7 @@ const PublisherAdd = () => {
     const name = useField('text')
     const description = useField('email')
     const [addPublisher] = useMutation(ADD_PUBLISHER)
+    const notification = useNotification()
 
     const history = useHistory()
     const handleSubmit = (e) => {
@@ -39,11 +40,12 @@ const PublisherAdd = () => {
                 description: description.value
             }
         }).then(result => {
-            console.log(result)
-            alert(`Added Author: ${result.data.addPublisher.name}`)
+            // console.log(result)
+            // alert(`Added Author: ${result.data.addPublisher.name}`)
+            notification.alertSuccess("Added new Publisher")
             resetForm()
         }).catch(e => {
-            alert(e)
+            notification.alertFailure(String(e))
             console.error(e)
         })
         // history.push('/staff/home')
@@ -55,16 +57,16 @@ const PublisherAdd = () => {
     return (
         <Container>
             <ReturnStaff/>
-
             <h1>Add new publisher</h1>
+            <NotificationAlert success={notification.success} failure={notification.failure} successText={notification.successText} failureText={notification.failureText}/>
             <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicFirstName">
                     <Form.Label>Publisher Name</Form.Label>
-                    <Form.Control value={name.value} type={name.type} onChange={name.onChange}/>
+                    <Form.Control required value={name.value} type={name.type} onChange={name.onChange}/>
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Publisher Description</Form.Label>
-                    <Form.Control value={description.value} type={description.type} onChange={description.onChange}
+                    <Form.Control required value={description.value} type={description.type} onChange={description.onChange}
                                   as="textarea" rows={3}/>
                 </Form.Group>
                 <Button variant="primary" type="submit">
