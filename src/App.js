@@ -30,6 +30,7 @@ import {logInWithCredential, loginWithoutCredential, logoutWithoutCredential} fr
 import {connect} from "react-redux";
 import UserChangePassword from "./pages/User/UserChangePassword";
 import StaffChangePassword from "./pages/Staff/StaffChangePassword";
+import BookBorrow from "./pages/book/BookBorrow";
 
 function App(props) {
     function getCookie(cname) {
@@ -62,6 +63,9 @@ function App(props) {
 
                 <Switch>
                     {/*Book*/}
+                    <Route path="/book/borrow">
+                        <BookBorrow/>
+                    </Route>
                     <Route path="/book/add">
                         <BookAdd/>
                     </Route>

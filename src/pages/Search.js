@@ -2,7 +2,6 @@ import {connect} from "react-redux";
 import {newSearchQuery, searchScope} from "../reducers/searchQueryReducer";
 import {Button, Container, Form, FormControl, InputGroup, Table} from "react-bootstrap";
 import {useState} from "react";
-import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
 
@@ -44,7 +43,7 @@ const Search = (props) => {
     const date = new Date(timeElapsed);
     const {loading, error, data} = useQuery(SEARCHBOOKS, {
         variables: {
-            query: props.searchQuery.query,
+            query: props.searchQuery.query ? props.searchQuery.query : '',
             scope: props.searchQuery.scope
         }
     })

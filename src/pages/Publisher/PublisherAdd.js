@@ -13,7 +13,7 @@ const ADD_PUBLISHER = gql`
         addPublisher(
             name:$name,
             description:$description
-        ){
+        ){  
             id
             name
         }

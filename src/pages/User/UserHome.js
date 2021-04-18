@@ -4,10 +4,28 @@ import {useState} from "react";
 import {newSearchQuery} from "../../reducers/searchQueryReducer";
 import {logoutWithoutCredential} from "../../reducers/loginReducer"
 import {connect} from "react-redux";
+import {gql} from "@apollo/client/core";
+import {useQuery} from "@apollo/client";
+
+const USER = gql`
+    query User($id:ID!){
+        user(id:$id){currentlyBorrowed{
+            id
+            title
+            author{
+                name
+            }
+            dateOfBorrow
+        }
+        
+        }
+    }
+`
 
 const UserHome = (props) => {
     const [search, setSearch] = useState('')
     const history = useHistory()
+    const {loading, error, data} = useQuery(USER, {variables: {id: props.login.user.user._id}})
     const logout = () => {
         props.logoutWithoutCredential()
         history.push('/')
@@ -35,6 +53,10 @@ const UserHome = (props) => {
     }
     const timeElapsed = Date.now();
     const date = new Date(timeElapsed);
+
+    console.log(data)
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error :( {error}</p>;
     if (props.login.login) {
         return (
             <Container>
@@ -66,7 +88,6 @@ const UserHome = (props) => {
                 <Table striped bordered hover>
                     <thead>
                     <tr>
-                        <th>#</th>
                         <th>Book Title</th>
                         <th>Author</th>
                         <th>Due Date</th>
@@ -75,18 +96,10 @@ const UserHome = (props) => {
                     </thead>
                     <tbody>
                     <tr>
-                        <td>1</td>
-                        <td>Twinkle Little Star</td>
-                        <td>John Lennon</td>
-                        <td>{date.toDateString()}</td>
+                        <td>{data.user.currentlyBorrowed.title}</td>
+                        <td>{data.user.currentlyBorrowed.author.name}</td>
+                        <td>{data.user.currentlyBorrowed.dateOfBorrow}</td>
                         <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Yski booki</td>
-                        <td>Number one</td>
-                        <td>{date.toDateString()}</td>
-                        <td>$ 12</td>
                     </tr>
                     </tbody>
                 </Table>
@@ -94,11 +107,10 @@ const UserHome = (props) => {
 
             </Container>
         )
-    }
-    else{
+    } else {
         alert("Please log in first!")
         history.push('/')
-        return(
+        return (
             null
         )
     }
