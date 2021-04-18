@@ -1,10 +1,11 @@
-import {useHistory, useParams} from "react-router";
+import {useHistory} from "react-router";
 import {useField} from "../../hooks";
-import {Button, Col, Container, Form, Modal, Row, Table} from "react-bootstrap";
+import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
+import {LoadingSpinner, NotificationAlert, ReturnStaff} from "../ReturnStaff";
 
 const EDIT_AUTHOR = gql`
     mutation EditBook(
@@ -51,15 +52,16 @@ const Author = (props) => {
     const {loading, error, data} = useQuery(AUTHORS)
     console.log(data)
 
-    const deleteAuthorFun = (id) => {
-        alert(`delete ${id}`)
-        deleteAuthor({variables: {id}})
-        window.location.reload(false);
+    const deleteAuthorFun = async (id,name) =>{
+        if(window.confirm(`Are you sure you want to delete author: ${name}`)){
+            await deleteAuthor({variables: {id}})
+            window.location.reload(false);
+        }
     }
 
     const EditModal = (props) => {
-        const name = useField('text')
-        const biography = useField('text')
+        const name = useField('text','')
+        const biography = useField('text','')
 
         const handleSubmit = (e) => {
             e.preventDefault()
@@ -70,13 +72,10 @@ const Author = (props) => {
                     biography: biography.value
                 }
             }).then(result => {
-                alert(`Edited Author: ${result.data.editAuthor.name}`)
-                console.log(result)
+                window.alert(`Edited Author: ${result.data.editAuthor.name}`)
                 window.location.reload(false);
-                setModalShow(false)
             }).catch(e => {
-                alert(e)
-                console.error(e)
+                window.alert(e)
             })
         }
 
@@ -102,6 +101,7 @@ const Author = (props) => {
                         Edit Author
                     </Modal.Title>
                 </Modal.Header>
+                <NotificationAlert success={alert.success} failure={alert.failure}/>
                 <Modal.Body className="show-grid">
                     <Container>
                         <Form>
@@ -133,11 +133,11 @@ const Author = (props) => {
     }
 
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return(<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
     return (
         <Container>
-            <Link to='/staff/home'><p> ← Back to staff</p></Link>
+            <ReturnStaff/>
             <h1>View, Edit and Delete Author</h1>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
@@ -163,7 +163,7 @@ const Author = (props) => {
                             </Link>
                             </td>
                             <td><Link onClick={() =>
-                                deleteAuthorFun(author.id)
+                                deleteAuthorFun(author.id, author.name)
                             }>
                                 Delete
                             </Link>

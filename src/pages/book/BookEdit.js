@@ -1,6 +1,6 @@
-import {useHistory, useParams} from "react-router";
+import {useHistory} from "react-router";
 import {useField} from "../../hooks";
-import {Button, Col, Container, Form, Modal, Row, Table} from "react-bootstrap";
+import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql, useMutation, useQuery} from "@apollo/client";
@@ -196,9 +196,9 @@ const BookEdit = (props) => {
 
 
         const title = useField('text')
-        const category = useField('text')
-        const author = useField('text')
-        const publisher = useField('text')
+        const category = useField('text','')
+        const author = useField('text','')
+        const publisher = useField('text','')
         const dateOfPublication = useField('date')
         const pageCount = useField('number')
         const description = useField('text')
@@ -209,6 +209,7 @@ const BookEdit = (props) => {
                    dialogClassName="modal-90w"
                    onEnter={() => {
                        const editData = data.books.find(book => book.id === editId)
+                       console.log("editData",editData)
                        title.setValue(editData.title)
                        category.setValue(editData.category)
                        author.setValue(editData.author)
@@ -237,7 +238,8 @@ const BookEdit = (props) => {
                                 <Form.Control as="select" onChange={category.onChange}>
                                     <option>Select category</option>
                                     {data.categories.map(categoryMap => {
-                                        // console.log("categoryMap",categoryMap)
+                                        console.log("categoryMap",categoryMap)
+                                        console.log(category.value)
                                         if (category.value !== null) {
                                             if (category.value.id === categoryMap.id) {
                                                 return (<option value={categoryMap.id}
@@ -258,6 +260,7 @@ const BookEdit = (props) => {
                                     })}
                                 </Form.Control>
                             </Form.Group>
+
                             <Form.Group controlId="formBasicAuthor">
                                 <Form.Label>Author</Form.Label>
                                 <Form.Control as="select" onChange={author.onChange}>
