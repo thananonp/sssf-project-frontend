@@ -7,6 +7,7 @@ import React, {useEffect} from "react";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
+import {requireStaff} from "../../helpers/utils";
 
 const STAFF_COMPARE_PASSWORD = gql`
     query StaffComparePassword($id:ID!,$password:String!){
@@ -46,7 +47,7 @@ const StaffSetting = (props) => {
             firstName.setValue(props.login.user.user.firstName)
             lastName.setValue(props.login.user.user.lastName)
         }
-    }, [])
+    })
 
     const [editStaff] = useMutation(EDIT_STAFF)
     let StaffComparePassword, loading, data;
@@ -131,6 +132,8 @@ const StaffSetting = (props) => {
         lastName.reset()
         oldPassword.reset()
     }
+
+    requireStaff(props,history)
     return (
         <Container>
             <ReturnStaff/>

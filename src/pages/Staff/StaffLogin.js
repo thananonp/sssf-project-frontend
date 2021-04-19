@@ -3,7 +3,7 @@ import {Button, Container, Form} from "react-bootstrap";
 import {logInWithCredential, loginWithoutCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
 import {useField} from "../../hooks";
-import {setUpToken} from "../../helpers/utils";
+import {setUpToken, staffChecker} from "../../helpers/utils";
 
 const StaffLogin = (props) => {
     const email = useField('email', "staff1@staff.com")
@@ -66,6 +66,7 @@ const StaffLogin = (props) => {
             })
     }
 
+    staffChecker(props, history)
     return (
         <div>
             <Container>
@@ -99,10 +100,16 @@ const StaffLogin = (props) => {
     )
 }
 
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
+
 
 const mapDispatchToProps = {
     loginWithoutCredential, logoutWithoutCredential, logInWithCredential
 }
-const connectedStaffLogin = connect(null, mapDispatchToProps)(StaffLogin)
+const connectedStaffLogin = connect(mapStateToProps, mapDispatchToProps)(StaffLogin)
 
 export default connectedStaffLogin

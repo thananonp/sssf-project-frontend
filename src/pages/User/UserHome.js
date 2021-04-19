@@ -133,3 +133,5 @@ const mapStateToProps = (state) => {
 const connectedUserHome = connect(mapStateToProps, mapDispatchToProps)(UserHome)
 
 export default connectedUserHome
+
+// requireStaff(props, history)

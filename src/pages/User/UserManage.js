@@ -60,17 +60,31 @@ const UserManage = (props) => {
     const {loading, error, data} = useQuery(USERS)
     const [editId, setEditId] = useState('')
 
-    const deleteUserFun = (id) => {
-        alert(`delete ${id}`)
-        deleteUser({
-            variables: {
-                id
+    const deleteUserFun = async (id,name) => {
+        if (window.confirm(`Are you sure you want to delete user: ${name}`)) {
+            try {
+                await deleteUser({variables: {id}})
+                window.location.reload(false);
+            } catch (e) {
+                window.alert(e)
             }
-        })
-        window.location.reload(false);
+        }
+
+        // alert(`delete ${id}`)
+        // deleteUser({
+        //     variables: {
+        //         id
+        //     }
+        // })
+        // window.location.reload(false);
     }
 
     const EditModal = (props) => {
+        const email = useField('email')
+        const firstName = useField('text')
+        const lastName = useField('text')
+        const password = useField('password')
+
         const handleSubmit = (e) => {
             e.preventDefault()
             editUser({
@@ -100,12 +114,6 @@ const UserManage = (props) => {
             password.reset()
         }
 
-        const email = useField('email')
-        const firstName = useField('text')
-        const lastName = useField('text')
-        const password = useField('password')
-
-
         return (
             <Modal {...props}
                    aria-labelledby="contained-modal-title-vcenter"
@@ -128,25 +136,31 @@ const UserManage = (props) => {
                     <Container>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control type={email.type} placeholder="Enter email" value={email.value}
+                            <Form.Control required type={email.type} placeholder="Enter email" value={email.value}
                                           onChange={email.onChange}/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicFirstName">
                             <Form.Label>First Name</Form.Label>
-                            <Form.Control type={firstName.type} placeholder="Enter first name" value={firstName.value}
+                            <Form.Control required type={firstName.type} placeholder="Enter first name" value={firstName.value}
                                           onChange={firstName.onChange}/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicSurname">
                             <Form.Label>Last Name</Form.Label>
-                            <Form.Control type={lastName.type} placeholder="Enter last name" value={lastName.value}
+                            <Form.Control required type={lastName.type} placeholder="Enter last name" value={lastName.value}
                                           onChange={lastName.onChange}/>
                         </Form.Group>
 
+                        <Form.Check
+                            type='checkbox'
+                            id={`default-checkbox`}
+                            label={`Change Password`}
+                        />
+
                         <Form.Group controlId="formBasicPassword">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type={password.type} placeholder="Password" value={password.value}
+                            <Form.Control required type={password.type} placeholder="Password" value={password.value}
                                           onChange={password.onChange}/>
                         </Form.Group>
                     </Container>
@@ -199,7 +213,7 @@ const UserManage = (props) => {
                             </Link>
                             </td>
                             <td><Link onClick={() =>
-                                deleteUserFun(user.id)
+                                deleteUserFun(user.id, user.firstName)
                             }>
                                 Delete
                             </Link>

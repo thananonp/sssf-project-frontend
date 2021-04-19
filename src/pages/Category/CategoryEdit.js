@@ -5,6 +5,9 @@ import {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
+import {connect} from "react-redux";
+import {LoadingSpinner, ReturnStaff} from "../ReturnStaff";
+import {requireStaff} from "../../helpers/utils";
 
 const CATEGORIES = gql`
     query{
@@ -49,19 +52,30 @@ const CategoryEdit = (props) => {
     const [deleteCategory] = useMutation(DELETE_CATEGORY)
     console.log(data)
 
-    const deletePublisherFun = (id) => {
-        alert(`delete ${id}`)
-        deleteCategory({variables: {id}}).then(result => {
-            console.log(result)
-            window.location.reload(false);
-            setModalShow(false)
-        }).catch(e => {
-            alert(e)
-            console.error(e)
-        })
+    const deletePublisherFun = async (id, name) => {
+        if (window.confirm(`Are you sure you want to delete category: ${name}`)) {
+            try {
+                await deleteCategory({variables: {id}})
+                window.location.reload(false);
+            } catch (e) {
+                window.alert(e)
+            }
+        }
+        //
+        // alert(`delete ${id}`)
+        // deleteCategory({variables: {id}}).then(result => {
+        //     console.log(result)
+        //     window.location.reload(false);
+        //     setModalShow(false)
+        // }).catch(e => {
+        //     alert(e)
+        //     console.error(e)
+        // })
     }
 
     const EditModal = (props) => {
+        const title = useField('text')
+
         const handleSubmit = (e) => {
             e.preventDefault()
             editCategory({
@@ -84,11 +98,6 @@ const CategoryEdit = (props) => {
             title.reset()
         }
 
-        const title = useField('text')
-
-
-        if (loading) return <p>Loading...</p>;
-        if (error) return <p>Error :( {error}</p>;
         return (
             <Modal {...props}
                    aria-labelledby="contained-modal-title-vcenter"
@@ -128,11 +137,12 @@ const CategoryEdit = (props) => {
     }
 
 
-    if (loading) return <p>Loading...</p>;
+    requireStaff(props, history)
+    if (loading) return <LoadingSpinner/>;
     if (error) return <p>Error :( {error}</p>;
     return (
         <Container>
-            <Link to='/staff/home'><p> ← Back to staff</p></Link>
+            <ReturnStaff/>
             <h1>View, Edit and Delete Category</h1>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
@@ -159,7 +169,7 @@ const CategoryEdit = (props) => {
                             </Link>
                             </td>
                             <td><Link onClick={() =>
-                                deletePublisherFun(category.id)
+                                deletePublisherFun(category.id, category.title)
                             }>
                                 Delete
                             </Link>
@@ -174,5 +184,12 @@ const CategoryEdit = (props) => {
         </Container>
     )
 }
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
 
-export default CategoryEdit
+const connectedCategoryEdit = connect(mapStateToProps, null)(CategoryEdit)
+
+export default connectedCategoryEdit

@@ -17,7 +17,9 @@ export const logInWithCredential = (token) => {
         })
     }
 }
-export const logoutWithoutCredential = () => {
+export const logoutWithoutCredential = (history) => {
+    clearToken()
+    history.push('/')
     return async dispatch => {
         dispatch({
             type: "LOGOUT"

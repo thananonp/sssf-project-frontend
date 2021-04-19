@@ -7,6 +7,7 @@ import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
 import {ReturnStaff} from "../ReturnStaff";
+import {requireStaff} from "../../helpers/utils";
 
 const STAFF_COMPARE_PASSWORD = gql`
     query StaffComparePassword($id:ID!,$password:String!){
@@ -34,7 +35,6 @@ const StaffChangePassword = (props) => {
     const oldPassword = useField('password', '')
     const password = useField('password', '')
     const confirmPassword = useField('password', '')
-    let userId
     const [ChangePasswordStaff] = useMutation(CHANGE_PASSWORD_STAFF)
     let StaffComparePassword, loading, data;
     [StaffComparePassword, {loading, data}] = useLazyQuery(STAFF_COMPARE_PASSWORD, {
@@ -81,43 +81,39 @@ const StaffChangePassword = (props) => {
         confirmPassword.reset()
     }
 
-    if (props.login.login) {
-        return (
-            <Container>
-                <ReturnStaff/>
-                <h1>Staff Setting</h1>
-                <Form onSubmit={updateInfo} onReset={resetForm}>
+    requireStaff(props, history)
+    return (
+        <Container>
+            <ReturnStaff/>
+            <h1>Staff Setting</h1>
+            <Form onSubmit={updateInfo} onReset={resetForm}>
 
-                    <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Old Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" value={oldPassword.value}
-                                      onChange={oldPassword.onChange}/>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" value={password.value}
-                                      onChange={password.onChange}/>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicPasswordCheck">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" value={confirmPassword.value}
-                                      onChange={confirmPassword.onChange}/>
-                    </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Old Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" value={oldPassword.value}
+                                  onChange={oldPassword.onChange}/>
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" value={password.value}
+                                  onChange={password.onChange}/>
+                </Form.Group>
+                <Form.Group controlId="formBasicPasswordCheck">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" value={confirmPassword.value}
+                                  onChange={confirmPassword.onChange}/>
+                </Form.Group>
 
-                    <Button variant="primary" type="submit">
-                        Submit
-                    </Button>
-                    <Button variant="secondary" type="reset">
-                        Reset
-                    </Button>
-                </Form>
-            </Container>
-        )
-    } else {
-        alert("Please log in first!")
-        history.push('/')
-        return null
-    }
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
+                <Button variant="secondary" type="reset">
+                    Reset
+                </Button>
+            </Form>
+        </Container>
+    )
+
 }
 const mapDispatchToProps = {
     logoutWithoutCredential, logInWithCredential

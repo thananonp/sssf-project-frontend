@@ -4,6 +4,8 @@ import {Button, Container, Form} from "react-bootstrap";
 import {NotificationAlert, ReturnStaff} from "../ReturnStaff";
 import {gql} from "@apollo/client/core";
 import {useMutation} from "@apollo/client";
+import {requireStaff} from "../../helpers/utils";
+import {connect} from "react-redux";
 
 const ADD_PUBLISHER = gql`
     mutation AddPublisher(
@@ -20,7 +22,7 @@ const ADD_PUBLISHER = gql`
     }
 `
 
-const PublisherAdd = () => {
+const PublisherAdd = (props) => {
     const name = useField('text')
     const description = useField('email')
     const [addPublisher] = useMutation(ADD_PUBLISHER)
@@ -28,11 +30,11 @@ const PublisherAdd = () => {
 
     const history = useHistory()
     const handleSubmit = (e) => {
-
-        console.log({
-            name:name.value,
-            description: description.value
-        })
+        //
+        // console.log({
+        //     name:name.value,
+        //     description: description.value
+        // })
         e.preventDefault()
         addPublisher({
             variables:{
@@ -40,9 +42,7 @@ const PublisherAdd = () => {
                 description: description.value
             }
         }).then(result => {
-            // console.log(result)
-            // alert(`Added Author: ${result.data.addPublisher.name}`)
-            notification.alertSuccess("Added new Publisher")
+            notification.alertSuccess(`Added new Publisher ${result.data.addPublisher.name}`)
             resetForm()
         }).catch(e => {
             notification.alertFailure(String(e))
@@ -54,6 +54,8 @@ const PublisherAdd = () => {
         name.reset()
         description.reset()
     }
+
+    requireStaff(props, history)
     return (
         <Container>
             <ReturnStaff/>
@@ -79,5 +81,11 @@ const PublisherAdd = () => {
         </Container>
     )
 }
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
+const connectedPublisherAdd = connect(mapStateToProps, null)(PublisherAdd)
 
-export default PublisherAdd
+export default connectedPublisherAdd

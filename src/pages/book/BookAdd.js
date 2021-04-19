@@ -1,8 +1,10 @@
-import {useField} from "../../hooks";
+import {useField, useNotification} from "../../hooks";
 import {useHistory} from "react-router";
 import {Button, Container, Form} from "react-bootstrap";
 import {gql, useMutation, useQuery} from "@apollo/client";
-import {ReturnStaff} from "../ReturnStaff";
+import {LoadingSpinner, NotificationAlert, ReturnStaff} from "../ReturnStaff";
+import {requireStaff} from "../../helpers/utils";
+import {connect} from "react-redux";
 
 const ADD_BOOK = gql`
     mutation AddBook(
@@ -64,7 +66,7 @@ const categoriesAuthorsPublishers = gql`
     }
 `
 
-const BookAdd = () => {
+const BookAdd = (props) => {
     const title = useField('text')
     const category = useField('text')
     const author = useField('text')
@@ -74,6 +76,7 @@ const BookAdd = () => {
     const description = useField('text')
     const {loading, error, data} = useQuery(categoriesAuthorsPublishers)
     const [addBook] = useMutation(ADD_BOOK)
+    const notification = useNotification()
 
     const history = useHistory()
 
@@ -91,11 +94,13 @@ const BookAdd = () => {
 
             }
         }).then(result => {
-            console.log(result)
-            alert(`Added Book: ${result.data.addBook.title}`)
+            // console.log(result)
+            // alert(`Added Book: ${result.data.addBook.title}`)
+            // resetForm()
+            notification.alertSuccess(`Added Book: ${result.data.addBook.title}`)
             resetForm()
         }).catch(e => {
-            alert(e)
+            notification.alertFailure(String(e))
             console.error(e)
         })
         // history.push('/staff/home')
@@ -111,14 +116,16 @@ const BookAdd = () => {
         description.reset()
     }
 
-
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
+    requireStaff(props, history)
     return (
         <Container>
             <ReturnStaff/>
 
             <h1>Add new book</h1>
+            <NotificationAlert success={notification.success} failure={notification.failure} successText={notification.successText} failureText={notification.failureText}/>
+
             <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicTitle">
                     <Form.Label>Title</Form.Label>
@@ -185,5 +192,12 @@ const BookAdd = () => {
         </Container>
     )
 }
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
 
-export default BookAdd
+const connectedBookAdd = connect(mapStateToProps,null)(BookAdd)
+
+export default connectedBookAdd

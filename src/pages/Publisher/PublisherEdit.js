@@ -5,7 +5,9 @@ import {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
-import {LoadingSpinner} from "../ReturnStaff";
+import {LoadingSpinner, ReturnStaff} from "../ReturnStaff";
+import {connect} from "react-redux";
+import {requireStaff} from "../../helpers/utils";
 
 const PUBLISHERS = gql`
     query{
@@ -47,7 +49,6 @@ const DELETE_PUBLISHER = gql`
 const PublisherEdit = (props) => {
     const [modalShow, setModalShow] = useState(false);
     const [editId, setEditId] = useState(0)
-
     const history = useHistory()
     const {loading, error, data} = useQuery(PUBLISHERS)
     const [editPublisher] = useMutation(EDIT_PUBLISHER)
@@ -87,10 +88,10 @@ const PublisherEdit = (props) => {
                     description: description.value
                 }
             }).then(result => {
+                console.log(result)
                 setModalShow(false)
                 window.alert(`Edited Publisher: ${result.data.editPublisher.name}`)
                 window.location.reload(false);
-                console.log(result)
             }).catch(e => {
                 window.alert(e)
             })
@@ -148,9 +149,10 @@ const PublisherEdit = (props) => {
 
     if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
+    requireStaff(props, history)
     return (
         <Container>
-            <Link to='/staff/home'><p> ← Back to staff</p></Link>
+            <ReturnStaff/>
             <h1>View, Edit and Delete Publisher</h1>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
@@ -188,10 +190,15 @@ const PublisherEdit = (props) => {
                 })}
                 </tbody>
             </Table>
-
-
         </Container>
     )
 }
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
 
-export default PublisherEdit
+const connectedPublisherEdit = connect(mapStateToProps,null)(PublisherEdit)
+
+export default connectedPublisherEdit

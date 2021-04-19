@@ -4,6 +4,9 @@ import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql, useMutation, useQuery} from "@apollo/client";
+import {LoadingSpinner, ReturnStaff} from "../ReturnStaff";
+import {requireStaff} from "../../helpers/utils";
+import {connect} from "react-redux";
 
 const getBooks = gql`
     query{
@@ -112,19 +115,35 @@ const BookEdit = (props) => {
     const [deleteBook] = useMutation(DELETEBOOK)
 
 
-    const deleteBookFun = (id) => {
-        deleteBook({
-            variables: {
-                id
+    const deleteBookFun = async (id,title) => {
+        if (window.confirm(`Are you sure you want to delete book: ${title}`)) {
+            try {
+                await deleteBook({variables: {id}})
+                window.location.reload(false);
+            } catch (e) {
+                window.alert(e)
             }
-        })
-        window.location.reload(false);
+        }
+        //
+        // deleteBook({
+        //     variables: {
+        //         id
+        //     }
+        // })
+        // window.location.reload(false);
     }
 
     const EditModal = (props) => {
         let editedCategory
         let editedAuthor
         let editedPublisher
+        const title = useField('text')
+        const category = useField('text', '')
+        const author = useField('text', '')
+        const publisher = useField('text', '')
+        const dateOfPublication = useField('date')
+        const pageCount = useField('number')
+        const description = useField('text')
 
         const handleSubmit = (e) => {
             // console.log("category.type", category.type)
@@ -140,11 +159,10 @@ const BookEdit = (props) => {
 
             if (category.value.length === undefined) {
                 editedCategory = category.value.id
-                console.log("fuck")
+                // console.log("fuck")
             } else {
                 editedCategory = category.value
-                console.log("fuck")
-
+                // console.log("fuck")
             }
 
             if (author.value.length === undefined) {
@@ -184,24 +202,14 @@ const BookEdit = (props) => {
                     description: description.value
                 }
             }).then(result => {
-                console.log(result)
                 setModalShow(false)
-                alert(`Edited Book: ${result.data.editBook.title}`)
+                console.log(result)
+                window.alert(`Edited Book: ${result.data.editBook.title}`)
                 window.location.reload(false);
             }).catch(e => {
-                alert(e)
-                console.error(e)
+                window.alert(e)
             })
         }
-
-
-        const title = useField('text')
-        const category = useField('text','')
-        const author = useField('text','')
-        const publisher = useField('text','')
-        const dateOfPublication = useField('date')
-        const pageCount = useField('number')
-        const description = useField('text')
 
         return (
             <Modal {...props}
@@ -209,7 +217,7 @@ const BookEdit = (props) => {
                    dialogClassName="modal-90w"
                    onEnter={() => {
                        const editData = data.books.find(book => book.id === editId)
-                       console.log("editData",editData)
+                       console.log("editData", editData)
                        title.setValue(editData.title)
                        category.setValue(editData.category)
                        author.setValue(editData.author)
@@ -238,7 +246,7 @@ const BookEdit = (props) => {
                                 <Form.Control as="select" onChange={category.onChange}>
                                     <option>Select category</option>
                                     {data.categories.map(categoryMap => {
-                                        console.log("categoryMap",categoryMap)
+                                        console.log("categoryMap", categoryMap)
                                         console.log(category.value)
                                         if (category.value !== null) {
                                             if (category.value.id === categoryMap.id) {
@@ -333,11 +341,12 @@ const BookEdit = (props) => {
         );
     }
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
+    requireStaff(props, history)
     return (
         <Container>
-            <Link to='/staff/home'><p> ← Back to staff</p></Link>
+            <ReturnStaff/>
             <h1>View, Edit and Delete Book</h1>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
@@ -375,7 +384,7 @@ const BookEdit = (props) => {
                                 setModalShow(true)
                             }}>Edit</Link></td>
                             <td><Link onClick={() => {
-                                deleteBookFun(book.id)
+                                deleteBookFun(book.id, book.title)
                             }}>Delete</Link></td>
                         </tr>
                     )
@@ -387,5 +396,12 @@ const BookEdit = (props) => {
         </Container>
     )
 }
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
 
-export default BookEdit
+const connectedBookEdit = connect(mapStateToProps, null)(BookEdit)
+
+export default connectedBookEdit

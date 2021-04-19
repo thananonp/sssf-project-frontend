@@ -5,7 +5,7 @@ import {useHistory} from "react-router";
 import {logInWithCredential, logoutWithoutCredential} from "../reducers/loginReducer";
 import {connect} from "react-redux";
 import {useField} from "../hooks";
-import {clearToken, setUpToken} from "../helpers/utils";
+import {restLogin} from "../helpers/utils";
 
 const NavBar = (props) => {
     const history = useHistory()
@@ -26,47 +26,15 @@ const NavBar = (props) => {
         }
         console.log("option", option)
         console.log("url", process.env.REACT_APP_BACKEND_REST_URL + 'user/authenticate')
-        fetch(process.env.REACT_APP_BACKEND_REST_URL + 'user/authenticate', option)
-            .then(response => {
-                console.log("response", response)
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        alert('Email not found, please retry')
-                    }
-                    if (response.status === 401) {
-                        alert('Email and password do not match, please retry')
-                    }
-                    if (response.status === 400) {
-                        alert('Email and password do not match, please retry')
-                        return false
-                    }
-                }
-                return response
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                if (data !== undefined) {
-                    props.logInWithCredential(data.token)
-                    // document.cookie = `token= ${data.token}; Max-Age=1200`;
-                    // localStorage.setItem('jwtToken', data.token)
-                    setUpToken(data.token)
-                    history.push('/user/home')
-                }
-            })
-            .catch(e => {
-                console.error(e)
-                alert(e)
-            })
+        restLogin('user/authenticate', option, history, props, '/user/home')
+
         // history.push('/user/home')
         // props.loginWithoutCredential()
     }
     const logoutUser = (e) => {
-        props.logoutWithoutCredential()
-        clearToken()
-        history.push('/')
+        props.logoutWithoutCredential(history)
     }
-    console.log(props.login)
+    // console.log(props.login)
     return (
         <nav>
             <Container fluid>

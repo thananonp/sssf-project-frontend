@@ -1,10 +1,11 @@
 import {Button, Container, Form} from "react-bootstrap";
 import {useField} from "../../hooks";
 import {useHistory} from "react-router";
-import {loginWithoutCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
+import {loginWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
 import {gql} from "@apollo/client/core";
 import {useMutation} from "@apollo/client";
+import {staffChecker, userChecker} from "../../helpers/utils";
 
 const ADD_USER = gql`
     mutation AddUser(
@@ -64,7 +65,6 @@ const UserRegister = (props) => {
 
     }
 
-
     const resetForm = () => {
         email.reset()
         firstName.reset()
@@ -72,6 +72,9 @@ const UserRegister = (props) => {
         password.reset()
         confirmPassword.reset()
     }
+
+    staffChecker(props, history)
+    userChecker(props, history)
     return (
         <div>
             <h1>Register New User</h1>
@@ -122,9 +125,14 @@ const UserRegister = (props) => {
     )
 }
 
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
 const mapDispatchToProps = {
     loginWithoutCredential
 }
-const connectedUserRegister = connect(null, mapDispatchToProps)(UserRegister)
+const connectedUserRegister = connect(mapStateToProps, mapDispatchToProps)(UserRegister)
 
 export default connectedUserRegister
