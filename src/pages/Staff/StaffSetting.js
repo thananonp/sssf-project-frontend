@@ -7,7 +7,7 @@ import React, {useEffect} from "react";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
-import {requireStaff} from "../../helpers/utils";
+import {requireStaff, restLogin} from "../../helpers/utils";
 
 const STAFF_COMPARE_PASSWORD = gql`
     query StaffComparePassword($id:ID!,$password:String!){
@@ -74,39 +74,40 @@ const StaffSetting = (props) => {
                     }
                     console.log("option", option)
                     console.log("url", process.env.REACT_APP_BACKEND_REST_URL + 'staff/authenticate')
-                    fetch(process.env.REACT_APP_BACKEND_REST_URL + 'staff/authenticate', option)
-                        .then(response => {
-                            console.log("response", response)
-                            if (!response.ok) {
-                                if (response.status === 404) {
-                                    alert('Email not found, please retry')
-                                    return false
-                                }
-                                if (response.status === 401) {
-                                    alert('Email and password do not match, please retry')
-                                    return false
-                                }
-                                if (response.status === 400) {
-                                    alert('Email and password do not match, please retry')
-                                    return false
-                                }
-                            }
-                            return response
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data)
-                            if (data !== undefined) {
-                                props.logInWithCredential(data.token)
-                                document.cookie = `token= ${data.token}`;
-                                // localStorage.setItem('jwtToken', data.token)
-                                history.push('/staff/home')
-                            }
-                        })
-                        .catch(e => {
-                            console.error(e)
-                            alert(e)
-                        })
+                    restLogin('/staff/authenticate',option,history,props,'/staff/home')
+                    // fetch(process.env.REACT_APP_BACKEND_REST_URL + 'staff/authenticate', option)
+                    //     .then(response => {
+                    //         console.log("response", response)
+                    //         if (!response.ok) {
+                    //             if (response.status === 404) {
+                    //                 alert('Email not found, please retry')
+                    //                 return false
+                    //             }
+                    //             if (response.status === 401) {
+                    //                 alert('Email and password do not match, please retry')
+                    //                 return false
+                    //             }
+                    //             if (response.status === 400) {
+                    //                 alert('Email and password do not match, please retry')
+                    //                 return false
+                    //             }
+                    //         }
+                    //         return response
+                    //     })
+                    //     .then(response => response.json())
+                    //     .then(data => {
+                    //         console.log(data)
+                    //         if (data !== undefined) {
+                    //             props.logInWithCredential(data.token)
+                    //             document.cookie = `token= ${data.token}`;
+                    //             // localStorage.setItem('jwtToken', data.token)
+                    //             history.push('/staff/home')
+                    //         }
+                    //     })
+                    //     .catch(e => {
+                    //         console.error(e)
+                    //         alert(e)
+                    //     })
                 }).catch(e => {
                     alert(e)
                     console.log(e)
