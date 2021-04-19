@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import React from "react";
-import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import {Button, Col, Container, Form, Nav, Row} from "react-bootstrap";
 import {useHistory} from "react-router";
 import {logInWithCredential, logoutWithoutCredential} from "../reducers/loginReducer";
 import {connect} from "react-redux";
@@ -34,12 +34,60 @@ const NavBar = (props) => {
     const logoutUser = (e) => {
         props.logoutWithoutCredential(history)
     }
+
+    const renderNav = () => {
+        // console.log("renderNav")
+        if (props.login.login) {
+            console.log("logged in")
+            if (props.login.user.type === 'user') {
+                console.log("user")
+                return (<>
+                    <Nav.Item>
+                        <Nav.Link href="/user/home">User Home</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/search">Search</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/user/setting">Setting</Nav.Link>
+                    </Nav.Item>
+                </>)
+            } else if (props.login.user.type === 'staff') {
+                console.log("user")
+                return (<>
+                    <Nav.Item>
+                        <Nav.Link href="/staff/home">Staff Home</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/search">Search</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/book/borrow">Return/Borrow</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/user/manage">Manage user</Nav.Link>
+                    </Nav.Item>
+                </>)
+            }
+        } else {
+            return (<Nav.Item>
+                <Nav.Link href="/search">Search</Nav.Link>
+            </Nav.Item>)
+        }
+    }
     // console.log(props.login)
     return (
-        <nav>
+        <Nav
+            activeKey="/"
+            className="singleRow"
+            // onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
+        >
+
             <Container fluid>
-                <Row>
-                    <Col xs lg="2"> <Link to="/"><h1>Home</h1></Link> </Col>
+                <Row className="singleRow">
+                    <Col xs lg="2"> <Link to="/"><h3><span>📖Library</span></h3></Link> </Col>
+                    {renderNav()}
+
                     <Col className="float-right">
                         {props.login.login
                             ? <Row className="float-right">
@@ -77,7 +125,7 @@ const NavBar = (props) => {
                 </Row>
             </Container>
 
-        </nav>
+        </Nav>
     )
 }
 

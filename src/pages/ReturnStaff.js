@@ -21,7 +21,7 @@ export const ReturnUser = () => {
 export const LoadingSpinner = () => {
     return (
         <div>
-            <Spinner animation="border" role="status">
+            <Spinner className={"centered"} animation="border" role="status">
                 <span className="sr-only">Loading...</span>
             </Spinner>
         </div>)
