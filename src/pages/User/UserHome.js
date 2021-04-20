@@ -6,8 +6,9 @@ import {logoutWithoutCredential} from "../../reducers/loginReducer"
 import {connect} from "react-redux";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
-import {clearToken} from "../../helpers/utils";
+import {clearToken, requireUser} from "../../helpers/utils";
 import {Link} from "react-router-dom";
+import {LoadingSpinner} from "../ReturnStaff";
 
 const USER = gql`
     query User($id:ID!){
@@ -29,7 +30,7 @@ const USER = gql`
 const UserHome = (props) => {
     const [search, setSearch] = useState('')
     const history = useHistory()
-    const {loading, error, data} = useQuery(USER, {variables: {id: props.login.user.user._id}})
+    const {loading, error, data} = useQuery(USER, {variables: {id: props.login.login? props.login.user.user._id: null}})
     const logout = () => {
         props.logoutWithoutCredential()
         clearToken()
@@ -57,17 +58,13 @@ const UserHome = (props) => {
     }
 
     console.log("data", data)
-    if (loading) return <p>Loading...</p>;
+    requireUser(props,history)
+    if (loading) return <LoadingSpinner/>;
     if (error) return <p>Error :( {error}</p>;
-    if (!props.login.login) {
-        alert("Please log in first!")
-        history.push('/')
-        return null
-    }
     return (
         <Container>
             <Row>
-                <Col><h2>Welcome {props.login.user.user.firstName}{props.login.user.user._id}</h2>
+                <Col><h2>Welcome {props.login.user.user.firstName}</h2>
                 </Col>
                 <Col>
                     <div className="float-right">

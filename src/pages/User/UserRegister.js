@@ -9,10 +9,10 @@ import {staffChecker, userChecker} from "../../helpers/utils";
 
 const ADD_USER = gql`
     mutation AddUser(
-        $email:String,
-        $firstName:String,
-        $lastName:String,
-        $password:String
+        $email:String!,
+        $firstName:String!,
+        $lastName:String!,
+        $password:String!
     ){
         addUser(
             email: $email,
@@ -76,9 +76,8 @@ const UserRegister = (props) => {
     staffChecker(props, history)
     userChecker(props, history)
     return (
-        <div>
+        <Container>
             <h1>Register New User</h1>
-            <Container>
                 <Form onSubmit={handleSubmit} onReset={resetForm}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address (*)</Form.Label>
@@ -120,8 +119,7 @@ const UserRegister = (props) => {
                         Reset
                     </Button>
                 </Form>
-            </Container>
-        </div>
+        </Container>
     )
 }
 

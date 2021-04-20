@@ -5,6 +5,7 @@ import {useState} from "react";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
 import {Link} from "react-router-dom";
+import {LoadingSpinner} from "./ReturnStaff";
 
 const SEARCHBOOKS = gql`
     query SearchBooks($query:String, $scope:String){
@@ -61,7 +62,7 @@ const Search = (props) => {
     }
 
     console.log(data)
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
     return (
         <div>

@@ -3,7 +3,7 @@ import {useField} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
-import {ReturnStaff} from "../ReturnStaff";
+import {LoadingSpinner, ReturnStaff} from "../ReturnStaff";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 
@@ -177,8 +177,7 @@ const UserManage = (props) => {
         );
     }
 
-
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
     return (
         <Container>

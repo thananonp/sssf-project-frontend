@@ -49,21 +49,28 @@ export const requireStaff = (props, history) => {
         if (props.login.user.type === 'staff') {
         }
         else {
-            alert("You don't have the permission to be here!")
+            alert("Please log in first!")
             history.push('/')
         }
 
     } else {
-        alert("You don't have the permission to be here!")
+        alert("Please log in first!")
         history.push('/')
     }
 }
 
-export const requ = (props, history) => {
+export const requireUser = (props, history) => {
     if (props.login.login) {
         if (props.login.user.type === 'user') {
-            history.push('/user/home')
         }
+        else {
+            alert("Please log in first!")
+            history.push('/')
+        }
+
+    } else {
+        alert("Please log in first!")
+        history.push('/')
     }
 }
 
@@ -78,11 +85,11 @@ export const restLogin = (url, option, history, props, push) => {
                     return false
                 }
                 if (response.status === 401) {
-                    alert('Email and password do not match, please retry')
+                    alert('Invalid credential, please retry')
                     return false
                 }
                 if (response.status === 400) {
-                    alert('Email and password do not match, please retry')
+                    alert('Bad request, please retry')
                     return false
                 }
             }

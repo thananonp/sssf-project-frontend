@@ -34,10 +34,10 @@ const UserSetting = (props) => {
     const oldPassword = useField('password', '')
     const password = useField('password', '')
     const confirmPassword = useField('password', '')
-    let userId
+    // let userId
     const [ChangePasswordUser] = useMutation(CHANGE_PASSWORD_USER)
     let UserComparePassword, loading, data;
-    [UserComparePassword, {loading, data}] = useLazyQuery(USER_COMPARE_PASSWORD, {
+    [UserComparePassword] = useLazyQuery(USER_COMPARE_PASSWORD, {
         onCompleted: (data) => {
             if (data.userComparePassword) {
                 ChangePasswordUser({
@@ -47,14 +47,17 @@ const UserSetting = (props) => {
                     }
                 }).then(result => {
                     alert(`User ${result.data.changePasswordUser.email} edited\nPlease sign in again.`)
-                    props.logoutWithoutCredential()
-                    document.cookie = `token=;max-age:1`;
+                    props.logoutWithoutCredential(history)
+                    // document.cookie = `token=;max-age:1`;
                     // props.loginWithoutCredential()
 
                 }).catch(e => {
                     alert(e)
                     console.log(e)
                 })
+            }
+            else{
+                window.alert("You have enter a wrong password")
             }
         }
     });

@@ -3,7 +3,7 @@ import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {Button, Container, Form, ListGroup} from "react-bootstrap";
 import {useField} from "../../hooks";
-import {ReturnStaff} from "../ReturnStaff";
+import {LoadingSpinner, ReturnStaff} from "../ReturnStaff";
 
 const BOOK_USERS = gql`
     query {
@@ -130,9 +130,9 @@ const BookBorrow = () => {
     // useEffect(() => {
     //
     // }, [])
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
-    console.log("data", data)
+    // console.log("data", data)
     return (
         <Container>
             <ReturnStaff/>

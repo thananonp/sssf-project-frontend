@@ -1,12 +1,12 @@
 import {Button, Container, Form} from "react-bootstrap";
 import {useHistory} from "react-router";
 import {useField} from "../../hooks";
-import {Link} from "react-router-dom";
 import React, {useEffect} from "react";
 import {gql} from "@apollo/client/core";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
+import {ReturnUser} from "../ReturnStaff";
 
 // const USER = gql`
 //     query User($id:ID!){
@@ -49,7 +49,7 @@ const UserSetting = (props) => {
     const lastName = useField('text')
     const oldPassword = useField('password', '')
     let UserComparePassword, loading, data;
-    [UserComparePassword, {loading, data}] = useLazyQuery(USERCOMPAREPASSWORD, {
+    [UserComparePassword] = useLazyQuery(USERCOMPAREPASSWORD, {
         onCompleted: (data) => {
             console.log(data)
             if (data.userComparePassword) {
@@ -61,50 +61,14 @@ const UserSetting = (props) => {
                         email: email.value,
                     }
                 }).then(result => {
-                    alert(`User ${result.data.editUser.email} edited`)
-                    // props.loginWithoutCredential()
-                    const option = {
-                        method: 'post',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                        },
-                        body: `email=${email.value}&password=${oldPassword.value}`
-                    }
-                    console.log("option", option)
-                    console.log("url", process.env.REACT_APP_BACKEND_REST_URL + 'user/authenticate')
-                    fetch(process.env.REACT_APP_BACKEND_REST_URL + 'user/authenticate', option)
-                        .then(response => {
-                            console.log("response", response)
-                            if (!response.ok) {
-                                if (response.status === 404) {
-                                    alert('Email not found, please retry')
-                                }
-                                if (response.status === 401) {
-                                    alert('Email and password do not match, please retry')
-                                }
-                            }
-                            return response
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data)
-                            if (data !== undefined) {
-                                props.logInWithCredential(data.token)
-                                document.cookie = `token= ${data.token}`;
-                                // localStorage.setItem('jwtToken', data.token)
-                                history.push('/user/home')
-                            }
-                        })
-                        .catch(e => {
-                            console.error(e)
-                            alert(e)
-                        })
+                    alert(`User ${result.data.editUser.email} edited\nPlease sign in again.`)
+                    props.logoutWithoutCredential(history)
                 }).catch(e => {
                     alert(e)
                     console.log(e)
                 })
             } else {
-                alert("Password incorrect")
+                window.alert("You have enter a wrong password")
             }
         }
     });
@@ -125,7 +89,6 @@ const UserSetting = (props) => {
     const updateInfo = async (e) => {
         e.preventDefault()
         UserComparePassword({variables: {id: props.login.user.user._id, password: oldPassword.value}})
-
     }
 
     const resetForm = () => {
@@ -137,30 +100,30 @@ const UserSetting = (props) => {
     if (props.login.login) {
         return (
             <Container>
-                <Link to='/user/home'><p> ← Back to user</p></Link>
+                <ReturnUser/>
                 <h1>User Setting</h1>
                 <Form onSubmit={updateInfo} onReset={resetForm}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" value={email.value}
+                        <Form.Control required type="email" placeholder="Enter email" value={email.value}
                                       onChange={email.onChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicFirstName">
                         <Form.Label>First Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter first name" value={firstName.value}
+                        <Form.Control required type="text" placeholder="Enter first name" value={firstName.value}
                                       onChange={firstName.onChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicSurname">
                         <Form.Label>Last Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter last name" value={lastName.value}
+                        <Form.Control required type="text" placeholder="Enter last name" value={lastName.value}
                                       onChange={lastName.onChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" value={oldPassword.value}
+                        <Form.Control required type="password" placeholder="Password" value={oldPassword.value}
                                       onChange={oldPassword.onChange}/>
                     </Form.Group>
                     {/*<Form.Group controlId="formBasicPassword">*/}
