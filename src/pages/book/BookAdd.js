@@ -8,13 +8,13 @@ import {connect} from "react-redux";
 
 const ADD_BOOK = gql`
     mutation AddBook(
-        $title: String,
-        $category: ID!,
-        $author: ID!,
-        $publisher: ID!,
-        $dateOfPublication: String,
-        $pageCount: Int,
-        $description: String
+        $title: String!
+        $category: ID!
+        $author: ID!
+        $publisher: ID!
+        $dateOfPublication: String!
+        $pageCount: Int!
+        $description: String!
     ){
         addBook(
             title:$title,
@@ -124,7 +124,8 @@ const BookAdd = (props) => {
             <ReturnStaff/>
 
             <h1>Add new book</h1>
-            <NotificationAlert success={notification.success} failure={notification.failure} successText={notification.successText} failureText={notification.failureText}/>
+            <NotificationAlert success={notification.success} failure={notification.failure}
+                               successText={notification.successText} failureText={notification.failureText}/>
 
             <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicTitle">
@@ -198,6 +199,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const connectedBookAdd = connect(mapStateToProps,null)(BookAdd)
+const connectedBookAdd = connect(mapStateToProps, null)(BookAdd)
 
 export default connectedBookAdd

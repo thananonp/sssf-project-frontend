@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {Button, Card, CardDeck, Container, FormControl, InputGroup, ListGroup} from "react-bootstrap";
+import {Button, Card, CardDeck, Carousel, Container, FormControl, InputGroup, ListGroup} from "react-bootstrap";
 import {useField} from "../hooks";
 import {newSearchQuery} from "../reducers/searchQueryReducer";
 import {useHistory} from "react-router";
@@ -22,6 +22,7 @@ const Landing = (props) => {
                         <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>
                         <Card.Body>
                             <Card.Title>Click here to go to your user page.
+                                <br/>
                                 <Link to="/user/home"><Button>User page</Button></Link>
                             </Card.Title>
                         </Card.Body>
@@ -39,13 +40,13 @@ const Landing = (props) => {
             }
         } else {
             return (
-                <CardDeck>
+                < >
                     <Card style={{width: '18rem'}}>
                         <Card.Header as="h5">New user</Card.Header>
                         <Card.Body>
                             <Card.Title>Are you new to the library website</Card.Title>
                             <div>Already has an account
-                                <Link to="/user/login"><Button>Login</Button></Link>
+                                <span><Link to="/user/login"><Button>   Login</Button></Link></span>
                             </div>
                             <div>
                                 No account?
@@ -61,12 +62,12 @@ const Landing = (props) => {
                             <Link to="/staff/register"><Button>Staff Register</Button></Link>
                         </Card.Body>
                     </Card>
-                </CardDeck>
+                </>
             )
         }
     };
     return (
-        <Container fluid>
+        <Container>
             <h1>Welcome to library system</h1>
             <InputGroup className="mb-3">
                 <FormControl
@@ -82,7 +83,7 @@ const Landing = (props) => {
             </InputGroup>
             <br/>
             <CardDeck>
-                <Card style={{width: '18rem'}}>
+                <Card>
                     <Card.Header>Opening times</Card.Header>
                     <ListGroup variant="flush">
                         <ListGroup.Item>Mon - Fri<span className="float-right">8 - 18</span></ListGroup.Item>
@@ -90,37 +91,45 @@ const Landing = (props) => {
                         <ListGroup.Item>Sun<span className="float-right">Closed</span></ListGroup.Item>
                     </ListGroup>
                 </Card>
-                {/*{(props.login.login && props.login.user.type === "user")*/}
-                {/*    ? <Card style={{width: '18rem'}}>*/}
-                {/*        <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>*/}
-                {/*        <Card.Body>*/}
-                {/*            <Card.Title>Click here to go to your user page.*/}
-                {/*                <Link to="/user/home"><Button>User page</Button></Link>*/}
-                {/*            </Card.Title>*/}
-                {/*        </Card.Body>*/}
-                {/*    </Card>*/}
-                {/*    : <Card style={{width: '18rem'}}>*/}
-                {/*        <Card.Header as="h5">New user</Card.Header>*/}
-                {/*        <Card.Body>*/}
-                {/*            <Card.Title>Are you new to the library website</Card.Title>*/}
-                {/*            <div>Already has an account*/}
-                {/*                <Link to="/user/login"><Button>Login</Button></Link>*/}
-                {/*            </div>*/}
-                {/*            <div>*/}
-                {/*                No account?*/}
-                {/*                <Link to="/user/register"><Button>Register here</Button></Link>*/}
-                {/*            </div>*/}
-                {/*        </Card.Body>*/}
-                {/*    </Card>*/}
-                {/*}*/}
                 {showCard()}
-
-
             </CardDeck>
-            {/*<img*/}
-            {/*    src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"/>*/}
-
-
+            <br/>
+            <Carousel>
+                <Carousel.Item interval={2000}>
+                    <img
+                        className="carouselImage"
+                        src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+                        alt="First slide"
+                    />
+                    <Carousel.Caption>
+                        <h3>Best library in town</h3>
+                        <p>Come visit us Monday - Saturday</p>
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item interval={2000}>
+                    <img
+                        className="carouselImage"
+                        src="https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=701&q=80"
+                        alt="Second slide"
+                    />
+                    <Carousel.Caption>
+                        <h3>Coworking space available</h3>
+                        <p>Quiet place with a good service</p>
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item interval={2000}>
+                    <img
+                        className="carouselImage"
+                        src="https://images.unsplash.com/photo-1618819348246-aa783b55685b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+                        alt="Third slide"
+                    />
+                    <Carousel.Caption>
+                        <h3>Cafe is available in the garden</h3>
+                        <p>Coffee and bread is up for buying</p>
+                    </Carousel.Caption>
+                </Carousel.Item>
+            </Carousel>
+            <br/>
         </Container>
 
     )

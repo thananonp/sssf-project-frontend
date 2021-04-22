@@ -21,8 +21,9 @@ import {requireStaff} from "../../helpers/utils";
 const UserHome = (props) => {
     const [search, setSearch] = useState('')
     const history = useHistory()
+
     const logout = () => {
-        props.logoutWithoutCredential()
+        props.logoutWithoutCredential(history)
     }
 
     const editStaff = () => {
@@ -30,8 +31,6 @@ const UserHome = (props) => {
     }
 
     const handleSearch = (e) => {
-        // alert("Searching")
-        // console.log(e.target.value)
         setSearch(e.target.value)
     }
 

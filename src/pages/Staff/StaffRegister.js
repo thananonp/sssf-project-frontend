@@ -3,7 +3,6 @@ import {useField} from "../../hooks";
 import {useHistory} from "react-router";
 import {loginWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
-import {requireStaff} from "../../helpers/utils";
 
 const StaffRegister = (props) => {
     const history = useHistory()
@@ -26,7 +25,8 @@ const StaffRegister = (props) => {
         password.reset()
         confirmPassword.reset()
     }
-    requireStaff(props, history)
+
+    // requireStaff(props, history)
     return (
         <div>
             <h1>Register New Staff</h1>

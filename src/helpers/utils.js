@@ -13,21 +13,12 @@ export const getToken = () => {
     return localStorage.getItem('jwtToken')
 }
 
-//
-
 export const notificationAlert = (event) => {
     event.setValue(true)
     setTimeout(() => {
         event.setValue(false)
     }, 3000)
 }
-//
-// export const changeNotificationText = (event, text) => {
-//     event.setValue(text)
-//     setTimeout(()=>{
-//         event.setValue('')
-//     },3000)
-// }
 
 export const staffChecker = (props, history) => {
     if (props.login.login) {
@@ -47,8 +38,7 @@ export const userChecker = (props, history) => {
 export const requireStaff = (props, history) => {
     if (props.login.login) {
         if (props.login.user.type === 'staff') {
-        }
-        else {
+        } else {
             alert("Please log in first!")
             history.push('/')
         }
@@ -62,8 +52,7 @@ export const requireStaff = (props, history) => {
 export const requireUser = (props, history) => {
     if (props.login.login) {
         if (props.login.user.type === 'user') {
-        }
-        else {
+        } else {
             alert("Please log in first!")
             history.push('/')
         }
@@ -74,44 +63,17 @@ export const requireUser = (props, history) => {
     }
 }
 
+export const login = (history, props, data) => {
+    if (data.userLogin) {
+        const token = data.userLogin
+        props.logInWithCredential(token)
+        setUpToken(token)
+        history.push('/user/home')
 
-export const restLogin = (url, option, history, props, push) => {
-    fetch(process.env.REACT_APP_BACKEND_REST_URL + url, option)
-        .then(response => {
-            console.log("response", response)
-            if (!response.ok) {
-                if (response.status === 404) {
-                    alert('Email not found, please retry')
-                    return false
-                }
-                if (response.status === 401) {
-                    alert('Invalid credential, please retry')
-                    return false
-                }
-                if (response.status === 400) {
-                    alert('Bad request, please retry')
-                    return false
-                }
-            }
-            return response
-        })
-        .then(response => {
-                if (response !== false) {
-                    return response.json()
-                }
-            }
-        )
-        .then(data => {
-            console.log(data)
-            if (data !== undefined) {
-                props.logInWithCredential(data.token)
-                // document.cookie = `token= ${data.token}`;
-                setUpToken(data.token)
-                history.push(push)
-            }
-        })
-        .catch(e => {
-            console.error(e)
-            alert(e)
-        })
+    }else if(data.staffLogin){
+        const token = data.staffLogin
+        props.logInWithCredential(token)
+        setUpToken(token)
+        history.push('/staff/home')
+    }
 }

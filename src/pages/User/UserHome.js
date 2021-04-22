@@ -6,7 +6,7 @@ import {logoutWithoutCredential} from "../../reducers/loginReducer"
 import {connect} from "react-redux";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
-import {clearToken, requireUser} from "../../helpers/utils";
+import {requireUser} from "../../helpers/utils";
 import {Link} from "react-router-dom";
 import {LoadingSpinner} from "../ReturnStaff";
 
@@ -32,9 +32,7 @@ const UserHome = (props) => {
     const history = useHistory()
     const {loading, error, data} = useQuery(USER, {variables: {id: props.login.login? props.login.user.user._id: null}})
     const logout = () => {
-        props.logoutWithoutCredential()
-        clearToken()
-        history.push('/')
+        props.logoutWithoutCredential(history)
     }
 
     const editUser = () => {

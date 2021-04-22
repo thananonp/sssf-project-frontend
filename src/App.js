@@ -152,6 +152,9 @@ function App(props) {
                         <Landing/>
                     </Route>
                 </Switch>
+                {/*<footer>*/}
+                {/*    <p>Thananon Pongsuwan, Picture from unsplash and Made for Server side scripting framework</p>*/}
+                {/*</footer>*/}
             </div>
         </Router>
     );

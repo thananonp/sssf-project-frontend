@@ -66,7 +66,7 @@ const Search = (props) => {
     if (error) return <p>Error :( {error}</p>;
     return (
         <div>
-            <Container fluid>
+            <Container>
                 <h1>Search</h1>
                 <h5>Current search term: {props.searchQuery.query}</h5>
                 <h5>Current search scope: {props.searchQuery.scope}</h5>
