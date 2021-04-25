@@ -44,7 +44,27 @@ const useNotification = (timeout) => {
         }, timeout ? timeout : 2500)
     }
 
-    return {success, failure,successText, failureText,alertSuccess, alertFailure}
+    return {success, failure, successText, failureText, alertSuccess, alertFailure}
 }
 
-export {useField, useNotification}
+const useFile = () => {
+    const [value, setValue] = useState(null)
+    const onChange = (event) => {
+        setValue(event.target.files[0])
+    }
+
+    const reset = () => {
+        setValue(null)
+    }
+
+
+    return {
+        value,
+        onChange,
+        reset,
+        setValue
+    }
+}
+
+
+export {useField, useNotification, useFile}

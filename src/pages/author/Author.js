@@ -10,6 +10,7 @@ const AUTHOR = gql`
             id
             name
             biography
+            imageUrl
         }
         
          books (author : $id){
@@ -27,8 +28,10 @@ const Author = () => {
     const {loading, error, data} = useQuery(AUTHOR, {variables: {id}})
     if (loading) return <LoadingSpinner/>;
     if (error) return <p>Error :( {error}</p>;
+    console.log(data)
     return (
         <Container>
+            <img className="profileImage" src={data.author.imageUrl}/>
             <h1>Author: {data.author.name}</h1>
             <h5>List of books in by this author</h5>
             <ListGroup>
