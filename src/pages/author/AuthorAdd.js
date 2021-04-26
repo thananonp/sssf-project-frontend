@@ -26,7 +26,13 @@ const AuthorAdd = () => {
     const biography = useField('email')
     const file = useFile()
 
-    const [addAuthor] = useMutation(ADD_AUTHOR)
+    const [addAuthor] = useMutation(ADD_AUTHOR, {
+        onCompleted: (data) => {
+            console.log(data)
+        }, onError: (e) => {
+            console.log(e)
+        }
+    })
     const notification = useNotification()
 
     // const history = useHistory()
@@ -41,14 +47,15 @@ const AuthorAdd = () => {
                 biography: biography.value,
                 file: file.value
             }
-        }).then(result => {
-            console.log(result)
-            notification.alertSuccess(`Added new author ${name.value}`)
-            resetForm()
-        }).catch(e => {
-            notification.alertFailure(String(e))
-            console.error(e)
         })
+        //     .then(result => {
+        //     console.log(result)
+        //     notification.alertSuccess(`Added new author ${name.value}`)
+        //     resetForm()
+        // }).catch(e => {
+        //     notification.alertFailure(String(e))
+        //     console.error(e)
+        // })
     }
     const handleFileChange = (e) => {
         console.log(e.target.files[0])
@@ -79,7 +86,8 @@ const AuthorAdd = () => {
                                   as="textarea" rows={3}/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1" accept="image/*"
+                    <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
+                               accept="image/*"
                                label="Example file input"/>
                 </Form.Group>
                 {/*<input type="file" onChange={handleFileChange}/>*/}

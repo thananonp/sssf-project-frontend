@@ -1,22 +1,24 @@
 import {useHistory} from "react-router";
-import {useField} from "../../hooks";
+import {useField, useFile} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
-import {LoadingSpinner, NotificationAlert, ReturnStaff} from "../ReturnStaff";
+import {LoadingSpinner, ReturnStaff} from "../ReturnStaff";
 
 const EDIT_AUTHOR = gql`
     mutation EditBook(
         $id:ID!
         $name:String!,
         $biography: String!
+        $file:Upload
     ){
         editAuthor(
-            id:$id
+            id:$id,
             name:$name,
-            biography:$biography
+            biography:$biography,
+            file:$file
         ){
             id
             name
@@ -39,6 +41,7 @@ const AUTHORS = gql`
             id
             name
             biography
+            imageUrl
         }
     }
 `
@@ -52,16 +55,17 @@ const Author = (props) => {
     const {loading, error, data} = useQuery(AUTHORS)
     console.log(data)
 
-    const deleteAuthorFun = async (id,name) =>{
-        if(window.confirm(`Are you sure you want to delete author: ${name}`)){
+    const deleteAuthorFun = async (id, name) => {
+        if (window.confirm(`Are you sure you want to delete author: ${name}`)) {
             await deleteAuthor({variables: {id}})
             window.location.reload(false);
         }
     }
 
     const EditModal = (props) => {
-        const name = useField('text','')
-        const biography = useField('text','')
+        const name = useField('text', '')
+        const biography = useField('text', '')
+        const file = useFile()
 
         const handleSubmit = (e) => {
             e.preventDefault()
@@ -69,7 +73,8 @@ const Author = (props) => {
                 variables: {
                     id: editId,
                     name: name.value,
-                    biography: biography.value
+                    biography: biography.value,
+                    file: file.value
                 }
             }).then(result => {
                 setModalShow(false)
@@ -102,10 +107,11 @@ const Author = (props) => {
                         Edit Author
                     </Modal.Title>
                 </Modal.Header>
-                <NotificationAlert success={alert.success} failure={alert.failure}/>
+                {/*<NotificationAlert success={alert.success} failure={alert.failure}/>*/}
                 <Modal.Body className="show-grid">
                     <Container>
                         <Form>
+                            <img className="mediumAvatar" src={file.value} alt={name.value}/>
                             <Form.Group controlId="formBasicFirstName">
                                 <Form.Label>Author Name</Form.Label>
                                 <Form.Control value={name.value} type={name.type}
@@ -116,8 +122,12 @@ const Author = (props) => {
                                 <Form.Control value={biography.value} type={biography.type}
                                               onChange={biography.onChange} as="textarea" rows={3}/>
                             </Form.Group>
-
-
+                            <Form.Group>
+                                <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
+                                           accept="image/*"
+                                           label="Example file input"/>
+                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture, the old one will be used.</Form.Text>
+                            </Form.Group>
                         </Form>
                     </Container>
                 </Modal.Body>
@@ -134,7 +144,7 @@ const Author = (props) => {
     }
 
 
-    if (loading) return(<LoadingSpinner/>);
+    if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
     return (
         <Container>
@@ -145,6 +155,7 @@ const Author = (props) => {
             <Table striped bordered hover>
                 <thead>
                 <tr>
+                    <th>Image</th>
                     <th>Name</th>
                     <th>Biography</th>
                     <th colSpan={2}>Action</th>
@@ -154,6 +165,8 @@ const Author = (props) => {
                 {data.authors.map(author => {
                     return (
                         <tr>
+                            {author.imageUrl ?
+                                <td><img className="smallAvatar" src={author.imageUrl} alt={author.name}/></td> : <td/>}
                             <td>{author.name}</td>
                             <td>{author.biography}</td>
                             <td><Link onClick={() => {
