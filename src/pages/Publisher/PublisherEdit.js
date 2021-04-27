@@ -5,7 +5,7 @@ import {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
-import {LoadingSpinner, ReturnStaff} from "../ReturnStaff";
+import {LoadingSpinner, ReturnStaff} from "../Components";
 import {connect} from "react-redux";
 import {requireStaff} from "../../helpers/utils";
 

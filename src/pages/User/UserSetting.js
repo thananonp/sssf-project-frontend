@@ -6,7 +6,7 @@ import {gql} from "@apollo/client/core";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
-import {ReturnUser} from "../ReturnStaff";
+import {ReturnUser} from "../Components";
 
 // const USER = gql`
 //     query User($id:ID!){

@@ -6,7 +6,7 @@ import {gql} from "@apollo/client/core";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
-import {ReturnStaff} from "../ReturnStaff";
+import {ReturnStaff} from "../Components";
 import {requireStaff} from "../../helpers/utils";
 
 const STAFF_COMPARE_PASSWORD = gql`

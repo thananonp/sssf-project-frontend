@@ -1,7 +1,7 @@
 import {useField, useFile, useNotification} from "../../hooks";
 import {useHistory} from "react-router";
 import {Button, Container, Form} from "react-bootstrap";
-import {NotificationAlert, ReturnStaff} from "../ReturnStaff";
+import {NotificationAlert, ReturnStaff} from "../Components";
 import {gql} from "@apollo/client/core";
 import {useMutation} from "@apollo/client";
 import {requireStaff} from "../../helpers/utils";

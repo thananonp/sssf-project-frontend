@@ -3,7 +3,7 @@ import {useField} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
-import {LoadingSpinner, ReturnStaff} from "../ReturnStaff";
+import {LoadingSpinner, ReturnStaff} from "../Components";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 

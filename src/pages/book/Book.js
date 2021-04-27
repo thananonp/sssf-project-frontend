@@ -3,7 +3,7 @@ import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
 import {Container, ListGroup} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {LoadingSpinner} from "../ReturnStaff";
+import {LoadingSpinner} from "../Components";
 
 const BOOK = gql`
     query Book($id: ID!){

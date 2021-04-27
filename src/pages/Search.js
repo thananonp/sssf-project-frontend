@@ -5,7 +5,7 @@ import {useState} from "react";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
 import {Link} from "react-router-dom";
-import {LoadingSpinner} from "./ReturnStaff";
+import {LoadingSpinner} from "./Components";
 
 const SEARCHBOOKS = gql`
     query SearchBooks($query:String, $scope:String){

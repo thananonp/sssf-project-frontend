@@ -8,7 +8,7 @@ import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
 import {requireUser} from "../../helpers/utils";
 import {Link} from "react-router-dom";
-import {LoadingSpinner} from "../ReturnStaff";
+import {LoadingSpinner} from "../Components";
 
 const USER = gql`
     query User($id:ID!){

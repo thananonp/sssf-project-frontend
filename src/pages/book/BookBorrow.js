@@ -3,7 +3,7 @@ import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {Button, Container, Form, ListGroup} from "react-bootstrap";
 import {useField} from "../../hooks";
-import {LoadingSpinner, ReturnStaff} from "../ReturnStaff";
+import {LoadingSpinner, ReturnStaff} from "../Components";
 
 const BOOK_USERS = gql`
     query {

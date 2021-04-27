@@ -2,7 +2,7 @@ import {useField, useFile, useNotification} from "../../hooks";
 import {useHistory} from "react-router";
 import {Button, Container, Form} from "react-bootstrap";
 import {gql, useMutation, useQuery} from "@apollo/client";
-import {LoadingSpinner, NotificationAlert, ReturnStaff} from "../ReturnStaff";
+import {LoadingSpinner, NotificationAlert, ReturnStaff} from "../Components";
 import {requireStaff} from "../../helpers/utils";
 import {connect} from "react-redux";
 

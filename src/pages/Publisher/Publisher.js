@@ -1,7 +1,7 @@
 import {useParams} from "react-router";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
-import {LoadingSpinner} from "../ReturnStaff";
+import {LoadingSpinner} from "../Components";
 import {Container, ListGroup} from "react-bootstrap";
 
 const PUBLISHER = gql`

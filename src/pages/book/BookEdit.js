@@ -4,7 +4,7 @@ import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql, useMutation, useQuery} from "@apollo/client";
-import {LoadingSpinner, ReturnStaff} from "../ReturnStaff";
+import {LoadingSpinner, ReturnStaff} from "../Components";
 import {requireStaff} from "../../helpers/utils";
 import {connect} from "react-redux";
 
