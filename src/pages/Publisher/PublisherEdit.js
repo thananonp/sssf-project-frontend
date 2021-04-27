@@ -186,9 +186,9 @@ const PublisherEdit = (props) => {
                 {data.publishers.map((publisher, index) => {
                     return (
                         <tr>
+                            <td>{index + 1}</td>
                             {publisher.imageUrl ?
                                 <td><img className="smallAvatar" src={publisher.imageUrl} alt={publisher.name}/></td> : <td/>}
-                            <td>{index + 1}</td>
                             <td>{publisher.name}</td>
                             <td>{publisher.description}</td>
                             <td><Link onClick={() => {

@@ -10,15 +10,16 @@ const PUBLISHER = gql`
             id
             name
             description
+            imageUrl
         }
         books (publisher : $id){
-    id
-    title
-    author{
-        id
-        name
-    }
-  }
+            id
+            title
+            author{
+                id
+                name
+            }
+        }
     }
 `
 
@@ -29,6 +30,7 @@ const Publisher = (props) => {
     if (error) return <p>Error :( {error}</p>;
     return (
         <Container>
+            <img className="profileImage" src={data.publisher.imageUrl}/>
             <h1>Publisher: {data.publisher.name}</h1>
             <p>{data.publisher.description}</p>
             <h5>List of books by this Publisher</h5>

@@ -1,5 +1,5 @@
 import {useHistory} from "react-router";
-import {useField} from "../../hooks";
+import {useField, useFile} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
@@ -14,6 +14,7 @@ const CATEGORIES = gql`
         categories{
             id
             title
+            imageUrl
         }
     }
 `
@@ -22,9 +23,11 @@ const EDIT_CATEGORY = gql`
     mutation EditCategory(
         $id:ID!,
         $title:String!
+        $file:Upload
     ){editCategory(
         id:$id,
         title: $title
+        file:$file
     ){
         id
         title
@@ -75,13 +78,16 @@ const CategoryEdit = (props) => {
 
     const EditModal = (props) => {
         const title = useField('text')
+        const fileHolder = useFile()
+        const file = useFile()
 
         const handleSubmit = (e) => {
             e.preventDefault()
             editCategory({
                 variables: {
                     id: editId,
-                    title: title.value
+                    title: title.value,
+                    file:file.value
                 }
             }).then(result => {
                 alert(`Edited Category: ${result.data.editCategory.title}`)
@@ -96,6 +102,7 @@ const CategoryEdit = (props) => {
 
         const resetForm = () => {
             title.reset()
+            file.reset()
         }
 
         return (
@@ -117,9 +124,16 @@ const CategoryEdit = (props) => {
                 <Modal.Body className="show-grid">
                     <Container>
                         <Form>
+                            <img className="mediumAvatar" src={fileHolder.value} alt={title.value}/>
                             <Form.Group controlId="formBasicFirstName">
                                 <Form.Label>Category title</Form.Label>
                                 <Form.Control value={title.value} type={title.type} onChange={title.onChange}/>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
+                                           accept="image/*"
+                                           label="Example file input"/>
+                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture, the old one will be used.</Form.Text>
                             </Form.Group>
                         </Form>
                     </Container>
@@ -150,8 +164,8 @@ const CategoryEdit = (props) => {
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Publisher Name</th>
-                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Category Name</th>
                     <th colSpan={2}>Action</th>
                 </tr>
                 </thead>
@@ -160,6 +174,8 @@ const CategoryEdit = (props) => {
                     return (
                         <tr>
                             <td>{index + 1}</td>
+                            {category.imageUrl ?
+                                <td><img className="smallAvatar" src={category.imageUrl} alt={category.name}/></td> : <td/>}
                             <td>{category.title}</td>
                             <td><Link onClick={() => {
                                 setEditId(category.id)

@@ -1,4 +1,4 @@
-import {useField, useNotification} from "../../hooks";
+import {useField, useFile, useNotification} from "../../hooks";
 import {useHistory} from "react-router";
 import {Button, Container, Form} from "react-bootstrap";
 import {NotificationAlert, ReturnStaff} from "../ReturnStaff";
@@ -10,8 +10,9 @@ import {connect} from "react-redux";
 const ADD_CATEGORY = gql`
     mutation AddCategory(
         $title: String!
+        $file: Upload!
     ){
-        addCategory(title:$title) {
+        addCategory(title:$title, file:$file) {
             id
             title
         }
@@ -20,6 +21,7 @@ const ADD_CATEGORY = gql`
 
 const CategoryAdd = (props) => {
     const title = useField('text')
+    const file = useFile()
     const [addCategory] = useMutation(ADD_CATEGORY)
     const history = useHistory()
     const notification = useNotification()
@@ -28,7 +30,8 @@ const CategoryAdd = (props) => {
         e.preventDefault()
         addCategory({
             variables: {
-                title: title.value
+                title: title.value,
+                file:file.value
             }
         }).then(result => {
             notification.alertSuccess(`Added category: ${result.data.addCategory.title}`)
@@ -41,6 +44,7 @@ const CategoryAdd = (props) => {
     }
     const resetForm = () => {
         title.reset()
+        file.reset()
     }
 
     requireStaff(props, history)
@@ -55,6 +59,11 @@ const CategoryAdd = (props) => {
                 <Form.Group controlId="formBasicFirstName">
                     <Form.Label>Category title</Form.Label>
                     <Form.Control required value={title.value} type={title.type} onChange={title.onChange}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
+                               accept="image/*"
+                               label="Example file input"/>
                 </Form.Group>
                 <Button variant="primary" type="submit">
                     Submit

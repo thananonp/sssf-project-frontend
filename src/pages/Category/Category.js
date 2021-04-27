@@ -9,17 +9,18 @@ const CATEGORY = gql`
         category(id: $id) {
             id
             title
+            imageUrl
         }
         books (category : $id){
-    id
-    title
-    category{
-        title
-    }
-    author{
-     name
-    }
-  }
+            id
+            title
+            category{
+                title
+            }
+            author{
+                name
+            }
+        }
     }
 `
 
@@ -32,14 +33,15 @@ const Category = (props) => {
     console.log(data)
     return (
         <Container>
+            <img className="profileImage" src={data.category.imageUrl}/>
             <h1>Category: {data.category.title}</h1>
             <h5>List of books in this category</h5>
             <ListGroup>
-            {data.books.length ? data.books.map((book, index) => {
-                return (
-                    <ListGroup.Item>{book.title + ' by ' + book.author.name}</ListGroup.Item>
-                )
-            }) : <ListGroup.Item>No book in this category yet.</ListGroup.Item>}
+                {data.books.length ? data.books.map((book, index) => {
+                    return (
+                        <ListGroup.Item>{book.title + ' by ' + book.author.name}</ListGroup.Item>
+                    )
+                }) : <ListGroup.Item>No book in this category yet.</ListGroup.Item>}
             </ListGroup>
         </Container>
     )

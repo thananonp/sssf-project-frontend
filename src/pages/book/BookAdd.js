@@ -1,4 +1,4 @@
-import {useField, useNotification} from "../../hooks";
+import {useField, useFile, useNotification} from "../../hooks";
 import {useHistory} from "react-router";
 import {Button, Container, Form} from "react-bootstrap";
 import {gql, useMutation, useQuery} from "@apollo/client";
@@ -15,6 +15,7 @@ const ADD_BOOK = gql`
         $dateOfPublication: String!
         $pageCount: Int!
         $description: String!
+        $file: Upload!
     ){
         addBook(
             title:$title,
@@ -24,28 +25,10 @@ const ADD_BOOK = gql`
             dateOfPublication:$dateOfPublication,
             pageCount:$pageCount,
             description:$description,
-        ){id
+            file:$file
+        ){
+            id
             title
-            category{
-                id
-                title
-            }
-            author{
-                id
-                name
-            }
-            publisher{
-                id
-                name
-            }
-            dateOfPublication
-            pageCount
-            description
-            borrowedBy{
-                id
-                firstName
-            }
-
         }}`
 
 const categoriesAuthorsPublishers = gql`
@@ -77,7 +60,7 @@ const BookAdd = (props) => {
     const {loading, error, data} = useQuery(categoriesAuthorsPublishers)
     const [addBook] = useMutation(ADD_BOOK)
     const notification = useNotification()
-
+    const file = useFile()
     const history = useHistory()
 
     const handleSubmit = (e) => {
@@ -90,7 +73,8 @@ const BookAdd = (props) => {
                 publisher: publisher.value,
                 dateOfPublication: dateOfPublication.value,
                 pageCount: Number(pageCount.value),
-                description: description.value
+                description: description.value,
+                file:file.value
 
             }
         }).then(result => {
@@ -182,6 +166,11 @@ const BookAdd = (props) => {
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Description</Form.Label>
                     <Form.Control value={description.value} onChange={description.onChange} as="textarea" rows={3}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
+                               accept="image/*"
+                               label="Example file input"/>
                 </Form.Group>
                 <Button variant="primary" type="submit">
                     Submit

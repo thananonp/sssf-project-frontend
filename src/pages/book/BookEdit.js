@@ -1,5 +1,5 @@
 import {useHistory} from "react-router";
-import {useField} from "../../hooks";
+import {useField, useFile} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
@@ -32,6 +32,7 @@ const getBooks = gql`
                 id
                 firstName
             }
+            imageUrl
         }
         categories {
             id
@@ -52,13 +53,15 @@ const getBooks = gql`
 const EDITBOOK = gql`
     mutation EditBook(
         $id: ID!
-        $title: String,
-        $category: ID!,
-        $author: ID!,
-        $publisher: ID!,
-        $dateOfPublication: String,
-        $pageCount: Int,
-        $description: String){
+        $title: String!
+        $category: ID!
+        $author: ID!
+        $publisher: ID!
+        $dateOfPublication: String!
+        $pageCount: Int!
+        $description: String!
+        $file: Upload
+    ){
         editBook(
             id:$id,
             title:$title,
@@ -68,6 +71,7 @@ const EDITBOOK = gql`
             dateOfPublication:$dateOfPublication,
             pageCount:$pageCount,
             description:$description,
+            file:$file
         ) {
             id
             title
@@ -115,7 +119,7 @@ const BookEdit = (props) => {
     const [deleteBook] = useMutation(DELETEBOOK)
 
 
-    const deleteBookFun = async (id,title) => {
+    const deleteBookFun = async (id, title) => {
         if (window.confirm(`Are you sure you want to delete book: ${title}`)) {
             try {
                 await deleteBook({variables: {id}})
@@ -144,6 +148,8 @@ const BookEdit = (props) => {
         const dateOfPublication = useField('date')
         const pageCount = useField('number')
         const description = useField('text')
+        const fileHolder = useFile()
+        const file = useFile()
 
         const handleSubmit = (e) => {
             // console.log("category.type", category.type)
@@ -199,7 +205,8 @@ const BookEdit = (props) => {
                     publisher: editedPublisher,
                     dateOfPublication: dateOfPublication.value,
                     pageCount: Number(pageCount.value),
-                    description: description.value
+                    description: description.value,
+                    file: file.value
                 }
             }).then(result => {
                 setModalShow(false)
@@ -225,6 +232,7 @@ const BookEdit = (props) => {
                        dateOfPublication.setValue(editData.dateOfPublication)
                        pageCount.setValue(editData.pageCount)
                        description.setValue(editData.description)
+                       fileHolder.setValue(editData.imageUrl)
                    }}
                    backdrop="static"
                    keyboard={false}>
@@ -236,6 +244,7 @@ const BookEdit = (props) => {
                 <Modal.Body className="show-grid">
                     <Container>
                         <Form>
+                            <img className="mediumAvatar" src={fileHolder.value} alt={title.value}/>
                             <Form.Group controlId="formBasicTitle">
                                 <Form.Label>Title</Form.Label>
                                 <Form.Control value={title.value} type={title.type} onChange={title.onChange}/>
@@ -329,6 +338,13 @@ const BookEdit = (props) => {
                                               as="textarea"
                                               rows={3}/>
                             </Form.Group>
+                            <Form.Group>
+                                <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
+                                           accept="image/*"
+                                           label="Example file input"/>
+                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
+                                    the old one will be used.</Form.Text>
+                            </Form.Group>
                         </Form>
                     </Container>
                 </Modal.Body>
@@ -354,6 +370,7 @@ const BookEdit = (props) => {
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>Image</th>
                     <th>Title</th>
                     <th>Category</th>
                     <th>Author</th>
@@ -370,6 +387,8 @@ const BookEdit = (props) => {
                     return (
                         <tr>
                             <td>{index + 1}</td>
+                            {book.imageUrl ?
+                                <td><img className="smallAvatar" src={book.imageUrl} alt={book.name}/></td> : <td/>}
                             <td>{book.title}</td>
                             {book.category.title !== null ? <td>{book.category.title}</td> :
                                 <td>No category defined</td>}

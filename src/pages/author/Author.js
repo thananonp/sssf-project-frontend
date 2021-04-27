@@ -13,13 +13,13 @@ const AUTHOR = gql`
             imageUrl
         }
         
-         books (author : $id){
-    id
-    title
-    publisher{
-        name
-    }
-  }
+        books (author : $id){
+            id
+            title
+            publisher{
+                name
+            }
+        }
     }
 `
 
