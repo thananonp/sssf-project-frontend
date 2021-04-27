@@ -65,6 +65,7 @@ const Author = (props) => {
     const EditModal = (props) => {
         const name = useField('text', '')
         const biography = useField('text', '')
+        const fileHolder = useFile()
         const file = useFile()
 
         const handleSubmit = (e) => {
@@ -88,6 +89,7 @@ const Author = (props) => {
         const resetForm = () => {
             name.reset()
             biography.reset()
+            file.reset()
         }
 
         return (
@@ -100,6 +102,7 @@ const Author = (props) => {
                        const editData = data.authors.find(author => author.id === editId)
                        name.setValue(editData.name)
                        biography.setValue(editData.biography)
+                       fileHolder.setValue(editData.imageUrl)
                    }
                    }>
                 <Modal.Header closeButton>
@@ -111,7 +114,7 @@ const Author = (props) => {
                 <Modal.Body className="show-grid">
                     <Container>
                         <Form>
-                            <img className="mediumAvatar" src={file.value} alt={name.value}/>
+                            <img className="mediumAvatar" src={fileHolder.value} alt={name.value}/>
                             <Form.Group controlId="formBasicFirstName">
                                 <Form.Label>Author Name</Form.Label>
                                 <Form.Control value={name.value} type={name.type}

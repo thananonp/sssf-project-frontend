@@ -1,5 +1,5 @@
 import {useHistory} from "react-router";
-import {useField} from "../../hooks";
+import {useField, useFile} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
 import {Link} from "react-router-dom";
@@ -15,6 +15,7 @@ const PUBLISHERS = gql`
             id
             name
             description
+            imageUrl
         }
     }
 `
@@ -22,12 +23,15 @@ const PUBLISHERS = gql`
 const EDIT_PUBLISHER = gql`
     mutation EditPublisher(
         $id:ID!
-        $name:String
-        $description:String,
-    ){editPublisher(
-        id:$id,
-        name: $name,
+        $name:String!
+        $description:String!
+        $file:Upload
+    ){
+        editPublisher(
+        id:$id
+        name: $name
         description:$description
+        file:$file
     ){
         id
         name
@@ -78,6 +82,8 @@ const PublisherEdit = (props) => {
     const EditModal = (props) => {
         const name = useField('text')
         const description = useField('email')
+        const fileHolder = useFile()
+        const file = useFile()
 
         const handleSubmit = (e) => {
             e.preventDefault()
@@ -85,7 +91,8 @@ const PublisherEdit = (props) => {
                 variables: {
                     id: editId,
                     name: name.value,
-                    description: description.value
+                    description: description.value,
+                    file: file.value
                 }
             }).then(result => {
                 console.log(result)
@@ -100,6 +107,7 @@ const PublisherEdit = (props) => {
         const resetForm = () => {
             name.reset()
             description.reset()
+            file.reset()
         }
 
         return (
@@ -111,6 +119,7 @@ const PublisherEdit = (props) => {
                        const editData = data.publishers.find(publisher => publisher.id === editId)
                        name.setValue(editData.name)
                        description.setValue(editData.description)
+                       fileHolder.setValue(editData.imageUrl)
                    }
                    }
                    keyboard={false}>
@@ -122,6 +131,7 @@ const PublisherEdit = (props) => {
                 <Modal.Body className="show-grid">
                     <Container>
                         <Form>
+                            <img className="mediumAvatar" src={fileHolder.value} alt={name.value}/>
                             <Form.Group controlId="formBasicFirstName">
                                 <Form.Label>Publisher Name</Form.Label>
                                 <Form.Control value={name.value} type={name.type} onChange={name.onChange}/>
@@ -130,6 +140,12 @@ const PublisherEdit = (props) => {
                                 <Form.Label>Publisher Description</Form.Label>
                                 <Form.Control value={description.value} type={description.type}
                                               onChange={description.onChange}/>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
+                                           accept="image/*"
+                                           label="Example file input"/>
+                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture, the old one will be used.</Form.Text>
                             </Form.Group>
                         </Form>
                     </Container>
@@ -160,6 +176,7 @@ const PublisherEdit = (props) => {
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>Image</th>
                     <th>Publisher Name</th>
                     <th>Description</th>
                     <th colSpan={2}>Action</th>
@@ -169,6 +186,8 @@ const PublisherEdit = (props) => {
                 {data.publishers.map((publisher, index) => {
                     return (
                         <tr>
+                            {publisher.imageUrl ?
+                                <td><img className="smallAvatar" src={publisher.imageUrl} alt={publisher.name}/></td> : <td/>}
                             <td>{index + 1}</td>
                             <td>{publisher.name}</td>
                             <td>{publisher.description}</td>
