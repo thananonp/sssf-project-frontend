@@ -30,12 +30,16 @@ export const logoutWithoutCredential = (history) => {
 const loginReducer = (state = {login: false, token: undefined, user: undefined}, action) => {
     switch (action.type) {
         case 'LOGIN': {
-            return {login: true, token: action.token, user:jwt.decode(action.token)}
+            return {login: true, token: action.token, user: jwt.decode(action.token)}
         }
         case 'LOGOUT': {
             clearToken()
             return {login: false, token: undefined}
         }
+        default: {
+            console.log("Default Login Reducer")
+        }
+
     }
     return state
 }

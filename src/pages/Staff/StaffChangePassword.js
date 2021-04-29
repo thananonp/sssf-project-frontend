@@ -36,8 +36,7 @@ const StaffChangePassword = (props) => {
     const password = useField('password', '')
     const confirmPassword = useField('password', '')
     const [ChangePasswordStaff] = useMutation(CHANGE_PASSWORD_STAFF)
-    let StaffComparePassword, loading, data;
-    [StaffComparePassword, {loading, data}] = useLazyQuery(STAFF_COMPARE_PASSWORD, {
+    let [StaffComparePassword] = useLazyQuery(STAFF_COMPARE_PASSWORD, {
         onCompleted: (data) => {
             if (data.staffComparePassword) {
                 ChangePasswordStaff({

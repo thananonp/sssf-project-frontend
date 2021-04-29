@@ -42,7 +42,7 @@ const Book = () => {
     console.log("data", data)
     return (
         <Container>
-            <img className="profileImage" src={data.book.imageUrl}/>
+            <img alt="Profile" className="profileImage" src={data.book.imageUrl}/>
             <h1>{data.book.title}</h1>
             <br/>
             <p>{data.book.description}</p>

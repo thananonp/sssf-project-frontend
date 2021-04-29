@@ -6,7 +6,8 @@ import {gql} from "@apollo/client/core";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
-import {ReturnUser} from "../Components";
+import {LoadingSpinner, ReturnUser} from "../Components";
+import {requireUser} from "../../helpers/utils";
 
 // const USER = gql`
 //     query User($id:ID!){
@@ -48,8 +49,7 @@ const UserSetting = (props) => {
     const firstName = useField('text')
     const lastName = useField('text')
     const oldPassword = useField('password', '')
-    let UserComparePassword, loading, data;
-    [UserComparePassword] = useLazyQuery(USERCOMPAREPASSWORD, {
+    let [UserComparePassword, {loading, error}] = useLazyQuery(USERCOMPAREPASSWORD, {
         onCompleted: (data) => {
             console.log(data)
             if (data.userComparePassword) {
@@ -97,27 +97,30 @@ const UserSetting = (props) => {
         lastName.reset()
         oldPassword.reset()
     }
-    if (props.login.login) {
-        return (
-            <Container>
-                <ReturnUser/>
-                <h1>User Setting</h1>
-                <Form onSubmit={updateInfo} onReset={resetForm}>
-                    <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control required type="email" placeholder="Enter email" value={email.value}
-                                      onChange={email.onChange}/>
-                    </Form.Group>
 
-                    <Form.Group controlId="formBasicFirstName">
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control required type="text" placeholder="Enter first name" value={firstName.value}
-                                      onChange={firstName.onChange}/>
-                    </Form.Group>
+    if (loading) return <LoadingSpinner/>;
+    if (error) return <p>Error :( {error}</p>;
+    requireUser(props, history)
+    return (
+        <Container>
+            <ReturnUser/>
+            <h1>User Setting</h1>
+            <Form onSubmit={updateInfo} onReset={resetForm}>
+                <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control required type="email" placeholder="Enter email" value={email.value}
+                                  onChange={email.onChange}/>
+                </Form.Group>
 
-                    <Form.Group controlId="formBasicSurname">
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control required type="text" placeholder="Enter last name" value={lastName.value}
+                <Form.Group controlId="formBasicFirstName">
+                    <Form.Label>First Name</Form.Label>
+                    <Form.Control required type="text" placeholder="Enter first name" value={firstName.value}
+                                  onChange={firstName.onChange}/>
+                </Form.Group>
+
+                <Form.Group controlId="formBasicSurname">
+                    <Form.Label>Last Name</Form.Label>
+                    <Form.Control required type="text" placeholder="Enter last name" value={lastName.value}
                                       onChange={lastName.onChange}/>
                     </Form.Group>
 
@@ -146,11 +149,6 @@ const UserSetting = (props) => {
                 </Form>
             </Container>
         )
-    } else {
-        alert("Please log in first!")
-        history.push('/')
-        return null
-    }
 }
 const mapDispatchToProps = {
     logoutWithoutCredential, logInWithCredential

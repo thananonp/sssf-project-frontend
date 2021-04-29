@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import {LoadingSpinner, ReturnStaff} from "../Components";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
+import {requireUser} from "../../helpers/utils";
 
 const USERS = gql`
     query{
@@ -177,6 +178,7 @@ const UserManage = (props) => {
         );
     }
 
+    requireUser(props,history)
     if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
     return (

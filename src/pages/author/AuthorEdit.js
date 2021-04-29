@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {LoadingSpinner, ReturnStaff} from "../Components";
+import {requireStaff} from "../../helpers/utils";
 
 const EDIT_AUTHOR = gql`
     mutation EditBook(
@@ -149,6 +150,7 @@ const Author = (props) => {
 
     if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
+    requireStaff(props,history)
     return (
         <Container>
             <ReturnStaff/>

@@ -5,7 +5,7 @@ import {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql, useMutation, useQuery} from "@apollo/client";
 import {LoadingSpinner, ReturnStaff} from "../Components";
-import {requireStaff} from "../../helpers/utils";
+import {getToday, requireStaff} from "../../helpers/utils";
 import {connect} from "react-redux";
 
 const getBooks = gql`
@@ -324,12 +324,13 @@ const BookEdit = (props) => {
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Date of Publication</Form.Label>
-                                <Form.Control value={dateOfPublication.value} type={dateOfPublication.type}
+                                <Form.Control max={getToday()} value={dateOfPublication.value}
+                                              type={dateOfPublication.type}
                                               onChange={dateOfPublication.onChange}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Page Count</Form.Label>
-                                <Form.Control value={pageCount.value} type="number"
+                                <Form.Control min="1" value={pageCount.value} type="number"
                                               onChange={pageCount.onChange}/>
                             </Form.Group>
                             <Form.Group controlId="exampleForm.ControlTextarea1">

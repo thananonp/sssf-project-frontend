@@ -1,4 +1,3 @@
-import {useParams} from "react-router";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {Button, Container, Form, ListGroup} from "react-bootstrap";
@@ -88,7 +87,6 @@ const RETURN = gql`
 `
 
 const BookBorrow = () => {
-    const id = useParams().id
     const bookBorrow = useField('text')
     const userBorrow = useField('text')
     const bookReturn = useField('text')

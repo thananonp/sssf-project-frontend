@@ -1,6 +1,6 @@
 import {Button, Container, Form} from "react-bootstrap";
 import {useHistory} from "react-router";
-import {ReturnStaff} from "../Components";
+import {LoadingSpinner, ReturnStaff} from "../Components";
 import {useField} from "../../hooks";
 import {gql} from "@apollo/client/core";
 import React, {useEffect} from "react";
@@ -47,11 +47,10 @@ const StaffSetting = (props) => {
             firstName.setValue(props.login.user.user.firstName)
             lastName.setValue(props.login.user.user.lastName)
         }
-    })
+    }, [])
 
     const [editStaff] = useMutation(EDIT_STAFF)
-    let StaffComparePassword, loading, data;
-    [StaffComparePassword, {loading, data}] = useLazyQuery(STAFF_COMPARE_PASSWORD, {
+    let [StaffComparePassword, {loading, error}] = useLazyQuery(STAFF_COMPARE_PASSWORD, {
         onCompleted: (data) => {
             console.log(data)
             if (data.staffComparePassword) {
@@ -85,13 +84,15 @@ const StaffSetting = (props) => {
     }
 
     const resetForm = () => {
-        email.reset()
-        firstName.reset()
-        lastName.reset()
+        email.setValue(props.login.user.user.email)
+        firstName.setValue(props.login.user.user.firstName)
+        lastName.setValue(props.login.user.user.lastName)
         oldPassword.reset()
     }
 
     requireStaff(props, history)
+    if (loading) return <LoadingSpinner/>;
+    if (error) return <p>Error :( {error}</p>;
     return (
         <Container>
             <ReturnStaff/>

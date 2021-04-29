@@ -102,13 +102,9 @@ const NavBar = (props) => {
                                 <Form.Control size="sm" required type={password.type} value={password.value}
                                               onChange={password.onChange}/>
                             </Form.Group>
-                            {/*<Form.Group controlId="formBasicCheckbox">*/}
-                            {/*    <Form.Check type="checkbox" label="Check me out" />*/}
-                            {/*</Form.Group>*/}
                             <Button variant="primary" type="submit">
                                 Submit
                             </Button>
-                        {/*</Form.Row>*/}
                     </Form>}
             </Navbar.Collapse>
         </Navbar>

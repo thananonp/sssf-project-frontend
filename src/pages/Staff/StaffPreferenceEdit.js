@@ -5,7 +5,7 @@ import React from "react";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {connect} from "react-redux";
-import {ReturnStaff} from "../Components";
+import {LoadingSpinner, ReturnStaff} from "../Components";
 import {requireStaff} from "../../helpers/utils";
 
 const PREFERENCE = gql`
@@ -80,6 +80,8 @@ const StaffPreferenceEdit = (props) => {
     }
 
     requireStaff(props, history)
+    if (loading) return <LoadingSpinner/>;
+    if (error) return <p>Error :( {error}</p>;
     return (
         <Container>
             <ReturnStaff/>

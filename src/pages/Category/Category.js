@@ -33,7 +33,7 @@ const Category = (props) => {
     console.log(data)
     return (
         <Container>
-            <img className="profileImage" src={data.category.imageUrl}/>
+            <img alt="Profile" className="profileImage" src={data.category.imageUrl}/>
             <h1>Category: {data.category.title}</h1>
             <h5>List of books in this category</h5>
             <ListGroup>

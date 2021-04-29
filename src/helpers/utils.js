@@ -70,10 +70,23 @@ export const login = (history, props, data) => {
         setUpToken(token)
         history.push('/user/home')
 
-    }else if(data.staffLogin){
+    } else if (data.staffLogin) {
         const token = data.staffLogin
         props.logInWithCredential(token)
         setUpToken(token)
         history.push('/staff/home')
     }
+}
+
+
+export const getToday = () => {
+    const today = new Date()
+    const day = today.getDate()
+    let month = today.getUTCMonth()
+    const year = today.getFullYear()
+    if (month !== 10 | 11) {
+        month = month + 1
+        month = "0" + month
+    }
+    return (`${year}-${month}-${day}`)
 }

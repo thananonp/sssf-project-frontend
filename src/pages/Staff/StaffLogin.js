@@ -27,13 +27,6 @@ const StaffLogin = (props) => {
             alert("Password length needs to be greater than 8 characters")
             return false
         }
-        const option = {
-            method: 'post',
-            headers: {
-                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
-            },
-            body: `email=${email.value}&password=${password.value}`
-        }
         LoginStaff({variables: {email: email.value, password: password.value}})
     }
 

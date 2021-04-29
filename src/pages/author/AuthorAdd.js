@@ -57,10 +57,6 @@ const AuthorAdd = () => {
         //     console.error(e)
         // })
     }
-    const handleFileChange = (e) => {
-        console.log(e.target.files[0])
-        file.setValue(e.target.files[0])
-    }
 
     const resetForm = () => {
         name.reset()

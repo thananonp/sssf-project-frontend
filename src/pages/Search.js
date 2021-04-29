@@ -40,7 +40,6 @@ const SEARCHBOOKS = gql`
 
 const Search = (props) => {
     const [search, setSearch] = useState('')
-    const timeElapsed = Date.now();
     const {loading, error, data} = useQuery(SEARCHBOOKS, {
         variables: {
             query: props.searchQuery.query ? props.searchQuery.query : '',
