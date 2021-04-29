@@ -186,7 +186,7 @@ const BookBorrow = () => {
                                 {data.borrowedBooks.map((book, index) => {
                                     return (
                                         <option key={index}
-                                                value={book.id}>{book.title + ' by ' + book.author.name}</option>
+                                                value={book.id}>{book.title + ' by ' + book.author.name + 'borrowed by ' + book.borrowedBy.firstName}</option>
                                     )
                                 })}
                             </Form.Control>

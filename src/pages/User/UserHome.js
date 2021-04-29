@@ -22,7 +22,10 @@ const USER = gql`
                 }
                 dateOfBorrow
             }
-
+        }
+        preference{
+            fineRate
+            borrowableDay
         }
     }
 `
@@ -30,7 +33,11 @@ const USER = gql`
 const UserHome = (props) => {
     const [search, setSearch] = useState('')
     const history = useHistory()
-    const {loading, error, data} = useQuery(USER, {variables: {id: props.login.login? props.login.user.user._id: null}})
+    const {
+        loading,
+        error,
+        data
+    } = useQuery(USER, {variables: {id: props.login.login ? props.login.user.user._id : null}})
     const logout = () => {
         props.logoutWithoutCredential(history)
     }
@@ -55,8 +62,34 @@ const UserHome = (props) => {
         history.push('/user/changepassword')
     }
 
+    const compareDueDate = (date) => {
+        const now = Date.now()
+        const diff = now - date
+        const daySinceDue = Math.ceil(diff / (1000 * 60 * 60 * 24)) - data.preference.borrowableDay
+        if (daySinceDue < 1) {
+            return daySinceDue
+        } else {
+            return daySinceDue
+        }
+    }
+
+    const calculateFine = (day) => {
+        const fine = data.preference.fineRate * day
+        if (fine < 0) {
+            return 0
+        } else {
+            return fine
+        }
+    }
+
+    const calculateDueDate = date => {
+        const borrowedDate = new Date(Number(date))
+        borrowedDate.setDate(borrowedDate.getDate() + data.preference.borrowableDay)
+        return new Date(borrowedDate).toDateString()
+    }
+
     console.log("data", data)
-    requireUser(props,history)
+    requireUser(props, history)
     if (loading) return <LoadingSpinner/>;
     if (error) return <p>Error :( {error}</p>;
     return (
@@ -92,19 +125,26 @@ const UserHome = (props) => {
                     <th>Book Title</th>
                     <th>Author</th>
                     <th>Due Date</th>
-                    <th>Fine</th>
+                    <th>Day count</th>
+                    <th>Fine ($)</th>
                 </tr>
                 </thead>
                 <tbody>
                 {data.user.currentlyBorrowed
                     ? <tr>
-                        <td><Link to={`/book/${data.user.currentlyBorrowed.id}`}>{data.user.currentlyBorrowed.title}</Link></td>
-                        <td><Link to={`/author/${data.user.currentlyBorrowed.author.id}`}>{data.user.currentlyBorrowed.author.name}</Link></td>
-                        <td>{new Date(Number(data.user.currentlyBorrowed.dateOfBorrow)).toDateString()}</td>
-                        <td>-</td>
+                        <td><Link
+                            to={`/book/${data.user.currentlyBorrowed.id}`}>{data.user.currentlyBorrowed.title}</Link>
+                        </td>
+                        <td><Link
+                            to={`/author/${data.user.currentlyBorrowed.author.id}`}>{data.user.currentlyBorrowed.author.name}</Link>
+                        </td>
+                        <td>{calculateDueDate(data.user.currentlyBorrowed.dateOfBorrow)}</td>
+                        {/*<td>{new Date(Number(data.user.currentlyBorrowed.dateOfBorrow)).setDate(data.user.).toDateString()}</td>*/}
+                        <td>{compareDueDate(data.user.currentlyBorrowed.dateOfBorrow)}</td>
+                        <td>{calculateFine(compareDueDate(data.user.currentlyBorrowed.dateOfBorrow))}</td>
                     </tr>
                     :
-                    <td colSpan={4}>No borrowed book</td>
+                    <td colSpan={5}>No borrowed book</td>
                 }
 
                 </tbody>
@@ -114,7 +154,6 @@ const UserHome = (props) => {
         </Container>
     )
 }
-
 
 
 const mapDispatchToProps = {
