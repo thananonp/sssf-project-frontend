@@ -32,6 +32,7 @@ import UserChangePassword from "./pages/User/UserChangePassword";
 import StaffChangePassword from "./pages/Staff/StaffChangePassword";
 import BookBorrow from "./pages/book/BookBorrow";
 import {getToken} from "./helpers/utils";
+import StaffPreferenceEdit from "./pages/Staff/StaffPreferenceEdit";
 
 function App(props) {
 
@@ -103,9 +104,14 @@ function App(props) {
                     </Route>
 
                     {/*Staff*/}
+                    <Route path="/staff/editpreference">
+                        <StaffPreferenceEdit/>
+                    </Route>
+
                     <Route path="/staff/changepassword">
                         <StaffChangePassword/>
                     </Route>
+
                     <Route path="/staff/register">
                         <StaffRegister/>
                     </Route>

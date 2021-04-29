@@ -42,6 +42,9 @@ const UserHome = (props) => {
     const changePassword = () => {
         history.push('/staff/changepassword')
     }
+    const editPreference = () => {
+        history.push('/staff/editpreference')
+    }
 
     requireStaff(props, history)
     return (
@@ -52,6 +55,7 @@ const UserHome = (props) => {
                 </Col>
                 <Col>
                     <div className="float-right">
+                        <Button onClick={editPreference}>Edit Preference</Button>
                         <Button onClick={changePassword}>Change Password</Button>
                         <Button onClick={editStaff}>Setting</Button>
                         <Button onClick={logout}>Logout</Button>
