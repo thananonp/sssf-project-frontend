@@ -64,6 +64,9 @@ const CategoryAdd = (props) => {
                     <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                accept="image/*"
                                label="Example file input"/>
+                    {file.url
+                        ? <img className="imagePreview" alt="input" src={file.url}/>
+                        : null}
                 </Form.Group>
                 <Button variant="primary" type="submit">
                     Submit

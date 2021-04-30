@@ -238,7 +238,7 @@ const BookEdit = (props) => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="show-grid">
-                    <Container>
+                    <Container fluid>
                         <Form>
                             <img className="mediumAvatar" src={fileHolder.value} alt={title.value}/>
                             <Form.Group controlId="formBasicTitle">

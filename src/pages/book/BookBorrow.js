@@ -144,10 +144,19 @@ const BookBorrow = () => {
                             <Form.Control as="select" onChange={bookBorrow.onChange}>
                                 <option>Select book</option>
                                 {data.notBorrowedBooks.map((book, index) => {
-                                    return (
-                                        <option key={index}
-                                                value={book.id}>{book.title + ' by ' + book.author.name}</option>
-                                    )
+                                    console.log(book)
+                                    let bookName
+                                    if (book.author) {
+                                        bookName = book.title + ' by ' + book.author.name
+                                        return <option key={index}
+                                                       value={book.id}>{bookName}</option>
+                                    } else {
+                                        bookName = book.title + ' by deleted author'
+                                        return <option key={index}
+                                                       value={book.id}>{bookName}</option>
+                                    }
+
+
                                 })}
                             </Form.Control>
                         </Form.Group>
@@ -182,11 +191,21 @@ const BookBorrow = () => {
                             <Form.Control as="select" onChange={bookReturn.onChange}>
                                 <option>Select book</option>
                                 {data.borrowedBooks.map((book, index) => {
-                                    return (
-                                        <option key={index}
-                                                value={book.id}>{book.title + ' by ' + book.author.name + 'borrowed by ' + book.borrowedBy.firstName}</option>
-                                    )
+                                    console.log(book)
+                                    let bookName
+                                    if (book.author) {
+                                        bookName = book.title + ' by ' + book.author.name
+                                        return <option key={index}
+                                                       value={book.id}>{bookName}</option>
+                                    } else {
+                                        bookName = book.title + ' by deleted author'
+                                        return <option key={index}
+                                                       value={book.id}>{bookName}</option>
+                                    }
+
+
                                 })}
+
                             </Form.Control>
                         </Form.Group>
 

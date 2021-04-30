@@ -15,7 +15,7 @@ const searchResultReducer = (state = [], action) => {
             return copy
         }
         default: {
-            console.log("Search Result reducer default")
+            // console.log("Search Result reducer default")
         }
     }
     return state

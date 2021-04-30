@@ -135,8 +135,13 @@ const UserHome = (props) => {
                         <td><Link
                             to={`/book/${data.user.currentlyBorrowed.id}`}>{data.user.currentlyBorrowed.title}</Link>
                         </td>
-                        <td><Link
-                            to={`/author/${data.user.currentlyBorrowed.author.id}`}>{data.user.currentlyBorrowed.author.name}</Link>
+                        <td>
+                            {data.user.currentlyBorrowed.author
+                                ? <Link
+                                    to={`/author/${data.user.currentlyBorrowed.author.id}`}>{data.user.currentlyBorrowed.author.name}</Link>
+                                : "Deleted Author"
+                            }
+
                         </td>
                         <td>{calculateDueDate(data.user.currentlyBorrowed.dateOfBorrow)}</td>
                         {/*<td>{new Date(Number(data.user.currentlyBorrowed.dateOfBorrow)).setDate(data.user.).toDateString()}</td>*/}

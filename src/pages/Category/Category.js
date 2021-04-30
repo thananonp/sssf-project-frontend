@@ -30,7 +30,7 @@ const Category = (props) => {
 
     if (loading) return <LoadingSpinner/>;
     if (error) return <p>Error :( {error}</p>;
-    console.log(data)
+    // console.log(data)
     return (
         <Container>
             <img alt="Profile" className="profileImage" src={data.category.imageUrl}/>

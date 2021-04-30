@@ -48,13 +48,28 @@ const Book = () => {
             <p>{data.book.description}</p>
             <ListGroup>
                 <ListGroup.Item>Category<span
-                    className="float-right"><Link to={`/category/${data.book.category.id}`}> {data.book.category.title} </Link></span>
+                    className="float-right">
+                    {data.book.category
+                        ? <Link to={`/category/${data.book.category.id}`}> {data.book.category.title} </Link>
+                        : "Deleted category"
+                    }
+                    </span>
                 </ListGroup.Item>
                 <ListGroup.Item>Written by<span
-                    className="float-right"><Link to={`/author/${data.book.author.id}`}> {data.book.author.name} </Link></span>
+                    className="float-right">
+                    {data.book.book
+                        ? <Link to={`/book/${data.book.author.id}`}> {data.book.author.name} </Link>
+                        : "Deleted author"
+                    }
+                </span>
                 </ListGroup.Item>
                 <ListGroup.Item>Published by<span
-                    className="float-right"><Link to={`/author/${data.book.publisher.id}`}> {data.book.publisher.name} </Link></span>
+                    className="float-right">
+                    {data.book.publisher
+                        ? <Link to={`/publisher/${data.book.publisher.id}`}> {data.book.publisher.name} </Link>
+                        : "Deleted publisher"
+                    }
+                </span>
                 </ListGroup.Item>
                 <ListGroup.Item>Date of Publication <span
                     className="float-right">{data.book.dateOfPublication}</span>

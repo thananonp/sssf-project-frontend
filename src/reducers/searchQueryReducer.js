@@ -36,7 +36,7 @@ const searchQueryReducer = (state = initialState, action) => {
             return copy
         }
         default: {
-            console.log("Search Query Reducer")
+            // console.log("Search Query Reducer")
         }
     }
     return state

@@ -37,7 +37,7 @@ const loginReducer = (state = {login: false, token: undefined, user: undefined},
             return {login: false, token: undefined}
         }
         default: {
-            console.log("Default Login Reducer")
+            // console.log("Default Login Reducer")
         }
 
     }
