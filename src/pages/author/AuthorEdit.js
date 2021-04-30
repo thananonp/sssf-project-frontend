@@ -7,6 +7,7 @@ import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {LoadingSpinner, ReturnStaff} from "../Components";
 import {requireStaff} from "../../helpers/utils";
+import {connect} from "react-redux";
 
 const EDIT_AUTHOR = gql`
     mutation EditBook(
@@ -47,7 +48,7 @@ const AUTHORS = gql`
     }
 `
 
-const Author = (props) => {
+const AuthorEdit = (props) => {
     const [modalShow, setModalShow] = useState(false);
     const [editId, setEditId] = useState(0)
     const history = useHistory()
@@ -88,8 +89,9 @@ const Author = (props) => {
         }
 
         const resetForm = () => {
-            name.reset()
-            biography.reset()
+            const editData = data.authors.find(author => author.id === editId)
+            name.setValue(editData.name)
+            biography.setValue(editData.biography)
             file.reset()
         }
 
@@ -127,10 +129,13 @@ const Author = (props) => {
                                               onChange={biography.onChange} as="textarea" rows={3}/>
                             </Form.Group>
                             <Form.Group>
+                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture, the old one will be used.</Form.Text>
                                 <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                            accept="image/*"
                                            label="Example file input"/>
-                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture, the old one will be used.</Form.Text>
+                                {file.url
+                                    ? <img className="imagePreview" alt="input" src={file.url}/>
+                                    : null}
                             </Form.Group>
                         </Form>
                     </Container>
@@ -198,4 +203,12 @@ const Author = (props) => {
     )
 }
 
-export default Author
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
+
+const connectedAuthorEdit= connect(mapStateToProps, null)(AuthorEdit)
+
+export default connectedAuthorEdit

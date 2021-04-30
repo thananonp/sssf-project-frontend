@@ -128,13 +128,6 @@ const BookEdit = (props) => {
                 window.alert(e)
             }
         }
-        //
-        // deleteBook({
-        //     variables: {
-        //         id
-        //     }
-        // })
-        // window.location.reload(false);
     }
 
     const EditModal = (props) => {
@@ -151,18 +144,21 @@ const BookEdit = (props) => {
         const fileHolder = useFile()
         const file = useFile()
 
-        const handleSubmit = (e) => {
-            // console.log("category.type", category.type)
-            // console.log("category.id", category.value.id)
-            // console.log("category", category.value)
-            // console.log("category.length", category.value.length)
-            // console.log("category.value.length",category.value.length)
-            // console.log("category.value",category.value)
-            // console.log("author.value.length",author.value.length)
-            // console.log("author.value",author.value)
-            // console.log("publisher.value.length ",publisher.value.length )
-            // console.log("publisher.value ",publisher.value )
 
+        const resetForm = () => {
+            const editData = data.books.find(book => book.id === editId)
+            console.log("editData", editData)
+            title.setValue(editData.title)
+            category.setValue(editData.category)
+            author.setValue(editData.author)
+            publisher.setValue(editData.publisher)
+            dateOfPublication.setValue(editData.dateOfPublication)
+            pageCount.setValue(editData.pageCount)
+            description.setValue(editData.description)
+            file.reset()
+        }
+
+        const handleSubmit = (e) => {
             if (category.value.length === undefined) {
                 editedCategory = category.value.id
                 // console.log("fuck")
@@ -340,16 +336,25 @@ const BookEdit = (props) => {
                                               rows={3}/>
                             </Form.Group>
                             <Form.Group>
+                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
+                                    the old one will be used.</Form.Text>
                                 <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                            accept="image/*"
                                            label="Example file input"/>
-                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
-                                    the old one will be used.</Form.Text>
+                                {file.url
+                                    ?
+                                    <>
+                                        <p>Image Preview</p>
+                                        <img className="imagePreview" alt="input" src={file.url}/></>
+                                    : null}
                             </Form.Group>
                         </Form>
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
+                    <Button variant="secondary" onClick={resetForm}>
+                        Reset
+                    </Button>
                     <Button variant="primary" onClick={handleSubmit}>
                         Submit
                     </Button>
@@ -391,11 +396,11 @@ const BookEdit = (props) => {
                             {book.imageUrl ?
                                 <td><img className="smallAvatar" src={book.imageUrl} alt={book.name}/></td> : <td/>}
                             <td>{book.title}</td>
-                            {book.category.title !== null ? <td>{book.category.title}</td> :
-                                <td>No category defined</td>}
-                            {book.author !== null ? <td>{book.author.name}</td> : <td>No author defined</td>}
-                            {book.publisher.name !== null ? <td>{book.publisher.name}</td> :
-                                <td>No publisher defined</td>}
+                            {book.category !== null ? <td>{book.category.title}</td> :
+                                <td>Deleted Category</td>}
+                            {book.author !== null ? <td>{book.author.name}</td> : <td>Deleted Author</td>}
+                            {book.publisher !== null ? <td>{book.publisher.name}</td> :
+                                <td>Deleted Publisher</td>}
                             <td>{book.dateOfPublication}</td>
                             <td>{book.pageCount}</td>
                             {book.borrowedBy ? <td>{book.borrowedBy.firstName}</td> : <td>-</td>}

@@ -105,8 +105,9 @@ const PublisherEdit = (props) => {
         }
 
         const resetForm = () => {
-            name.reset()
-            description.reset()
+            const editData = data.publishers.find(publisher => publisher.id === editId)
+            name.setValue(editData.name)
+            description.setValue(editData.description)
             file.reset()
         }
 
@@ -142,10 +143,16 @@ const PublisherEdit = (props) => {
                                               onChange={description.onChange}/>
                             </Form.Group>
                             <Form.Group>
+                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture, the old one will be used.</Form.Text>
                                 <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                            accept="image/*"
                                            label="Example file input"/>
-                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture, the old one will be used.</Form.Text>
+                                {file.url
+                                    ?
+                                    <>
+                                        <p>Image Preview</p>
+                                        <img className="imagePreview" alt="input" src={file.url}/></>
+                                    : null}
                             </Form.Group>
                         </Form>
                     </Container>

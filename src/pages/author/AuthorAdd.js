@@ -3,6 +3,9 @@ import {useField, useFile, useNotification} from "../../hooks";
 import {NotificationAlert, ReturnStaff} from "../Components";
 import {gql} from "@apollo/client/core";
 import {useMutation} from "@apollo/client";
+import {backToTop, requireStaff} from "../../helpers/utils";
+import {connect} from "react-redux";
+import {useHistory} from "react-router";
 
 const ADD_AUTHOR = gql`
     mutation AddAuthor(
@@ -21,24 +24,19 @@ const ADD_AUTHOR = gql`
     }
 `
 
-const AuthorAdd = () => {
+const AuthorAdd = (props) => {
     const name = useField('text')
     const biography = useField('email')
     const file = useFile()
 
-    const [addAuthor] = useMutation(ADD_AUTHOR, {
-        onCompleted: (data) => {
-            console.log(data)
-        }, onError: (e) => {
-            console.log(e)
-        }
-    })
+    const [addAuthor] = useMutation(ADD_AUTHOR)
     const notification = useNotification()
+    const history = useHistory()
 
-    // const history = useHistory()
 
 
     const handleSubmit = (e) => {
+        backToTop()
         e.preventDefault()
         console.log(file.value)
         addAuthor({
@@ -47,15 +45,14 @@ const AuthorAdd = () => {
                 biography: biography.value,
                 file: file.value
             }
+        }).then(result => {
+            console.log(result)
+            notification.alertSuccess(`Added new author ${name.value}`)
+            resetForm()
+        }).catch(e => {
+            notification.alertFailure(String(e))
+            console.error(e)
         })
-        //     .then(result => {
-        //     console.log(result)
-        //     notification.alertSuccess(`Added new author ${name.value}`)
-        //     resetForm()
-        // }).catch(e => {
-        //     notification.alertFailure(String(e))
-        //     console.error(e)
-        // })
     }
 
     const resetForm = () => {
@@ -64,6 +61,7 @@ const AuthorAdd = () => {
         file.reset()
     }
 
+    requireStaff(props, history)
     return (
         <Container>
             <ReturnStaff/>
@@ -85,6 +83,9 @@ const AuthorAdd = () => {
                     <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                accept="image/*"
                                label="Example file input"/>
+                    {file.url
+                        ? <img className="imagePreview" alt="input" src={file.url}/>
+                        : null}
                 </Form.Group>
                 {/*<input type="file" onChange={handleFileChange}/>*/}
                 <Button variant="primary" type="submit">
@@ -98,4 +99,12 @@ const AuthorAdd = () => {
     )
 }
 
-export default AuthorAdd
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
+
+const connectedAuthorAdd = connect(mapStateToProps, null)(AuthorAdd)
+
+export default connectedAuthorAdd

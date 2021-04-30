@@ -49,16 +49,19 @@ const useNotification = (timeout) => {
 
 const useFile = () => {
     const [value, setValue] = useState(null)
+    const [url, setUrl] = useState(null)
     const onChange = (event) => {
+        setUrl(URL.createObjectURL(event.target.files[0]))
         setValue(event.target.files[0])
     }
 
     const reset = () => {
         setValue(null)
+        setUrl(null)
     }
 
-
     return {
+        url,
         value,
         onChange,
         reset,

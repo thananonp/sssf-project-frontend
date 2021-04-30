@@ -52,6 +52,13 @@ footer {
   float: left;
 }
 
+.imagePreview{
+  margin-top: 16px;
+  width: 50%;
+  height: 50%;
+  object-fit: cover;
+}
+
 .smallAvatar{
   width: 100px;
   height: 100px;
@@ -76,7 +83,7 @@ footer {
   margin-left: 16px;
   margin-right: 16px;
   padding-left: 16px;
-  padding-righ: 16px;
+  padding-right: 16px;
 }
 
 .centered {

@@ -102,3 +102,7 @@ export const checkIfPasswordIsTheSameAsConfirmPassword = (password, confirmPassw
         return true
     }
 }
+
+export const backToTop = () => {
+    return window.scrollTo(0, 0)
+}

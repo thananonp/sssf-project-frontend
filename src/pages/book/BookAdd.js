@@ -3,7 +3,7 @@ import {useHistory} from "react-router";
 import {Button, Container, Form} from "react-bootstrap";
 import {gql, useMutation, useQuery} from "@apollo/client";
 import {LoadingSpinner, NotificationAlert, ReturnStaff} from "../Components";
-import {getToday, requireStaff} from "../../helpers/utils";
+import {backToTop, getToday, requireStaff} from "../../helpers/utils";
 import {connect} from "react-redux";
 
 const ADD_BOOK = gql`
@@ -64,33 +64,38 @@ const BookAdd = (props) => {
     const history = useHistory()
 
     const handleSubmit = (e) => {
+        backToTop()
         e.preventDefault()
-        addBook({
-            variables: {
-                title: title.value,
-                category: category.value,
-                author: author.value,
-                publisher: publisher.value,
-                dateOfPublication: dateOfPublication.value,
-                pageCount: Number(pageCount.value),
-                description: description.value,
-                file:file.value
+        if(author.value && category.value && publisher.value) {
+            addBook({
+                variables: {
+                    title: title.value,
+                    category: category.value,
+                    author: author.value,
+                    publisher: publisher.value,
+                    dateOfPublication: dateOfPublication.value,
+                    pageCount: Number(pageCount.value),
+                    description: description.value,
+                    file: file.value
 
-            }
-        }).then(result => {
-            // console.log(result)
-            // alert(`Added Book: ${result.data.addBook.title}`)
-            // resetForm()
-            notification.alertSuccess(`Added Book: ${result.data.addBook.title}`)
-            resetForm()
-        }).catch(e => {
-            notification.alertFailure(String(e))
-            console.error(e)
-        })
+                }
+            }).then(result => {
+                // console.log(result)
+                // alert(`Added Book: ${result.data.addBook.title}`)
+                // resetForm()
+                notification.alertSuccess(`Added Book: ${result.data.addBook.title}`)
+                resetForm()
+            }).catch(e => {
+                notification.alertFailure(String(e))
+                console.error(e)
+            })
+        }else{
+            backToTop()
+            notification.alertFailure("Please select category, author and publisher.")
+        }
         // history.push('/staff/home')
     }
     const resetForm = () => {
-        console.log("reset")
         title.reset()
         author.reset()
         publisher.reset()
@@ -98,6 +103,7 @@ const BookAdd = (props) => {
         dateOfPublication.reset()
         pageCount.reset()
         description.reset()
+        file.reset()
     }
 
     if (loading) return (<LoadingSpinner/>);
@@ -114,9 +120,9 @@ const BookAdd = (props) => {
             <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicTitle">
                     <Form.Label>Title</Form.Label>
-                    <Form.Control value={title.value} type={title.type} onChange={title.onChange}/>
+                    <Form.Control required value={title.value} type={title.type} onChange={title.onChange}/>
                 </Form.Group>
-                <Form.Group controlId="formSelectCategory">
+                <Form.Group required controlId="formSelectCategory">
                     <Form.Label>Category</Form.Label>
 
                     <Form.Control as="select" onChange={category.onChange}>
@@ -143,7 +149,7 @@ const BookAdd = (props) => {
                 </Form.Group>
                 <Form.Group controlId="formBasicPublisher">
                     <Form.Label>Publisher</Form.Label>
-                    <Form.Control as="select" onChange={publisher.onChange}>
+                    <Form.Control  as="select" onChange={publisher.onChange}>
                         <option>Select publisher</option>
                         {data.publishers.map(publisher => {
                             return (
@@ -155,22 +161,25 @@ const BookAdd = (props) => {
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Date of Publication</Form.Label>
-                    <Form.Control max={getToday()} value={dateOfPublication.value} type={dateOfPublication.type}
+                    <Form.Control required max={getToday()} value={dateOfPublication.value} type={dateOfPublication.type}
                                   onChange={dateOfPublication.onChange}/>
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Page Count</Form.Label>
-                    <Form.Control min="1" value={pageCount.value} type="number"
+                    <Form.Control required min="1" value={pageCount.value} type="number"
                                   onChange={pageCount.onChange}/>
                 </Form.Group>
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control value={description.value} onChange={description.onChange} as="textarea" rows={3}/>
+                    <Form.Control required value={description.value} onChange={description.onChange} as="textarea" rows={3}/>
                 </Form.Group>
                 <Form.Group>
                     <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                accept="image/*"
                                label="Example file input"/>
+                    {file.url
+                        ? <img className="imagePreview" alt="input" src={file.url}/>
+                        : null}
                 </Form.Group>
                 <Button variant="primary" type="submit">
                     Submit
