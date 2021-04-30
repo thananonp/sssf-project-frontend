@@ -115,13 +115,13 @@ const Search = (props) => {
                             <tr>
                                 <td>{index + 1}</td>
                                 <td><Link to={`/book/${book.id}`}>{book.title}</Link></td>
-                                {book.category.title !== null ?
+                                {book.category !== null ?
                                     <td><Link to={`/category/${book.category.id}`}>{book.category.title}</Link></td> :
                                     <td>No category defined</td>}
                                 {book.author !== null ?
                                     <td><Link to={`/author/${book.author.id}`}>{book.author.name}</Link></td> :
                                     <td>No author defined</td>}
-                                {book.publisher.name !== null ?
+                                {book.publisher !== null ?
                                     <td><Link to={`/publisher/${book.publisher.id}`}>{book.publisher.name}</Link></td> :
                                     <td>No publisher defined</td>}
                                 <td>{book.dateOfPublication}</td>
@@ -130,12 +130,12 @@ const Search = (props) => {
                             </tr>
                         )
                     })}
-                        </tbody>
-                        </Table>
-                        </Container>
-                        </div>
-                        )
-                    }
+                    </tbody>
+                </Table>
+            </Container>
+        </div>
+    )
+}
 const mapDispatchToProps = {
     newSearchQuery, searchScope
 }

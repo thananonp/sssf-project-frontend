@@ -4,10 +4,25 @@ import {useField} from "../hooks";
 import {newSearchQuery} from "../reducers/searchQueryReducer";
 import {useHistory} from "react-router";
 import {connect} from "react-redux";
+import {gql} from "@apollo/client/core";
+import {useQuery} from "@apollo/client";
+import {LoadingSpinner} from "./Components";
+
+const GET_STATS = gql`
+    query {
+        countUser
+        countStaff
+        countBook
+        countAuthor
+        countPublisher
+        countCategory
+    }
+`
 
 const Landing = (props) => {
     const search = useField('text')
     const history = useHistory()
+    const {data, loading, error} = useQuery(GET_STATS)
 
     const toSearch = () => {
         props.newSearchQuery(search.value)
@@ -46,7 +61,7 @@ const Landing = (props) => {
                         <Card.Body>
                             <Card.Title>Are you new to the library website</Card.Title>
                             <div>Already has an account
-                                <span><Link to="/user/login"><Button>   Login</Button></Link></span>
+                                <span><Link to="/user/login"><Button>Login</Button></Link></span>
                             </div>
                             <div>
                                 No account?
@@ -64,6 +79,9 @@ const Landing = (props) => {
             )
         }
     };
+
+    if (loading) return <LoadingSpinner/>;
+    if (error) return <p>Error :( {error}</p>;
     return (
         <Container>
             <h1>Welcome to library system</h1>
@@ -82,7 +100,7 @@ const Landing = (props) => {
             <br/>
             <CardDeck>
                 <Card>
-                    <Card.Header>Opening times</Card.Header>
+                    <Card.Header as="h5">Opening times</Card.Header>
                     <ListGroup variant="flush">
                         <ListGroup.Item>Mon - Fri<span className="float-right">8 - 18</span></ListGroup.Item>
                         <ListGroup.Item>Sat<span className="float-right">10 -  18</span></ListGroup.Item>
@@ -91,6 +109,18 @@ const Landing = (props) => {
                 </Card>
                 {showCard()}
             </CardDeck>
+            <br/>
+            <Card>
+                <Card.Header as="h5">Our library statistic</Card.Header>
+                <ListGroup variant="flush">
+                    <ListGroup.Item>User<span className="float-right">{data.countUser}</span> </ListGroup.Item>
+                    <ListGroup.Item>Staff<span className="float-right">{data.countStaff}</span></ListGroup.Item>
+                    <ListGroup.Item>Book<span className="float-right">{data.countBook}</span></ListGroup.Item>
+                    <ListGroup.Item>Author<span className="float-right">{data.countAuthor}</span> </ListGroup.Item>
+                    <ListGroup.Item>Publisher<span className="float-right">{data.countPublisher}</span></ListGroup.Item>
+                    <ListGroup.Item>Category<span className="float-right">{data.countCategory}</span></ListGroup.Item>
+                </ListGroup>
+            </Card>
             <br/>
             <Carousel>
                 <Carousel.Item interval={2000}>
