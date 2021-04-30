@@ -22,9 +22,9 @@ const UserHome = (props) => {
     const [search, setSearch] = useState('')
     const history = useHistory()
 
-    const logout = () => {
-        props.logoutWithoutCredential(history)
-    }
+    // const logout = () => {
+    //     props.logoutWithoutCredential(history)
+    // }
 
     const editStaff = () => {
         history.push('/staff/setting')
@@ -55,10 +55,12 @@ const UserHome = (props) => {
                 </Col>
                 <Col>
                     <div className="float-right">
+                        <Link to="/staff/register"><Button>Staff Register</Button></Link>
+
                         <Button onClick={editPreference}>Edit Preference</Button>
                         <Button onClick={changePassword}>Change Password</Button>
                         <Button onClick={editStaff}>Setting</Button>
-                        <Button onClick={logout}>Logout</Button>
+                        {/*<Button onClick={logout}>Logout</Button>*/}
                     </div>
                 </Col>
             </Row>

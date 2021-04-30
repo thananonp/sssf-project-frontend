@@ -58,9 +58,7 @@ const Landing = (props) => {
                         <Card.Header as="h5">Staff</Card.Header>
                         <Card.Body>
                             <Card.Title>Free candy for staff here</Card.Title>
-                            <Link to="/staff"><Button>Staff login</Button></Link>
-                            <Link to="/staff/register"><Button>Staff Register</Button></Link>
-                        </Card.Body>
+                            <Link to="/staff"><Button>Staff login</Button></Link></Card.Body>
                     </Card>
                 </>
             )

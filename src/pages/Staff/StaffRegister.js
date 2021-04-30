@@ -3,6 +3,30 @@ import {useField} from "../../hooks";
 import {useHistory} from "react-router";
 import {loginWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
+import {checkIfPasswordIsTheSameAsConfirmPassword, requireStaff} from "../../helpers/utils";
+import {useMutation} from "@apollo/client";
+import {gql} from "@apollo/client/core";
+import {ReturnStaff} from "../Components";
+
+const ADD_STAFF = gql`
+    mutation AddStaff(
+        $email:String!,
+        $firstName:String!,
+        $lastName:String!,
+        $password:String!
+    ){
+        addStaff(
+            email: $email,
+            firstName: $firstName,
+            lastName: $lastName,
+            password: $password
+        ) {
+            email
+            firstName
+        }
+    }
+
+`
 
 const StaffRegister = (props) => {
     const history = useHistory()
@@ -11,13 +35,28 @@ const StaffRegister = (props) => {
     const lastName = useField('text')
     const password = useField('password')
     const confirmPassword = useField('password')
+    const [addStaff] = useMutation(ADD_STAFF)
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        alert("New staff registered")
-        props.loginWithoutCredential()
-        history.push('/staff/home')
+        if (checkIfPasswordIsTheSameAsConfirmPassword(password.value, confirmPassword.value)) {
+            addStaff({
+                variables: {
+                    email: email.value,
+                    firstName: firstName.value,
+                    lastName: lastName.value,
+                    password: password.value
+                }
+            }).then(result => {
+                alert(`Staff ${result.data.addStaff.email} registered.`)
+                history.push('/')
+            }).catch(e => {
+                alert(e)
+                console.log(e)
+            })
+        }
     }
+
     const resetForm = () => {
         email.reset()
         firstName.reset()
@@ -26,38 +65,42 @@ const StaffRegister = (props) => {
         confirmPassword.reset()
     }
 
-    // requireStaff(props, history)
+    requireStaff(props, history)
     return (
         <div>
-            <h1>Register New Staff</h1>
             <Container>
+                <ReturnStaff/>
+                <h1>Register New Staff</h1>
                 <Form onSubmit={handleSubmit} onReset={resetForm}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
-                        <Form.Control type={email.type} placeholder="Enter email" value={email.value}
+                        <Form.Control required type={email.type} placeholder="Enter email" value={email.value}
                                       onChange={email.onChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicFirstName">
                         <Form.Label>First Name</Form.Label>
-                        <Form.Control type={firstName.type} placeholder="Enter first name" value={firstName.value}
+                        <Form.Control required type={firstName.type} placeholder="Enter first name"
+                                      value={firstName.value}
                                       onChange={firstName.onChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicSurname">
                         <Form.Label>Last Name</Form.Label>
-                        <Form.Control type={lastName.type} placeholder="Enter last name" value={lastName.value}
+                        <Form.Control required type={lastName.type} placeholder="Enter last name" value={lastName.value}
                                       onChange={lastName.onChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type={password.type} placeholder="Password" value={password.value}
+                        <Form.Control required minlength="8" type={password.type} placeholder="Password"
+                                      value={password.value}
                                       onChange={password.onChange}/>
                     </Form.Group>
                     <Form.Group controlId="formBasicConfirmPassword">
                         <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control type={confirmPassword.type} placeholder="Password" value={confirmPassword.value}
+                        <Form.Control required minlength="8" type={confirmPassword.type} placeholder="Password"
+                                      value={confirmPassword.value}
                                       onChange={confirmPassword.onChange}/>
                     </Form.Group>
                     <Button type="submit">Submit</Button>

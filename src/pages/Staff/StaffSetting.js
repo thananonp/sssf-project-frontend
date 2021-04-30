@@ -69,7 +69,7 @@ const StaffSetting = (props) => {
                     console.log(e)
                 })
             } else {
-                window.alert("You have enter a wrong password")
+                window.alert("Old password does not match!")
             }
         }
     });
@@ -100,24 +100,24 @@ const StaffSetting = (props) => {
             <Form onSubmit={updateInfo} onReset={resetForm}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" value={email.value} onChange={email.onChange}/>
+                    <Form.Control required type="email" placeholder="Enter email" value={email.value} onChange={email.onChange}/>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicFirstName">
                     <Form.Label>First Name</Form.Label>
-                    <Form.Control type="text" placeholder="Enter first name" value={firstName.value}
+                    <Form.Control required type="text" placeholder="Enter first name" value={firstName.value}
                                   onChange={firstName.onChange}/>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicSurname">
                     <Form.Label>Last Name</Form.Label>
-                    <Form.Control type="text" placeholder="Enter last name" value={lastName.value}
+                    <Form.Control required type="text" placeholder="Enter last name" value={lastName.value}
                                   onChange={lastName.onChange}/>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" value={oldPassword.value}
+                    <Form.Control required minLength="8" type="password" placeholder="Password" value={oldPassword.value}
                                   onChange={oldPassword.onChange}/>
                 </Form.Group>
 

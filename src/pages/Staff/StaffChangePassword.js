@@ -7,7 +7,7 @@ import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
 import {ReturnStaff} from "../Components";
-import {requireStaff} from "../../helpers/utils";
+import {checkIfPasswordIsTheSameAsConfirmPassword, requireStaff} from "../../helpers/utils";
 
 const STAFF_COMPARE_PASSWORD = gql`
     query StaffComparePassword($id:ID!,$password:String!){
@@ -45,33 +45,25 @@ const StaffChangePassword = (props) => {
                         password: password.value
                     }
                 }).then(result => {
-                    alert(`Staff ${result.data.changePasswordStaff.email} edited\nPlease sign in again.`)
-                    props.logoutWithoutCredential()
-                    document.cookie = `token=;max-age:1`;
-                    // props.loginWithoutCredential()
-
+                    window.alert(`Staff ${result.data.changePasswordStaff.email} edited\nPlease sign in again.`)
+                    props.logoutWithoutCredential(history)
                 }).catch(e => {
-                    alert(e)
-                    console.log(e)
+                    window.alert(e)
                 })
+            } else {
+                window.alert("Old password does not match!")
             }
+        }, onError: (error) => {
+            console.log(error)
+            window.alert("Check password error" + error)
         }
     });
 
     const updateInfo = (e) => {
         e.preventDefault()
-        if (password.value.length < 8 || confirmPassword.value.length < 8) {
-            alert("New Password length must be greater than 8 characters")
-            return false
-
-        } else if (password.value !== confirmPassword.value) {
-            alert("New Password and Confirm Password does not match!")
-            return false
+        if (checkIfPasswordIsTheSameAsConfirmPassword(password.value, confirmPassword.value)) {
+            StaffComparePassword({variables: {id: props.login.user.user._id, password: oldPassword.value}})
         }
-        console.log({id: props.login.user.user._id, password: oldPassword.value})
-        StaffComparePassword({variables: {id: props.login.user.user._id, password: oldPassword.value}})
-
-
     }
 
     const resetForm = () => {
@@ -86,20 +78,21 @@ const StaffChangePassword = (props) => {
             <ReturnStaff/>
             <h1>Staff Setting</h1>
             <Form onSubmit={updateInfo} onReset={resetForm}>
-
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Old Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" value={oldPassword.value}
+                    <Form.Control required minLength="8" type="password" placeholder="Password"
+                                  value={oldPassword.value}
                                   onChange={oldPassword.onChange}/>
                 </Form.Group>
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" value={password.value}
+                    <Form.Control required minLength="8" type="password" placeholder="Password" value={password.value}
                                   onChange={password.onChange}/>
                 </Form.Group>
                 <Form.Group controlId="formBasicPasswordCheck">
                     <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" value={confirmPassword.value}
+                    <Form.Control required minLength="8" type="password" placeholder="Password"
+                                  value={confirmPassword.value}
                                   onChange={confirmPassword.onChange}/>
                 </Form.Group>
 

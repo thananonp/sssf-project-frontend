@@ -34,7 +34,7 @@ const UserLogin = (props) => {
 
     userChecker(props, history)
     return (
-        <Container fluid>
+        <Container>
             <h1>User Login</h1>
             <Form onSubmit={loginUser}>
                 <Form.Group controlId="formBasicEmail">

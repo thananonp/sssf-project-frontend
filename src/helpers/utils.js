@@ -23,6 +23,7 @@ export const notificationAlert = (event) => {
 export const staffChecker = (props, history) => {
     if (props.login.login) {
         if (props.login.user.type === 'staff') {
+            alert("You are already logged in with staff")
             history.push('/staff/home')
         }
     }
@@ -30,6 +31,7 @@ export const staffChecker = (props, history) => {
 export const userChecker = (props, history) => {
     if (props.login.login) {
         if (props.login.user.type === 'user') {
+            alert("You are already logged in with user")
             history.push('/user/home')
         }
     }
@@ -89,4 +91,14 @@ export const getToday = () => {
         month = "0" + month
     }
     return (`${year}-${month}-${day}`)
+}
+
+export const checkIfPasswordIsTheSameAsConfirmPassword = (password, confirmPassword) => {
+    if (password !== confirmPassword) {
+        alert("Password and confirm password does not match!")
+        return false
+    } else {
+        console.log("Password matched")
+        return true
+    }
 }
