@@ -3,11 +3,10 @@ import {createUploadLink} from "apollo-upload-client";
 import {setContext} from "@apollo/client/link/context";
 import {getToken} from "./utils";
 
-// console.log(process.env.REACT_APP_BACKEND_GRAPHQL_URL)
 const link = createUploadLink({
-    // uri: '/graphql',
-    uri: process.env.REACT_APP_BACKEND_GRAPHQL_URL,
     // credentials: 'include'
+    // uri: process.env.REACT_APP_BACKEND_GRAPHQL_URL,
+    uri:"https://thananonp-test.jelastic.metropolia.fi/graphql"
 });
 
 const authLink = setContext((_, { headers }) => {

@@ -33,12 +33,9 @@ const AuthorAdd = (props) => {
     const notification = useNotification()
     const history = useHistory()
 
-
-
     const handleSubmit = (e) => {
         backToTop()
         e.preventDefault()
-        console.log(file.value)
         addAuthor({
             variables: {
                 name: name.value,
@@ -46,7 +43,7 @@ const AuthorAdd = (props) => {
                 file: file.value
             }
         }).then(result => {
-            console.log(result)
+            // console.log(result)
             notification.alertSuccess(`Added new author ${name.value}`)
             resetForm()
         }).catch(e => {
@@ -87,7 +84,6 @@ const AuthorAdd = (props) => {
                         ? <img className="imagePreview" alt="input" src={file.url}/>
                         : null}
                 </Form.Group>
-                {/*<input type="file" onChange={handleFileChange}/>*/}
                 <Button variant="primary" type="submit">
                     Submit
                 </Button>

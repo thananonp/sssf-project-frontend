@@ -7,6 +7,7 @@ import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
 import {ReturnUser} from "../Components";
+import {CHANGE_PASSWORD_USER} from "../../helpers/gql";
 
 const USER_COMPARE_PASSWORD = gql`
     query UserComparePassword($id:ID!,$password:String!){
@@ -14,20 +15,6 @@ const USER_COMPARE_PASSWORD = gql`
     }
 `
 
-const CHANGE_PASSWORD_USER = gql`
-    mutation ChangePasswordUser(
-        $id: ID!,
-        $password: String!
-    ){
-        changePasswordUser(
-            id:  $id,
-            password:  $password
-        ) {
-            id
-            email
-        }
-    }
-`
 
 const UserSetting = (props) => {
     const history = useHistory()

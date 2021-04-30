@@ -1,15 +1,15 @@
 export const setUpToken = (token) => {
-    console.log("setUpToken")
+    // console.log("setUpToken")
     localStorage.setItem('jwtToken', token)
 }
 
 export const clearToken = () => {
-    console.log("clearToken")
+    // console.log("clearToken")
     localStorage.clear()
 }
 
 export const getToken = () => {
-    console.log("getToken")
+    // console.log("getToken")
     return localStorage.getItem('jwtToken')
 }
 
@@ -23,7 +23,7 @@ export const notificationAlert = (event) => {
 export const staffChecker = (props, history) => {
     if (props.login.login) {
         if (props.login.user.type === 'staff') {
-            alert("You are already logged in with staff")
+            window.alert("You are already logged in with staff")
             history.push('/staff/home')
         }
     }
@@ -31,7 +31,7 @@ export const staffChecker = (props, history) => {
 export const userChecker = (props, history) => {
     if (props.login.login) {
         if (props.login.user.type === 'user') {
-            alert("You are already logged in with user")
+            window.alert("You are already logged in with user")
             history.push('/user/home')
         }
     }
@@ -41,12 +41,12 @@ export const requireStaff = (props, history) => {
     if (props.login.login) {
         if (props.login.user.type === 'staff') {
         } else {
-            alert("Please log in first!")
+            window.alert("Please log in first!")
             history.push('/')
         }
 
     } else {
-        alert("Please log in first!")
+        window.alert("Please log in first!")
         history.push('/')
     }
 }
@@ -55,12 +55,12 @@ export const requireUser = (props, history) => {
     if (props.login.login) {
         if (props.login.user.type === 'user') {
         } else {
-            alert("Please log in first!")
+            window.alert("Please log in first!")
             history.push('/')
         }
 
     } else {
-        alert("Please log in first!")
+        window.alert("Please log in first!")
         history.push('/')
     }
 }
@@ -98,7 +98,7 @@ export const checkIfPasswordIsTheSameAsConfirmPassword = (password, confirmPassw
         alert("Password and confirm password does not match!")
         return false
     } else {
-        console.log("Password matched")
+        // console.log("Password matched")
         return true
     }
 }

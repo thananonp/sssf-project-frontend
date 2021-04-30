@@ -8,6 +8,7 @@ import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {requireStaff} from "../../helpers/utils";
 import {connect} from "react-redux";
+import {CHANGE_PASSWORD_USER} from "../../helpers/gql";
 
 const USERS = gql`
     query{
@@ -55,7 +56,9 @@ const DELETE_USER = gql`
 `
 const UserManage = (props) => {
     const [modalShow, setModalShow] = useState(false);
+    const [passwordModalShow, setPasswordModalShow] = useState(false);
     const history = useHistory()
+    const [changePasswordUser] = useMutation(CHANGE_PASSWORD_USER)
     const [editUser] = useMutation(EDIT_USER)
     const [deleteUser] = useMutation(DELETE_USER)
     const {loading, error, data} = useQuery(USERS)
@@ -70,21 +73,12 @@ const UserManage = (props) => {
                 window.alert(e)
             }
         }
-
-        // alert(`delete ${id}`)
-        // deleteUser({
-        //     variables: {
-        //         id
-        //     }
-        // })
-        // window.location.reload(false);
     }
 
     const EditModal = (props) => {
         const email = useField('email')
         const firstName = useField('text')
         const lastName = useField('text')
-        const password = useField('password')
 
         const handleSubmit = (e) => {
             e.preventDefault()
@@ -99,14 +93,14 @@ const UserManage = (props) => {
                 }).then(result => {
                     alert(`Edited user: ${result.data.editUser.firstName}`)
                     console.log(result)
-                    // window.location.reload(false);
+                    window.location.reload(false);
                     setModalShow(false)
                 }).catch(e => {
                     alert(e)
                     console.error(e)
                 })
                 setModalShow(false)
-            }else{
+            } else {
                 window.alert("Please fill in all the information")
             }
         }
@@ -116,7 +110,6 @@ const UserManage = (props) => {
             firstName.setValue(editData.firstName)
             lastName.setValue(editData.lastName)
             email.setValue(editData.email)
-            password.reset()
         }
 
         return (
@@ -158,9 +151,58 @@ const UserManage = (props) => {
                                           value={lastName.value}
                                           onChange={lastName.onChange}/>
                         </Form.Group>
+                    </Container>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={resetForm}>
+                        Reset
+                    </Button>
+                    <Button variant="primary" onClick={handleSubmit}>
+                        Submit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    }
+    const PasswordModal = (props) => {
+        const password = useField('password')
 
+        const handleSubmit = (e) => {
+            e.preventDefault()
+            if (password.value.length < 8) {
+                window.alert("New password length must be greater than 8 characters")
+                return false
+            }
+            changePasswordUser({variables: {id: editId, password: password.value}})
+                .then(result => {
+                    alert(`Password of user  ${result.data.changePasswordUser.email} edited`)
+                    window.location.reload()
+                }).catch(e => {
+                alert(e)
+                console.log(e)
+            })
+        }
+
+        const resetForm = () => {
+            password.reset()
+        }
+
+        return (
+            <Modal {...props}
+                   aria-labelledby="contained-modal-title-vcenter"
+                   size="lg"
+                   backdrop="static"
+                   keyboard={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Edit Password of User
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="show-grid">
+                    <Container>
                         <Form.Group controlId="formBasicPassword">
                             <Form.Label>Password</Form.Label>
+                            <Form.Text>The password must be more than 8 characters.</Form.Text>
                             <Form.Control required type={password.type} placeholder="Password" value={password.value}
                                           onChange={password.onChange}/>
                         </Form.Group>
@@ -186,7 +228,9 @@ const UserManage = (props) => {
             <ReturnStaff/>
             <h1>Manage user</h1>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
+            <PasswordModal show={passwordModalShow} onHide={() => setPasswordModalShow(false)}/>
 
+            <p>There are total of {data.users.length} users.</p>
             <Table striped bordered hover>
                 <thead>
                 <tr>
@@ -194,8 +238,7 @@ const UserManage = (props) => {
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email address</th>
-                    {/*<th>Book Due</th>*/}
-                    <th colSpan={2}>Action</th>
+                    <th colSpan={3}>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -211,6 +254,13 @@ const UserManage = (props) => {
                                 setModalShow(true)
                             }}>
                                 Edit
+                            </Link>
+                            </td>
+                            <td><Link onClick={() => {
+                                setEditId(user.id)
+                                setPasswordModalShow(true)
+                            }}>
+                                Change Password
                             </Link>
                             </td>
                             <td><Link onClick={() =>
