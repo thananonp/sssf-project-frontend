@@ -6,7 +6,8 @@ import {Link} from "react-router-dom";
 import {LoadingSpinner, ReturnStaff} from "../Components";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
-import {requireUser} from "../../helpers/utils";
+import {requireStaff} from "../../helpers/utils";
+import {connect} from "react-redux";
 
 const USERS = gql`
     query{
@@ -25,18 +26,17 @@ const EDIT_USER = gql`
         $id:ID!,
         $email:String,
         $firstName:String,
-        $lastName:String,
-        $password:String
+        $lastName:String
     ){
         editUser(
             id:$id,
             email:$email,
             firstName:$firstName,
-            lastName:$lastName,
-            password:$password
+            lastName:$lastName
         ){
             id
             email
+            firstName
         }
     }
 `
@@ -61,7 +61,7 @@ const UserManage = (props) => {
     const {loading, error, data} = useQuery(USERS)
     const [editId, setEditId] = useState('')
 
-    const deleteUserFun = async (id,name) => {
+    const deleteUserFun = async (id, name) => {
         if (window.confirm(`Are you sure you want to delete user: ${name}`)) {
             try {
                 await deleteUser({variables: {id}})
@@ -88,30 +88,34 @@ const UserManage = (props) => {
 
         const handleSubmit = (e) => {
             e.preventDefault()
-            editUser({
-                variables: {
-                    id: editId,
-                    firstName: firstName.value,
-                    lastName: lastName.value,
-                    email: email.value,
-                    password: password.value
-                }
-            }).then(result => {
-                alert(`Edited user: ${result.data.editUser.firstName}`)
-                console.log(result)
-                window.location.reload(false);
+            if (email.value && firstName.value && lastName.value) {
+                editUser({
+                    variables: {
+                        id: editId,
+                        firstName: firstName.value,
+                        lastName: lastName.value,
+                        email: email.value
+                    }
+                }).then(result => {
+                    alert(`Edited user: ${result.data.editUser.firstName}`)
+                    console.log(result)
+                    // window.location.reload(false);
+                    setModalShow(false)
+                }).catch(e => {
+                    alert(e)
+                    console.error(e)
+                })
                 setModalShow(false)
-            }).catch(e => {
-                alert(e)
-                console.error(e)
-            })
-            setModalShow(false)
+            }else{
+                window.alert("Please fill in all the information")
+            }
         }
 
         const resetForm = () => {
-            email.reset()
-            firstName.reset()
-            lastName.reset()
+            const editData = data.users.find(user => user.id === editId)
+            firstName.setValue(editData.firstName)
+            lastName.setValue(editData.lastName)
+            email.setValue(editData.email)
             password.reset()
         }
 
@@ -143,21 +147,17 @@ const UserManage = (props) => {
 
                         <Form.Group controlId="formBasicFirstName">
                             <Form.Label>First Name</Form.Label>
-                            <Form.Control required type={firstName.type} placeholder="Enter first name" value={firstName.value}
+                            <Form.Control required type={firstName.type} placeholder="Enter first name"
+                                          value={firstName.value}
                                           onChange={firstName.onChange}/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicSurname">
                             <Form.Label>Last Name</Form.Label>
-                            <Form.Control required type={lastName.type} placeholder="Enter last name" value={lastName.value}
+                            <Form.Control required type={lastName.type} placeholder="Enter last name"
+                                          value={lastName.value}
                                           onChange={lastName.onChange}/>
                         </Form.Group>
-
-                        <Form.Check
-                            type='checkbox'
-                            id={`default-checkbox`}
-                            label={`Change Password`}
-                        />
 
                         <Form.Group controlId="formBasicPassword">
                             <Form.Label>Password</Form.Label>
@@ -178,7 +178,7 @@ const UserManage = (props) => {
         );
     }
 
-    requireUser(props,history)
+    requireStaff(props, history)
     if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
     return (
@@ -229,5 +229,12 @@ const UserManage = (props) => {
         </Container>
     )
 }
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
 
-export default UserManage
+const connectedUserManage = connect(mapStateToProps, null)(UserManage)
+
+export default connectedUserManage
