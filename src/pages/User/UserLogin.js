@@ -16,9 +16,9 @@ const UserLogin = (props) => {
         onCompleted: (data) => {
             console.log(data)
             login(history, props, data)
-        },onError: (error) => {
+        }, onError: (error) => {
             window.alert(error)
-        }
+        }, fetchPolicy: "no-cache"
     })
 
 

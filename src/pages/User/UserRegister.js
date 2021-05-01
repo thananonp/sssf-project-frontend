@@ -1,11 +1,12 @@
 import {Button, Container, Form} from "react-bootstrap";
-import {useField} from "../../hooks";
+import {useField, useNotification} from "../../hooks";
 import {useHistory} from "react-router";
 import {loginWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
 import {gql} from "@apollo/client/core";
 import {useMutation} from "@apollo/client";
 import {checkIfPasswordIsTheSameAsConfirmPassword, staffChecker, userChecker} from "../../helpers/utils";
+import {NotificationAlert} from "../Components";
 
 const ADD_USER = gql`
     mutation AddUser(
@@ -34,6 +35,7 @@ const UserRegister = (props) => {
     const lastName = useField('text')
     const password = useField('password')
     const confirmPassword = useField('password')
+    const notification = useNotification()
     const [addUser] = useMutation(ADD_USER)
 
     const handleSubmit = (e) => {
@@ -47,13 +49,14 @@ const UserRegister = (props) => {
                     password: password.value
                 }
             }).then(result => {
-                alert(`User ${result.data.addUser.email} registered.\nPlease log in in the next page`)
-                history.push('/')
+                notification.alertSuccess(`User ${result.data.addUser.email} registered.\nPlease log in in the next page`)
+                setTimeout(() => {
+                    history.push('/')
+                }, 3000)
             }).catch(e => {
-                alert(e)
                 console.log(e)
+                notification.alertFailure(e.toString())
             })
-
         }
     }
 
@@ -70,6 +73,8 @@ const UserRegister = (props) => {
     return (
         <Container>
             <h1>Register New User</h1>
+            <NotificationAlert success={notification.success} failure={notification.failure}
+                               successText={notification.successText} failureText={notification.failureText}/>
             <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address (*)</Form.Label>

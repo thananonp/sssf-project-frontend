@@ -3,6 +3,9 @@ import {useMutation, useQuery} from "@apollo/client";
 import {Button, Container, Form, ListGroup} from "react-bootstrap";
 import {useField} from "../../hooks";
 import {LoadingSpinner, ReturnStaff} from "../Components";
+import {requireStaff} from "../../helpers/utils";
+import {connect} from "react-redux";
+import {useHistory} from "react-router";
 
 const BOOK_USERS = gql`
     query {
@@ -86,40 +89,53 @@ const RETURN = gql`
     }
 `
 
-const BookBorrow = () => {
+const BookBorrow = (props) => {
     const bookBorrow = useField('text')
     const userBorrow = useField('text')
     const bookReturn = useField('text')
     const {loading, error, data} = useQuery(BOOK_USERS)
     const [UpdateBookBorrow] = useMutation(BORROW)
     const [ClearBookBorrow] = useMutation(RETURN)
+    const history = useHistory()
 
     const handleSubmitBorrow = (e) => {
         e.preventDefault()
-        UpdateBookBorrow({
-            variables: {
-                id: bookBorrow.value,
-                borrowedBy: userBorrow.value
-            }
-        }).then(r => {
-            console.log(r)
-            window.location.reload(false);
-        })
-    }
+
+        if (bookBorrow.value && userBorrow.value) {
+            UpdateBookBorrow({
+                variables: {
+                    id: bookBorrow.value,
+                    borrowedBy: userBorrow.value
+                }
+            }).then(r => {
+                // console.log(r)
+                window.location.reload(false);
+            });
+        } else {
+            window.alert("Please select both book and user to borrow.")
+        }
+
+
+    };
     const resetFormBorrow = () => {
         bookBorrow.reset()
         userBorrow.reset()
     }
+
     const handleSubmitReturn = (e) => {
         e.preventDefault()
-        ClearBookBorrow({
-            variables: {
-                id: bookReturn.value
-            }
-        }).then(r => {
-            console.log(r)
-            window.location.reload(false);
-        })
+        if (bookReturn.value) {
+            ClearBookBorrow({
+                variables: {
+                    id: bookReturn.value
+                }
+            }).then(r => {
+                console.log(r)
+                window.location.reload(false);
+            })
+        }else{
+            window.alert("Please select the return book before clicking submit")
+        }
     }
     const resetFormReturn = () => {
         bookReturn.reset()
@@ -131,6 +147,7 @@ const BookBorrow = () => {
     if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
     // console.log("data", data)
+    requireStaff(props, history)
     return (
         <Container>
             <ReturnStaff/>
@@ -144,7 +161,7 @@ const BookBorrow = () => {
                             <Form.Control as="select" onChange={bookBorrow.onChange}>
                                 <option>Select book</option>
                                 {data.notBorrowedBooks.map((book, index) => {
-                                    console.log(book)
+                                    // console.log(book)
                                     let bookName
                                     if (book.author) {
                                         bookName = book.title + ' by ' + book.author.name
@@ -191,7 +208,7 @@ const BookBorrow = () => {
                             <Form.Control as="select" onChange={bookReturn.onChange}>
                                 <option>Select book</option>
                                 {data.borrowedBooks.map((book, index) => {
-                                    console.log(book)
+                                    // console.log(book)
                                     let bookName
                                     if (book.author) {
                                         bookName = book.title + ' by ' + book.author.name
@@ -222,4 +239,12 @@ const BookBorrow = () => {
     )
 }
 
-export default BookBorrow
+
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
+const connectedBookBorrow = connect(mapStateToProps, null)(BookBorrow)
+
+export default connectedBookBorrow

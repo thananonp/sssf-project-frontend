@@ -72,20 +72,24 @@ const AuthorEdit = (props) => {
 
         const handleSubmit = (e) => {
             e.preventDefault()
-            editAuthor({
-                variables: {
-                    id: editId,
-                    name: name.value,
-                    biography: biography.value,
-                    file: file.value
-                }
-            }).then(result => {
-                setModalShow(false)
-                window.alert(`Edited Author: ${result.data.editAuthor.name}`)
-                window.location.reload(false);
-            }).catch(e => {
-                window.alert(e)
-            })
+            if (name.value && biography.value) {
+                editAuthor({
+                    variables: {
+                        id: editId,
+                        name: name.value,
+                        biography: biography.value,
+                        file: file.value
+                    }
+                }).then(result => {
+                    setModalShow(false)
+                    window.alert(`Edited Author: ${result.data.editAuthor.name}`)
+                    window.location.reload(false);
+                }).catch(e => {
+                    window.alert(e)
+                })
+            } else {
+                window.alert("Please fill in all the required information")
+            }
         }
 
         const resetForm = () => {
@@ -129,7 +133,8 @@ const AuthorEdit = (props) => {
                                               onChange={biography.onChange} as="textarea" rows={3}/>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture, the old one will be used.</Form.Text>
+                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
+                                    the old one will be used.</Form.Text>
                                 <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                            accept="image/*"
                                            label="Example file input"/>
@@ -155,7 +160,7 @@ const AuthorEdit = (props) => {
 
     if (loading) return (<LoadingSpinner/>);
     if (error) return <p>Error :( {error}</p>;
-    requireStaff(props,history)
+    requireStaff(props, history)
     return (
         <Container>
             <ReturnStaff/>
@@ -209,6 +214,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const connectedAuthorEdit= connect(mapStateToProps, null)(AuthorEdit)
+const connectedAuthorEdit = connect(mapStateToProps, null)(AuthorEdit)
 
 export default connectedAuthorEdit

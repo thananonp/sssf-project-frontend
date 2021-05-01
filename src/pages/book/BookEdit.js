@@ -2,7 +2,6 @@ import {useHistory} from "react-router";
 import {useField, useFile} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
-import {Link} from "react-router-dom";
 import {gql, useMutation, useQuery} from "@apollo/client";
 import {LoadingSpinner, ReturnStaff} from "../Components";
 import {getToday, requireStaff} from "../../helpers/utils";
@@ -143,75 +142,89 @@ const BookEdit = (props) => {
         const description = useField('text')
         const fileHolder = useFile()
         const file = useFile()
+        const editData = data.books.find(book => book.id === editId)
 
-
-        const resetForm = () => {
-            const editData = data.books.find(book => book.id === editId)
-            console.log("editData", editData)
+        const populateData = () => {
             title.setValue(editData.title)
-            category.setValue(editData.category)
-            author.setValue(editData.author)
-            publisher.setValue(editData.publisher)
+            if (editData.category) {
+                category.setValue(editData.category.id);
+            }
+            if (editData.author) {
+                author.setValue(editData.author.id);
+            }
+            if (editData.publisher) {
+                publisher.setValue(editData.publisher.id);
+            }
             dateOfPublication.setValue(editData.dateOfPublication)
             pageCount.setValue(editData.pageCount)
             description.setValue(editData.description)
+            fileHolder.setValue(editData.imageUrl)
+        }
+
+        const resetForm = () => {
+            populateData()
             file.reset()
         }
 
         const handleSubmit = (e) => {
-            if (category.value.length === undefined) {
-                editedCategory = category.value.id
-                // console.log("fuck")
-            } else {
-                editedCategory = category.value
-                // console.log("fuck")
-            }
-
-            if (author.value.length === undefined) {
-                editedAuthor = author.value.id
-            } else {
-                editedAuthor = author.value
-            }
-
-            if (publisher.value.length === undefined) {
-                editedPublisher = publisher.value.id
-            } else {
-                editedPublisher = publisher.value
-            }
-            // console.log(editedCategory)
-            // console.log(editedAuthor)
-            // console.log(editedPublisher)
-            // console.log("Edit", {
-            //     id: editId,
-            //     title: title.value,
-            //     category: editedCategory,
-            //     author: editedAuthor,
-            //     publisher: editedPublisher,
-            //     dateOfPublication: dateOfPublication.value,
-            //     pageCount: Number(pageCount.value),
-            //     description: description.value
-            // })
             e.preventDefault()
-            editBook({
-                variables: {
-                    id: editId,
-                    title: title.value,
-                    category: editedCategory,
-                    author: editedAuthor,
-                    publisher: editedPublisher,
-                    dateOfPublication: dateOfPublication.value,
-                    pageCount: Number(pageCount.value),
-                    description: description.value,
-                    file: file.value
-                }
-            }).then(result => {
-                setModalShow(false)
-                console.log(result)
-                window.alert(`Edited Book: ${result.data.editBook.title}`)
-                window.location.reload(false);
-            }).catch(e => {
-                window.alert(e)
-            })
+            // if (category.value.length === undefined) {
+            //     editedCategory = category.value.id
+            //     // console.log("fuck")
+            // } else {
+            //     editedCategory = category.value
+            //     // console.log("fuck")
+            // }
+            //
+            // if (author.value.length === undefined) {
+            //     editedAuthor = author.value.id
+            // } else {
+            //     editedAuthor = author.value
+            // }
+            //
+            // if (publisher.value.length === undefined) {
+            //     editedPublisher = publisher.value.id
+            // } else {
+            //     editedPublisher = publisher.value
+            // }
+            if (category.value && author.value && publisher.value) {
+                editBook({
+                    variables: {
+                        id: editId,
+                        title: title.value,
+                        category: editedCategory,
+                        author: editedAuthor,
+                        publisher: editedPublisher,
+                        dateOfPublication: dateOfPublication.value,
+                        pageCount: Number(pageCount.value),
+                        description: description.value,
+                        file: file.value
+                    }
+                }).then(result => {
+                    setModalShow(false)
+                    // console.log(result)
+                    window.alert(`Edited Book: ${result.data.editBook.title}`)
+                    window.location.reload(false);
+                }).catch(e => {
+                    window.alert(e)
+                })
+            }
+                // console.log(editedCategory)
+                // console.log(editedAuthor)
+                // console.log(editedPublisher)
+                // console.log("Edit", {
+                //     id: editId,
+                //     title: title.value,
+                //     category: editedCategory,
+                //     author: editedAuthor,
+                //     publisher: editedPublisher,
+                //     dateOfPublication: dateOfPublication.value,
+                //     pageCount: Number(pageCount.value),
+                //     description: description.value
+            // })
+            else {
+                window.alert("Please fill in all the information")
+            }
         }
 
         return (
@@ -219,16 +232,7 @@ const BookEdit = (props) => {
                    aria-labelledby="contained-modal-title-vcenter"
                    dialogClassName="modal-90w"
                    onEnter={() => {
-                       const editData = data.books.find(book => book.id === editId)
-                       console.log("editData", editData)
-                       title.setValue(editData.title)
-                       category.setValue(editData.category)
-                       author.setValue(editData.author)
-                       publisher.setValue(editData.publisher)
-                       dateOfPublication.setValue(editData.dateOfPublication)
-                       pageCount.setValue(editData.pageCount)
-                       description.setValue(editData.description)
-                       fileHolder.setValue(editData.imageUrl)
+                       populateData()
                    }}
                    backdrop="static"
                    keyboard={false}>
@@ -238,127 +242,85 @@ const BookEdit = (props) => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="show-grid">
-                    <Container fluid>
-                        <Form>
-                            <img className="mediumAvatar" src={fileHolder.value} alt={title.value}/>
-                            <Form.Group controlId="formBasicTitle">
-                                <Form.Label>Title</Form.Label>
-                                <Form.Control value={title.value} type={title.type} onChange={title.onChange}/>
-                            </Form.Group>
-                            <Form.Group controlId="formSelectCategory">
-                                <Form.Label>Category</Form.Label>
+                    <Form onReset={resetForm} onSubmit={handleSubmit}>
+                        <img className="mediumAvatar" src={fileHolder.value} alt={title.value}/>
+                        <Form.Group controlId="formBasicTitle">
+                            <Form.Label>Title</Form.Label>
+                            <Form.Control required value={title.value} type={title.type} onChange={title.onChange}/>
+                        </Form.Group>
+                        <Form.Group controlId="formSelectCategory">
+                            <Form.Label>Category</Form.Label>
+                            <Form.Control required as="select" value={category.value} onChange={category.onChange}>
+                                <option>Select category</option>
+                                console.log(category.value)
+                                {data.categories.map(categoryMap => {
+                                    return (<option value={categoryMap.id}>{categoryMap.title}</option>)
+                                })}
+                            </Form.Control>
+                            <Form.Text>Default: {editData ? editData.category ? editData.category.title : null : null}</Form.Text>
+                        </Form.Group>
 
-                                <Form.Control as="select" onChange={category.onChange}>
-                                    <option>Select category</option>
-                                    {data.categories.map(categoryMap => {
-                                        console.log("categoryMap", categoryMap)
-                                        console.log(category.value)
-                                        if (category.value !== null) {
-                                            if (category.value.id === categoryMap.id) {
-                                                return (<option value={categoryMap.id}
-                                                                selected>{categoryMap.title}</option>)
+                        <Form.Group controlId="formBasicAuthor">
+                            <Form.Label>Author</Form.Label>
+                            <Form.Control required as="select" value={author.value} onChange={author.onChange}>
+                                <option>Select author</option>
+                                {data.authors.map(authorMap => {
+                                    return (<option value={authorMap.id}>{authorMap.name}</option>)
+                                })}
+                            </Form.Control>
+                            <Form.Text>Default: {editData ? editData.author ? editData.author.name : null : null}</Form.Text>
+                        </Form.Group>
+                        <Form.Group controlId="formBasicPublisher">
+                            <Form.Label>Publisher</Form.Label>
+                            <Form.Control required value={publisher.value} as="select" onChange={publisher.onChange}>
+                                <option>Select publisher</option>
+                                {data.publishers.map(publisherMap => {
+                                    return (<option value={publisherMap.id}>{publisherMap.name}</option>)
+                                })}
+                            </Form.Control>
+                            <Form.Text>Default: {editData ? editData.publisher ? editData.publisher.name : null : null}</Form.Text>
 
-                                            } else {
-                                                return (
-                                                    <option value={categoryMap.id}>{categoryMap.title}</option>
-
-                                                )
-                                            }
-                                        } else {
-                                            return (
-                                                <option value={categoryMap.id}>{categoryMap.title}</option>
-
-                                            )
-                                        }
-                                    })}
-                                </Form.Control>
-                            </Form.Group>
-
-                            <Form.Group controlId="formBasicAuthor">
-                                <Form.Label>Author</Form.Label>
-                                <Form.Control as="select" onChange={author.onChange}>
-                                    <option>Select author</option>
-                                    {data.authors.map(authorMap => {
-                                        if (author.value !== null) {
-                                            if (author.value.id === authorMap.id) {
-                                                return (<option value={authorMap.id}
-                                                                selected>{authorMap.name}</option>)
-                                            } else {
-                                                return (
-                                                    <option value={authorMap.id}>{authorMap.name}</option>
-                                                )
-                                            }
-                                        } else {
-                                            return (
-                                                <option value={authorMap.id}>{authorMap.name}</option>
-                                            )
-                                        }
-                                    })}
-                                </Form.Control>
-                            </Form.Group>
-                            <Form.Group controlId="formBasicPublisher">
-                                <Form.Label>Publisher</Form.Label>
-                                <Form.Control as="select" onChange={publisher.onChange}>
-                                    <option>Select publisher</option>
-                                    {data.publishers.map(publisherMap => {
-                                        if (publisher.value !== null) {
-                                            if (publisher.value.id === publisherMap.id) {
-                                                return (<option value={publisherMap.id}
-                                                                selected>{publisherMap.name}</option>)
-                                            } else {
-                                                return (
-                                                    <option value={publisherMap.id}>{publisherMap.name}</option>
-                                                )
-                                            }
-                                        } else {
-                                            return (
-                                                <option value={publisherMap.id}>{publisherMap.name}</option>
-                                            )
-                                        }
-                                    })}
-                                </Form.Control>
-                            </Form.Group>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Date of Publication</Form.Label>
-                                <Form.Control max={getToday()} value={dateOfPublication.value}
-                                              type={dateOfPublication.type}
-                                              onChange={dateOfPublication.onChange}/>
-                            </Form.Group>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Page Count</Form.Label>
-                                <Form.Control min="1" value={pageCount.value} type="number"
-                                              onChange={pageCount.onChange}/>
-                            </Form.Group>
-                            <Form.Group controlId="exampleForm.ControlTextarea1">
-                                <Form.Label>Description</Form.Label>
-                                <Form.Control value={description.value} onChange={description.onChange}
-                                              as="textarea"
-                                              rows={3}/>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
-                                    the old one will be used.</Form.Text>
-                                <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
-                                           accept="image/*"
-                                           label="Example file input"/>
-                                {file.url
-                                    ?
-                                    <>
-                                        <p>Image Preview</p>
-                                        <img className="imagePreview" alt="input" src={file.url}/></>
-                                    : null}
-                            </Form.Group>
-                        </Form>
-                    </Container>
+                        </Form.Group>
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>Date of Publication</Form.Label>
+                            <Form.Control required max={getToday()} value={dateOfPublication.value}
+                                          type={dateOfPublication.type}
+                                          onChange={dateOfPublication.onChange}/>
+                        </Form.Group>
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>Page Count</Form.Label>
+                            <Form.Control required min="1" value={pageCount.value} type="number"
+                                          onChange={pageCount.onChange}/>
+                        </Form.Group>
+                        <Form.Group controlId="exampleForm.ControlTextarea1">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control required value={description.value} onChange={description.onChange}
+                                          as="textarea"
+                                          rows={3}/>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
+                                the old one will be used.</Form.Text>
+                            <Form.File type="file" onChange={file.onChange} id="exampleFormControlFile1"
+                                       accept="image/*"
+                                       label="Example file input"/>
+                            {file.url
+                                ?
+                                <>
+                                    <p>Image Preview</p>
+                                    <img className="imagePreview" alt="input" src={file.url}/></>
+                                : null}
+                        </Form.Group>
+                        <div className="float-right">
+                            <Button variant="secondary" type="reset">
+                                Reset
+                            </Button>
+                            <Button variant="primary" type="submit">
+                                Submit
+                            </Button>
+                        </div>
+                    </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={resetForm}>
-                        Reset
-                    </Button>
-                    <Button variant="primary" onClick={handleSubmit}>
-                        Submit
-                    </Button>
-                </Modal.Footer>
             </Modal>
         );
     }
@@ -404,13 +366,13 @@ const BookEdit = (props) => {
                             <td>{book.dateOfPublication}</td>
                             <td>{book.pageCount}</td>
                             {book.borrowedBy ? <td>{book.borrowedBy.firstName}</td> : <td>-</td>}
-                            <td><Link onClick={() => {
+                            <td><Button variant="link" onClick={() => {
                                 setEditId(book.id)
                                 setModalShow(true)
-                            }}>Edit</Link></td>
-                            <td><Link onClick={() => {
+                            }}>Edit</Button></td>
+                            <td><Button variant="link" onClick={() => {
                                 deleteBookFun(book.id, book.title)
-                            }}>Delete</Link></td>
+                            }}>Delete</Button></td>
                         </tr>
                     )
                 })}

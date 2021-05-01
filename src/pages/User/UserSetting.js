@@ -92,10 +92,14 @@ const UserSetting = (props) => {
     }
 
     const resetForm = () => {
-        email.reset()
-        firstName.reset()
-        lastName.reset()
-        oldPassword.reset()
+        if (props.login.login) {
+            email.setValue(props.login.user.user.email)
+            firstName.setValue(props.login.user.user.firstName)
+            lastName.setValue(props.login.user.user.lastName)
+            oldPassword.reset()
+            // userId = props.login.user.user._id
+
+        }
     }
 
     if (loading) return <LoadingSpinner/>;
@@ -121,34 +125,34 @@ const UserSetting = (props) => {
                 <Form.Group controlId="formBasicSurname">
                     <Form.Label>Last Name</Form.Label>
                     <Form.Control required type="text" placeholder="Enter last name" value={lastName.value}
-                                      onChange={lastName.onChange}/>
-                    </Form.Group>
+                                  onChange={lastName.onChange}/>
+                </Form.Group>
 
-                    <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control required type="password" placeholder="Password" value={oldPassword.value}
-                                      onChange={oldPassword.onChange}/>
-                    </Form.Group>
-                    {/*<Form.Group controlId="formBasicPassword">*/}
-                    {/*    <Form.Label>Password</Form.Label>*/}
-                    {/*    <Form.Control type="password" placeholder="Password" value={password.value}*/}
-                    {/*                  onChange={password.onChange}/>*/}
-                    {/*</Form.Group>*/}
-                    {/*<Form.Group controlId="formBasicPasswordCheck">*/}
-                    {/*    <Form.Label>Confirm Password</Form.Label>*/}
-                    {/*    <Form.Control type="password" placeholder="Password" value={confirmPassword.value}*/}
-                    {/*                  onChange={confirmPassword.onChange}/>*/}
-                    {/*</Form.Group>*/}
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control required type="password" placeholder="Password" value={oldPassword.value}
+                                  onChange={oldPassword.onChange}/>
+                </Form.Group>
+                {/*<Form.Group controlId="formBasicPassword">*/}
+                {/*    <Form.Label>Password</Form.Label>*/}
+                {/*    <Form.Control type="password" placeholder="Password" value={password.value}*/}
+                {/*                  onChange={password.onChange}/>*/}
+                {/*</Form.Group>*/}
+                {/*<Form.Group controlId="formBasicPasswordCheck">*/}
+                {/*    <Form.Label>Confirm Password</Form.Label>*/}
+                {/*    <Form.Control type="password" placeholder="Password" value={confirmPassword.value}*/}
+                {/*                  onChange={confirmPassword.onChange}/>*/}
+                {/*</Form.Group>*/}
 
-                    <Button variant="primary" type="submit">
-                        Submit
-                    </Button>
-                    <Button variant="secondary" type="reset">
-                        Reset
-                    </Button>
-                </Form>
-            </Container>
-        )
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
+                <Button variant="secondary" type="reset">
+                    Reset
+                </Button>
+            </Form>
+        </Container>
+    )
 }
 const mapDispatchToProps = {
     logoutWithoutCredential, logInWithCredential

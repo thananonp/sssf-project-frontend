@@ -4,7 +4,7 @@ import {Button, Container, Form} from "react-bootstrap";
 import {NotificationAlert, ReturnStaff} from "../Components";
 import {gql} from "@apollo/client/core";
 import {useMutation} from "@apollo/client";
-import {requireStaff} from "../../helpers/utils";
+import {backToTop, requireStaff} from "../../helpers/utils";
 import {connect} from "react-redux";
 
 const ADD_CATEGORY = gql`
@@ -27,6 +27,7 @@ const CategoryAdd = (props) => {
     const notification = useNotification()
 
     const handleSubmit = (e) => {
+        backToTop()
         e.preventDefault()
         addCategory({
             variables: {

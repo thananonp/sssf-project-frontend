@@ -2,7 +2,6 @@ import {useHistory} from "react-router";
 import {useField, useFile} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
 import {useState} from "react";
-import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {connect} from "react-redux";
@@ -90,10 +89,10 @@ const CategoryEdit = (props) => {
                     file: file.value
                 }
             }).then(result => {
+                setModalShow(false)
                 alert(`Edited Category: ${result.data.editCategory.title}`)
                 console.log(result)
                 window.location.reload(false);
-                setModalShow(false)
             }).catch(e => {
                 alert(e)
                 console.error(e)
@@ -124,37 +123,36 @@ const CategoryEdit = (props) => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="show-grid">
-                    <Container>
-                        <Form>
-                            <img className="mediumAvatar" src={fileHolder.value} alt={title.value}/>
-                            <Form.Group controlId="formBasicFirstName">
-                                <Form.Label>Category title</Form.Label>
-                                <Form.Control value={title.value} type={title.type} onChange={title.onChange}/>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
-                                           accept="image/*"
-                                           label="Example file input"/>
-                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
-                                    the old one will be used.</Form.Text>
-                                {file.url
-                                    ?
-                                    <>
-                                        <p>Image Preview</p>
-                                        <img className="imagePreview" alt="input" src={file.url}/></>
-                                    : null}
-                            </Form.Group>
-                        </Form>
-                    </Container>
+                    <Form onReset={resetForm} onSubmit={handleSubmit}>
+                        <img className="imageBanner" src={fileHolder.value} alt={title.value}/>
+                        <Form.Group controlId="formBasicFirstName">
+                            <Form.Label>Category title</Form.Label>
+                            <Form.Control required value={title.value} type={title.type} onChange={title.onChange}/>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.File type="file" onChange={file.onChange} id="exampleFormControlFile1"
+                                       accept="image/*"
+                                       label="Example file input"/>
+                            <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
+                                the old one will be used.</Form.Text>
+                            {file.url
+                                ?
+                                <>
+                                    <p>Image Preview</p>
+                                    <img className="imagePreview" alt="input" src={file.url}/></>
+                                : null}
+                        </Form.Group>
+                        <div className="float-right">
+                            <Button variant="secondary" type="reset">
+                                Reset
+                            </Button>
+                            <Button variant="primary" type="submit">
+                                Submit
+                            </Button>
+                        </div>
+
+                    </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={resetForm}>
-                        Reset
-                    </Button>
-                    <Button variant="primary" onClick={handleSubmit}>
-                        Submit
-                    </Button>
-                </Modal.Footer>
             </Modal>
         );
     }
@@ -187,18 +185,17 @@ const CategoryEdit = (props) => {
                                 <td><img className="smallAvatar" src={category.imageUrl} alt={category.name}/></td> :
                                 <td/>}
                             <td>{category.title}</td>
-                            <td><Link onClick={() => {
+                            <td><Button variant="link" onClick={() => {
                                 setEditId(category.id)
                                 setModalShow(true)
                             }}>
                                 Edit
-                            </Link>
+                            </Button>
                             </td>
-                            <td><Link onClick={() =>
-                                deletePublisherFun(category.id, category.title)
-                            }>
-                                Delete
-                            </Link>
+                            <td>
+                                <Button variant="link" onClick={() =>
+                                    deletePublisherFun(category.id, category.title)
+                                }>Delete</Button>
                             </td>
                         </tr>
                     )

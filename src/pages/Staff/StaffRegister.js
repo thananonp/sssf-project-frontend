@@ -1,12 +1,12 @@
 import {Button, Container, Form} from "react-bootstrap";
-import {useField} from "../../hooks";
+import {useField, useNotification} from "../../hooks";
 import {useHistory} from "react-router";
 import {loginWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
 import {checkIfPasswordIsTheSameAsConfirmPassword, requireStaff} from "../../helpers/utils";
 import {useMutation} from "@apollo/client";
 import {gql} from "@apollo/client/core";
-import {ReturnStaff} from "../Components";
+import {NotificationAlert, ReturnStaff} from "../Components";
 
 const ADD_STAFF = gql`
     mutation AddStaff(
@@ -35,6 +35,7 @@ const StaffRegister = (props) => {
     const lastName = useField('text')
     const password = useField('password')
     const confirmPassword = useField('password')
+    const notification = useNotification()
     const [addStaff] = useMutation(ADD_STAFF)
 
     const handleSubmit = (e) => {
@@ -49,7 +50,7 @@ const StaffRegister = (props) => {
                 }
             }).then(result => {
                 alert(`Staff ${result.data.addStaff.email} registered.`)
-                history.push('/')
+                // history.push('/')
             }).catch(e => {
                 alert(e)
                 console.log(e)
@@ -71,6 +72,7 @@ const StaffRegister = (props) => {
             <Container>
                 <ReturnStaff/>
                 <h1>Register New Staff</h1>
+                <NotificationAlert/>
                 <Form onSubmit={handleSubmit} onReset={resetForm}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>

@@ -28,15 +28,15 @@ const EDIT_PUBLISHER = gql`
         $file:Upload
     ){
         editPublisher(
-        id:$id
-        name: $name
-        description:$description
-        file:$file
-    ){
-        id
-        name
-        description
-    }
+            id:$id
+            name: $name
+            description:$description
+            file:$file
+        ){
+            id
+            name
+            description
+        }
     }
 `
 
@@ -87,21 +87,25 @@ const PublisherEdit = (props) => {
 
         const handleSubmit = (e) => {
             e.preventDefault()
-            editPublisher({
-                variables: {
-                    id: editId,
-                    name: name.value,
-                    description: description.value,
-                    file: file.value
-                }
-            }).then(result => {
-                console.log(result)
-                setModalShow(false)
-                window.alert(`Edited Publisher: ${result.data.editPublisher.name}`)
-                window.location.reload(false);
-            }).catch(e => {
-                window.alert(e)
-            })
+            if (name.value && description.value) {
+                editPublisher({
+                    variables: {
+                        id: editId,
+                        name: name.value,
+                        description: description.value,
+                        file: file.value
+                    }
+                }).then(result => {
+                    console.log(result)
+                    setModalShow(false)
+                    window.alert(`Edited Publisher: ${result.data.editPublisher.name}`)
+                    window.location.reload(false);
+                }).catch(e => {
+                    window.alert(e)
+                })
+            } else {
+                window.alert("Please fill in all the required information")
+            }
         }
 
         const resetForm = () => {
@@ -143,7 +147,8 @@ const PublisherEdit = (props) => {
                                               onChange={description.onChange}/>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture, the old one will be used.</Form.Text>
+                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
+                                    the old one will be used.</Form.Text>
                                 <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                            accept="image/*"
                                            label="Example file input"/>
@@ -195,7 +200,8 @@ const PublisherEdit = (props) => {
                         <tr>
                             <td>{index + 1}</td>
                             {publisher.imageUrl ?
-                                <td><img className="smallAvatar" src={publisher.imageUrl} alt={publisher.name}/></td> : <td/>}
+                                <td><img className="smallAvatar" src={publisher.imageUrl} alt={publisher.name}/></td> :
+                                <td/>}
                             <td>{publisher.name}</td>
                             <td>{publisher.description}</td>
                             <td><Link onClick={() => {
@@ -225,6 +231,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const connectedPublisherEdit = connect(mapStateToProps,null)(PublisherEdit)
+const connectedPublisherEdit = connect(mapStateToProps, null)(PublisherEdit)
 
 export default connectedPublisherEdit

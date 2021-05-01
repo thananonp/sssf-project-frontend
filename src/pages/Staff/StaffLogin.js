@@ -11,14 +11,14 @@ const StaffLogin = (props) => {
     const email = useField('email', "staff1@staff.com")
     const password = useField('password', "passwordstaff1")
     const history = useHistory()
-    const [LoginStaff] = useLazyQuery(STAFF_LOGIN,{
+    const [LoginStaff] = useLazyQuery(STAFF_LOGIN, {
         onCompleted: (data) => {
-            console.log(data)
+            // console.log(data)
             login(history, props, data)
         },
         onError: (error) => {
             window.alert(error)
-        }
+        }, fetchPolicy: "no-cache"
     })
 
     const loginStaff = (e) => {
@@ -30,12 +30,17 @@ const StaffLogin = (props) => {
         LoginStaff({variables: {email: email.value, password: password.value}})
     }
 
+    const reset = () => {
+        email.reset()
+        password.reset()
+    }
+
     staffChecker(props, history)
     return (
         <div>
             <Container>
                 <h1>Staff Login</h1>
-                <Form onSubmit={loginStaff}>
+                <Form onSubmit={loginStaff} onReset={reset}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control required type={email.type} value={email.value} onChange={email.onChange}/>
@@ -43,7 +48,7 @@ const StaffLogin = (props) => {
 
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
-                        <Form.Control required type={password.type} value={password.value}
+                        <Form.Control required minLength="8" type={password.type} value={password.value}
                                       onChange={password.onChange}/>
                     </Form.Group>
                     <Button variant="primary" type="submit">
