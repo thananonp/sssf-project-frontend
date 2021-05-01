@@ -37,9 +37,9 @@ const NavBar = (props) => {
     const renderNav = () => {
         // console.log("renderNav")
         if (props.login.login) {
-            console.log("logged in")
+            // console.log("logged in")
             if (props.login.user.type === 'user') {
-                console.log("user")
+                // console.log("user")
                 return (<>
                     <Nav.Item>
                         <Nav.Link href="/user/home">User Home</Nav.Link>
@@ -52,7 +52,7 @@ const NavBar = (props) => {
                     </Nav.Item>
                 </>)
             } else if (props.login.user.type === 'staff') {
-                console.log("user")
+                // console.log("staff")
                 return (<>
                     <Nav.Item>
                         <Nav.Link href="/staff/home">Staff Home</Nav.Link>
@@ -76,7 +76,7 @@ const NavBar = (props) => {
     }
     // console.log(props.login)
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar  bg="light" expand="lg">
             <Navbar.Brand href="/">📖Library</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">

@@ -50,8 +50,19 @@ const useFile = () => {
     const [value, setValue] = useState(null)
     const [url, setUrl] = useState(null)
     const onChange = (event) => {
-        setUrl(URL.createObjectURL(event.target.files[0]))
-        setValue(event.target.files[0])
+        const inputFile = event.target.files[0]
+        if (inputFile) {
+            const inputFileType = event.target.files[0].type
+            if (!inputFileType.startsWith("image/")) {
+                window.alert("Please upload the image file type")
+            } else if (!inputFile) {
+                window.alert("Please")
+            } else {
+                setUrl(URL.createObjectURL(event.target.files[0]))
+                setValue(event.target.files[0])
+            }
+        }
+
     }
 
     const reset = () => {

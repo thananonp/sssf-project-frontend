@@ -87,7 +87,7 @@ const CategoryEdit = (props) => {
                 variables: {
                     id: editId,
                     title: title.value,
-                    file:file.value
+                    file: file.value
                 }
             }).then(result => {
                 alert(`Edited Category: ${result.data.editCategory.title}`)
@@ -101,7 +101,8 @@ const CategoryEdit = (props) => {
         }
 
         const resetForm = () => {
-            title.reset()
+            const editData = data.categories.find(category => category.id === editId)
+            title.setValue(editData.title)
             file.reset()
         }
 
@@ -113,6 +114,7 @@ const CategoryEdit = (props) => {
                    onEnter={() => {
                        const editData = data.categories.find(category => category.id === editId)
                        title.setValue(editData.title)
+                       fileHolder.setValue(editData.imageUrl)
                    }
                    }
                    keyboard={false}>
@@ -133,7 +135,14 @@ const CategoryEdit = (props) => {
                                 <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                            accept="image/*"
                                            label="Example file input"/>
-                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture, the old one will be used.</Form.Text>
+                                <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
+                                    the old one will be used.</Form.Text>
+                                {file.url
+                                    ?
+                                    <>
+                                        <p>Image Preview</p>
+                                        <img className="imagePreview" alt="input" src={file.url}/></>
+                                    : null}
                             </Form.Group>
                         </Form>
                     </Container>
@@ -175,7 +184,8 @@ const CategoryEdit = (props) => {
                         <tr>
                             <td>{index + 1}</td>
                             {category.imageUrl ?
-                                <td><img className="smallAvatar" src={category.imageUrl} alt={category.name}/></td> : <td/>}
+                                <td><img className="smallAvatar" src={category.imageUrl} alt={category.name}/></td> :
+                                <td/>}
                             <td>{category.title}</td>
                             <td><Link onClick={() => {
                                 setEditId(category.id)

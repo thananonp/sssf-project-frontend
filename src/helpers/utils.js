@@ -83,13 +83,18 @@ export const login = (history, props, data) => {
 
 export const getToday = () => {
     const today = new Date()
-    const day = today.getDate()
+    let  day = today.getDate()
     let month = today.getUTCMonth()
     const year = today.getFullYear()
-    if (month !== 10 | 11) {
+    if (month !== 10 || 11) {
         month = month + 1
         month = "0" + month
     }
+    if (day === 1 || 2 || 3 || 4 | 5 || 6 || 7 || 8 || 9 || 10) {
+        day = day + 1
+        day = "0" + day
+    }
+    // console.log(`${year}-${month}-${day}`)
     return (`${year}-${month}-${day}`)
 }
 

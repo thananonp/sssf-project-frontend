@@ -1,17 +1,23 @@
 # Library Management System Frontend
 
+[Backend Repo](https://github.com/thananonp/sssf-project-frontend)
+
+[Deployed Frontend](https://sssf-frontend.web.app/)
+
 ## About
 
 This project is made for server-side scripting service. This is the frontend part.
 
+![img](sssf-frontent.png)
+
 This project is made using these libraries
 
+* Apollo Client
+* JSON Web Token
+* GraphQL
 * React
 * React Router
-* JSON Web Token
 * React Bootstrap
-* Apollo Client
-* GraphQL
 
 ## Project structure
 
@@ -49,11 +55,14 @@ User and Staff will have
 ## Overview
 
 ##### Login
+
 When the user or the staff log in. The website sends the login credentials to the backend via GraphQL. The server then
 will authenticate and send the token back to the frontend. The token is kept in Local Storage and also the Redux state.
 
 ##### Logout
+
 When the user or staff click logout. The state and Local Storage will be cleared.
+
 ##### Permission Lock
 
 If you visit the page that require the permission. The website will check for the token and verified it. If the token
@@ -70,7 +79,9 @@ Mutation can only be done by staff members. So the add, edit and delete operatio
 only.
 
 ##### GraphQL
-The queries and the mutations is done by Apollo Server. Frontend also has error handling. If the fetch is failed, the alert is shown.
+
+The queries and the mutations is done by Apollo Server. Frontend also has error handling. If the fetch is failed, the
+alert is shown.
 
 
 

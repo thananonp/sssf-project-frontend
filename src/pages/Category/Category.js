@@ -38,9 +38,14 @@ const Category = (props) => {
             <h5>List of books in this category</h5>
             <ListGroup>
                 {data.books.length ? data.books.map((book, index) => {
-                    return (
-                        <ListGroup.Item>{book.title + ' by ' + book.author.name}</ListGroup.Item>
-                    )
+                    if (book.author) {
+                        return <ListGroup.Item>{book.title + ' by ' + book.author.name}</ListGroup.Item>
+
+                    } else {
+                        return (
+                            <ListGroup.Item>{book.title + ' by deleted author'}</ListGroup.Item>
+                        )
+                    }
                 }) : <ListGroup.Item>No book in this category yet.</ListGroup.Item>}
             </ListGroup>
         </Container>

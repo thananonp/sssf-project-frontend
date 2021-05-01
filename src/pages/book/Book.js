@@ -57,7 +57,7 @@ const Book = () => {
                 </ListGroup.Item>
                 <ListGroup.Item>Written by<span
                     className="float-right">
-                    {data.book.book
+                    {data.book.author
                         ? <Link to={`/book/${data.book.author.id}`}> {data.book.author.name} </Link>
                         : "Deleted author"
                     }
