@@ -6,7 +6,7 @@ import {gql} from "@apollo/client/core";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {logInWithCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
-import {LoadingSpinner, ReturnUser} from "../Components";
+import {ErrorMessage, LoadingSpinner, ReturnUser} from "../Components";
 import {requireUser} from "../../helpers/utils";
 
 // const USER = gql`
@@ -102,9 +102,9 @@ const UserSetting = (props) => {
         }
     }
 
-    if (loading) return <LoadingSpinner/>;
-    if (error) return <p>Error :( {error}</p>;
     requireUser(props, history)
+    if (loading) return (<LoadingSpinner/>);
+    if (error) return <ErrorMessage error={error}/>
     return (
         <Container>
             <ReturnUser/>

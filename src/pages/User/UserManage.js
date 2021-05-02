@@ -1,9 +1,9 @@
 import {useHistory} from "react-router";
 import {useField} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
-import {useState} from "react";
+import React, {useState} from "react";
 import {Link} from "react-router-dom";
-import {LoadingSpinner, ReturnStaff} from "../Components";
+import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {requireStaff} from "../../helpers/utils";
@@ -79,6 +79,13 @@ const UserManage = (props) => {
         const email = useField('email')
         const firstName = useField('text')
         const lastName = useField('text')
+        const editData = data.users.find(user => user.id === editId)
+
+        const populateData = () => {
+            firstName.setValue(editData.firstName)
+            lastName.setValue(editData.lastName)
+            email.setValue(editData.email)
+        }
 
         const handleSubmit = (e) => {
             e.preventDefault()
@@ -106,10 +113,7 @@ const UserManage = (props) => {
         }
 
         const resetForm = () => {
-            const editData = data.users.find(user => user.id === editId)
-            firstName.setValue(editData.firstName)
-            lastName.setValue(editData.lastName)
-            email.setValue(editData.email)
+            populateData()
         }
 
         return (
@@ -118,10 +122,7 @@ const UserManage = (props) => {
                    size="lg"
                    backdrop="static"
                    onEnter={() => {
-                       const editData = data.users.find(user => user.id === editId)
-                       firstName.setValue(editData.firstName)
-                       lastName.setValue(editData.lastName)
-                       email.setValue(editData.email)
+                       populateData()
                    }
                    }
                    keyboard={false}>
@@ -132,35 +133,37 @@ const UserManage = (props) => {
                 </Modal.Header>
                 <Modal.Body className="show-grid">
                     <Container>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Email address</Form.Label>
-                            <Form.Control required type={email.type} placeholder="Enter email" value={email.value}
-                                          onChange={email.onChange}/>
-                        </Form.Group>
+                        <Form onReset={resetForm} onSubmit={handleSubmit}>
+                            <Form.Group controlId="formBasicEmail">
+                                <Form.Label>Email address</Form.Label>
+                                <Form.Control required type={email.type} placeholder="Enter email" value={email.value}
+                                              onChange={email.onChange}/>
+                            </Form.Group>
 
-                        <Form.Group controlId="formBasicFirstName">
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control required type={firstName.type} placeholder="Enter first name"
-                                          value={firstName.value}
-                                          onChange={firstName.onChange}/>
-                        </Form.Group>
+                            <Form.Group controlId="formBasicFirstName">
+                                <Form.Label>First Name</Form.Label>
+                                <Form.Control required type={firstName.type} placeholder="Enter first name"
+                                              value={firstName.value}
+                                              onChange={firstName.onChange}/>
+                            </Form.Group>
 
-                        <Form.Group controlId="formBasicSurname">
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control required type={lastName.type} placeholder="Enter last name"
-                                          value={lastName.value}
-                                          onChange={lastName.onChange}/>
-                        </Form.Group>
+                            <Form.Group controlId="formBasicSurname">
+                                <Form.Label>Last Name</Form.Label>
+                                <Form.Control required type={lastName.type} placeholder="Enter last name"
+                                              value={lastName.value}
+                                              onChange={lastName.onChange}/>
+                            </Form.Group>
+                            <div className="float-right">
+                                <Button variant="secondary" type="reset">
+                                    Reset
+                                </Button>
+                                <Button variant="primary" type="submit">
+                                    Submit
+                                </Button>
+                            </div>
+                        </Form>
                     </Container>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={resetForm}>
-                        Reset
-                    </Button>
-                    <Button variant="primary" onClick={handleSubmit}>
-                        Submit
-                    </Button>
-                </Modal.Footer>
             </Modal>
         );
     }
@@ -169,10 +172,6 @@ const UserManage = (props) => {
 
         const handleSubmit = (e) => {
             e.preventDefault()
-            if (password.value.length < 8) {
-                window.alert("New password length must be greater than 8 characters")
-                return false
-            }
             changePasswordUser({variables: {id: editId, password: password.value}})
                 .then(result => {
                     alert(`Password of user  ${result.data.changePasswordUser.email} edited`)
@@ -200,29 +199,32 @@ const UserManage = (props) => {
                 </Modal.Header>
                 <Modal.Body className="show-grid">
                     <Container>
-                        <Form.Group controlId="formBasicPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Text>The password must be more than 8 characters.</Form.Text>
-                            <Form.Control required type={password.type} placeholder="Password" value={password.value}
-                                          onChange={password.onChange}/>
-                        </Form.Group>
+                        <Form onReset={resetForm} onSubmit={handleSubmit}>
+                            <Form.Group controlId="formBasicPassword">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Text>The password must be more than 8 characters.</Form.Text>
+                                <Form.Control required minLength="8" type={password.type} placeholder="Password"
+                                              value={password.value}
+                                              onChange={password.onChange}/>
+                            </Form.Group>
+                            <div className="float-right">
+                                <Button variant="secondary" type="reset">
+                                    Reset
+                                </Button>
+                                <Button variant="primary" type="submit">
+                                    Submit
+                                </Button>
+                            </div>
+                        </Form>
                     </Container>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={resetForm}>
-                        Reset
-                    </Button>
-                    <Button variant="primary" onClick={handleSubmit}>
-                        Submit
-                    </Button>
-                </Modal.Footer>
             </Modal>
         );
     }
 
     requireStaff(props, history)
     if (loading) return (<LoadingSpinner/>);
-    if (error) return <p>Error :( {error}</p>;
+    if (error) return <ErrorMessage error={error}/>
     return (
         <Container>
             <ReturnStaff/>

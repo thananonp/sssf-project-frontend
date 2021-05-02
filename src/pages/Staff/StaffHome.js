@@ -11,7 +11,7 @@ import {
     Row
 } from "react-bootstrap";
 import {useHistory} from "react-router";
-import {useState} from "react";
+import React, {useState} from "react";
 import {newSearchQuery} from "../../reducers/searchQueryReducer";
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
@@ -51,8 +51,7 @@ const UserHome = (props) => {
         <Container>
             <h1>Staff</h1>
             <Row>
-                <Col><h2>Welcome {props.login.user.user.firstName}</h2>
-                </Col>
+                {props.login.login ? <Col><h2>Welcome {props.login.user.user.firstName}</h2></Col> : null}
                 <Col>
                     <div className="float-right">
                         <Link to="/staff/register"><Button>Staff Register</Button></Link>

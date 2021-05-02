@@ -3,7 +3,8 @@ import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
 import {Container, ListGroup} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {LoadingSpinner} from "../Components";
+import {ErrorMessage, LoadingSpinner} from "../Components";
+import React from "react";
 
 const BOOK = gql`
     query Book($id: ID!){
@@ -37,9 +38,10 @@ const BOOK = gql`
 const Book = () => {
     const id = useParams().id
     const {loading, error, data} = useQuery(BOOK, {variables: {id}})
-    if (loading) return <LoadingSpinner/>;
-    if (error) return <p>Error :( {error}</p>;
-    console.log("data", data)
+
+
+    if (loading) return (<LoadingSpinner/>);
+    if (error) return <ErrorMessage error={error}/>
     return (
         <Container>
             <img alt="Profile" className="profileImage" src={data.book.imageUrl}/>

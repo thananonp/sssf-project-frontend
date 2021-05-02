@@ -2,10 +2,11 @@ import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {Button, Container, Form, ListGroup} from "react-bootstrap";
 import {useField} from "../../hooks";
-import {LoadingSpinner, ReturnStaff} from "../Components";
+import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
 import {requireStaff} from "../../helpers/utils";
 import {connect} from "react-redux";
 import {useHistory} from "react-router";
+import React from "react";
 
 const BOOK_USERS = gql`
     query {
@@ -145,8 +146,7 @@ const BookBorrow = (props) => {
     //
     // }, [])
     if (loading) return (<LoadingSpinner/>);
-    if (error) return <p>Error :( {error}</p>;
-    // console.log("data", data)
+    if (error) return <ErrorMessage error={error}/>
     requireStaff(props, history)
     return (
         <Container>

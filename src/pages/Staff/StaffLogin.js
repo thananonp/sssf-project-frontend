@@ -2,22 +2,25 @@ import {useHistory} from "react-router";
 import {Button, Container, Form} from "react-bootstrap";
 import {logInWithCredential, loginWithoutCredential, logoutWithoutCredential} from "../../reducers/loginReducer";
 import {connect} from "react-redux";
-import {useField} from "../../hooks";
+import {useField, useNotification} from "../../hooks";
 import {login, staffChecker} from "../../helpers/utils";
 import {useLazyQuery} from "@apollo/client";
 import {STAFF_LOGIN} from "../../helpers/gql";
+import {NotificationAlert} from "../Components";
 
 const StaffLogin = (props) => {
     const email = useField('email', "staff1@staff.com")
     const password = useField('password', "passwordstaff1")
     const history = useHistory()
+    const notification = useNotification()
+
     const [LoginStaff] = useLazyQuery(STAFF_LOGIN, {
         onCompleted: (data) => {
             // console.log(data)
             login(history, props, data)
         },
         onError: (error) => {
-            window.alert(error)
+            notification.alertFailure(error.toString())
         }, fetchPolicy: "no-cache"
     })
 
@@ -40,6 +43,8 @@ const StaffLogin = (props) => {
         <div>
             <Container>
                 <h1>Staff Login</h1>
+                <NotificationAlert success={notification.success} failure={notification.failure}
+                                   successText={notification.successText} failureText={notification.failureText}/>
                 <Form onSubmit={loginStaff} onReset={reset}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>

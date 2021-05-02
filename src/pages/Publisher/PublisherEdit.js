@@ -1,11 +1,11 @@
 import {useHistory} from "react-router";
 import {useField, useFile} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
-import {useState} from "react";
+import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
-import {LoadingSpinner, ReturnStaff} from "../Components";
+import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
 import {connect} from "react-redux";
 import {requireStaff} from "../../helpers/utils";
 
@@ -57,7 +57,7 @@ const PublisherEdit = (props) => {
     const {loading, error, data} = useQuery(PUBLISHERS)
     const [editPublisher] = useMutation(EDIT_PUBLISHER)
     const [deletePublisher] = useMutation(DELETE_PUBLISHER)
-    console.log(data)
+    // console.log(data)
 
     const deletePublisherFun = async (id, name) => {
         // alert(`delete ${id}`)
@@ -81,37 +81,38 @@ const PublisherEdit = (props) => {
 
     const EditModal = (props) => {
         const name = useField('text')
-        const description = useField('email')
+        const description = useField('text')
         const fileHolder = useFile()
         const file = useFile()
+        const editData = data.publishers.find(publisher => publisher.id === editId)
+
+        const populateData = () => {
+            fileHolder.setValue(editData.imageUrl)
+            name.setValue(editData.name)
+            description.setValue(editData.description)
+        }
 
         const handleSubmit = (e) => {
             e.preventDefault()
-            if (name.value && description.value) {
-                editPublisher({
-                    variables: {
-                        id: editId,
-                        name: name.value,
-                        description: description.value,
-                        file: file.value
-                    }
-                }).then(result => {
-                    console.log(result)
-                    setModalShow(false)
-                    window.alert(`Edited Publisher: ${result.data.editPublisher.name}`)
-                    window.location.reload(false);
-                }).catch(e => {
-                    window.alert(e)
-                })
-            } else {
-                window.alert("Please fill in all the required information")
-            }
+            editPublisher({
+                variables: {
+                    id: editId,
+                    name: name.value,
+                    description: description.value,
+                    file: file.value
+                }
+            }).then(result => {
+                console.log(result)
+                setModalShow(false)
+                window.alert(`Edited Publisher: ${result.data.editPublisher.name}`)
+                window.location.reload(false);
+            }).catch(e => {
+                window.alert(e)
+            })
         }
 
         const resetForm = () => {
-            const editData = data.publishers.find(publisher => publisher.id === editId)
-            name.setValue(editData.name)
-            description.setValue(editData.description)
+            populateData()
             file.reset()
         }
 
@@ -121,10 +122,7 @@ const PublisherEdit = (props) => {
                    size="lg"
                    backdrop="static"
                    onEnter={() => {
-                       const editData = data.publishers.find(publisher => publisher.id === editId)
-                       name.setValue(editData.name)
-                       description.setValue(editData.description)
-                       fileHolder.setValue(editData.imageUrl)
+                       populateData()
                    }
                    }
                    keyboard={false}>
@@ -135,21 +133,21 @@ const PublisherEdit = (props) => {
                 </Modal.Header>
                 <Modal.Body className="show-grid">
                     <Container>
-                        <Form>
+                        <Form onReset={resetForm} onSubmit={handleSubmit}>
                             <img className="mediumAvatar" src={fileHolder.value} alt={name.value}/>
                             <Form.Group controlId="formBasicFirstName">
                                 <Form.Label>Publisher Name</Form.Label>
-                                <Form.Control value={name.value} type={name.type} onChange={name.onChange}/>
+                                <Form.Control required value={name.value} type={name.type} onChange={name.onChange}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Publisher Description</Form.Label>
-                                <Form.Control value={description.value} type={description.type}
+                                <Form.Control required value={description.value} type={description.type}
                                               onChange={description.onChange}/>
                             </Form.Group>
                             <Form.Group>
                                 <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
                                     the old one will be used.</Form.Text>
-                                <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
+                                <Form.File type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                            accept="image/*"
                                            label="Example file input"/>
                                 {file.url
@@ -159,29 +157,30 @@ const PublisherEdit = (props) => {
                                         <img className="imagePreview" alt="input" src={file.url}/></>
                                     : null}
                             </Form.Group>
+                            <Button variant="secondary" type="reset">
+                                Reset
+                            </Button>
+                            <Button variant="primary" type="submit">
+                                Submit
+                            </Button>
                         </Form>
                     </Container>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={resetForm}>
-                        Reset
-                    </Button>
-                    <Button variant="primary" onClick={handleSubmit}>
-                        Submit
-                    </Button>
-                </Modal.Footer>
+
             </Modal>
         );
     }
 
 
     if (loading) return (<LoadingSpinner/>);
-    if (error) return <p>Error :( {error}</p>;
+    if (error) return <ErrorMessage error={error}/>
     requireStaff(props, history)
     return (
         <Container>
             <ReturnStaff/>
-            <h1>View, Edit and Delete Publisher</h1>
+            <h1>Manage Publisher</h1>
+            <p>There are total of {data.publishers.length} publisher.</p>
+
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
             <Table striped bordered hover>

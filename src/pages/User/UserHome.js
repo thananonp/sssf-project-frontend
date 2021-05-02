@@ -1,6 +1,6 @@
 import {Button, Col, Container, FormControl, InputGroup, Row, Table} from "react-bootstrap";
 import {useHistory} from "react-router";
-import {useState} from "react";
+import React, {useState} from "react";
 import {newSearchQuery} from "../../reducers/searchQueryReducer";
 import {logoutWithoutCredential} from "../../reducers/loginReducer"
 import {connect} from "react-redux";
@@ -8,7 +8,7 @@ import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
 import {requireUser} from "../../helpers/utils";
 import {Link} from "react-router-dom";
-import {LoadingSpinner} from "../Components";
+import {ErrorMessage, LoadingSpinner} from "../Components";
 
 const USER = gql`
     query User($id:ID!){
@@ -88,15 +88,14 @@ const UserHome = (props) => {
         return new Date(borrowedDate).toDateString()
     }
 
-    console.log("data", data)
+    // console.log("data", data)
     requireUser(props, history)
-    if (loading) return <LoadingSpinner/>;
-    if (error) return <p>Error :( {error}</p>;
+    if (loading) return (<LoadingSpinner/>);
+    if (error) return <ErrorMessage error={error}/>
     return (
         <Container>
             <Row>
-                <Col><h2>Welcome {props.login.user.user.firstName}</h2>
-                </Col>
+                {props.login.login ? <Col><h2>Welcome {props.login.user.user.firstName}</h2></Col> : null}
                 <Col>
                     <div className="float-right">
                         <Button onClick={changePassword}>Change Password</Button>

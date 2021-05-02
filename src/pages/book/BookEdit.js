@@ -1,9 +1,9 @@
 import {useHistory} from "react-router";
 import {useField, useFile} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
-import {useState} from "react";
+import React, {useState} from "react";
 import {gql, useMutation, useQuery} from "@apollo/client";
-import {LoadingSpinner, ReturnStaff} from "../Components";
+import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
 import {getToday, requireStaff} from "../../helpers/utils";
 import {connect} from "react-redux";
 
@@ -326,12 +326,14 @@ const BookEdit = (props) => {
     }
 
     if (loading) return (<LoadingSpinner/>);
-    if (error) return <p>Error :( {error}</p>;
+    if (error) return <ErrorMessage error={error}/>
     requireStaff(props, history)
     return (
         <Container>
             <ReturnStaff/>
-            <h1>View, Edit and Delete Book</h1>
+            <h1>Manage Book</h1>
+            <p>There are total of {data.books.length} books.</p>
+
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
             <Table striped bordered hover>

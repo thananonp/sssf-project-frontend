@@ -75,6 +75,7 @@ const NavBar = (props) => {
         }
     }
     // console.log(props.login)
+
     return (
         <Navbar  bg="light" expand="lg">
             <Navbar.Brand href="/">📖Library</Navbar.Brand>

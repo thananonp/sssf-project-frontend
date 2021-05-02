@@ -49,10 +49,10 @@ const StaffRegister = (props) => {
                     password: password.value
                 }
             }).then(result => {
-                alert(`Staff ${result.data.addStaff.email} registered.`)
-                // history.push('/')
+                notification.alertSuccess(`Staff ${result.data.addStaff.email} registered.`)
+                resetForm()
             }).catch(e => {
-                alert(e)
+                notification.alertFailure(e.toString())
                 console.log(e)
             })
         }
@@ -72,7 +72,8 @@ const StaffRegister = (props) => {
             <Container>
                 <ReturnStaff/>
                 <h1>Register New Staff</h1>
-                <NotificationAlert/>
+                <NotificationAlert success={notification.success} failure={notification.failure}
+                                   successText={notification.successText} failureText={notification.failureText}/>
                 <Form onSubmit={handleSubmit} onReset={resetForm}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>

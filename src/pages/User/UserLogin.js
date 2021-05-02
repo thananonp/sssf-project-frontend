@@ -1,20 +1,23 @@
 import {useHistory} from "react-router";
 import {Button, Container, Form} from "react-bootstrap";
 import {connect} from "react-redux";
-import {useField} from "../../hooks";
+import {useField, useNotification} from "../../hooks";
 import {logInWithCredential} from "../../reducers/loginReducer";
 import {login, userChecker} from "../../helpers/utils";
 import {useLazyQuery} from "@apollo/client";
 import {USER_LOGIN} from "../../helpers/gql";
+import {NotificationAlert} from "../Components";
 
 
 const UserLogin = (props) => {
     const email = useField('email', "user1@user.com")
     const password = useField('password', "passworduser11")
     const history = useHistory()
+    const notification = useNotification()
+
     let [LoginUser] = useLazyQuery(USER_LOGIN, {
         onCompleted: (data) => {
-            console.log(data)
+            // console.log(data)
             login(history, props, data)
         }, onError: (error) => {
             window.alert(error)
@@ -36,6 +39,8 @@ const UserLogin = (props) => {
     return (
         <Container>
             <h1>User Login</h1>
+            <NotificationAlert success={notification.success} failure={notification.failure}
+                               successText={notification.successText} failureText={notification.failureText}/>
             <Form onSubmit={loginUser}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>

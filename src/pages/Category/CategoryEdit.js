@@ -1,11 +1,11 @@
 import {useHistory} from "react-router";
 import {useField, useFile} from "../../hooks";
 import {Button, Container, Form, Modal, Table} from "react-bootstrap";
-import {useState} from "react";
+import React, {useState} from "react";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {connect} from "react-redux";
-import {LoadingSpinner, ReturnStaff} from "../Components";
+import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
 import {requireStaff} from "../../helpers/utils";
 
 const CATEGORIES = gql`
@@ -159,12 +159,14 @@ const CategoryEdit = (props) => {
 
 
     requireStaff(props, history)
-    if (loading) return <LoadingSpinner/>;
-    if (error) return <p>Error :( {error}</p>;
+    if (loading) return (<LoadingSpinner/>);
+    if (error) return <ErrorMessage error={error}/>
     return (
         <Container>
             <ReturnStaff/>
             <h1>View, Edit and Delete Category</h1>
+            <p>There are total of {data.categories.length} categories.</p>
+
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
             <Table striped bordered hover>

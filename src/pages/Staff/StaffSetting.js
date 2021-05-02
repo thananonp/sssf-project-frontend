@@ -1,6 +1,6 @@
 import {Button, Container, Form} from "react-bootstrap";
 import {useHistory} from "react-router";
-import {LoadingSpinner, ReturnStaff} from "../Components";
+import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
 import {useField} from "../../hooks";
 import {gql} from "@apollo/client/core";
 import React, {useEffect} from "react";
@@ -91,8 +91,8 @@ const StaffSetting = (props) => {
     }
 
     requireStaff(props, history)
-    if (loading) return <LoadingSpinner/>;
-    if (error) return <p>Error :( {error}</p>;
+    if (loading) return (<LoadingSpinner/>);
+    if (error) return <ErrorMessage error={error}/>
     return (
         <Container>
             <ReturnStaff/>

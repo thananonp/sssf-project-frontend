@@ -6,7 +6,7 @@ import {useHistory} from "react-router";
 import {connect} from "react-redux";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
-import {LoadingSpinner} from "./Components";
+import {LoadingSpinner, NotificationAlert} from "./Components";
 
 const GET_STATS = gql`
     query {
@@ -80,11 +80,32 @@ const Landing = (props) => {
         }
     };
 
+    const showStatistic = () => {
+        if (data) {
+            return (<ListGroup variant="flush">
+                <ListGroup.Item>User<span className="float-right">{data.countUser}</span> </ListGroup.Item>
+                <ListGroup.Item>Staff<span className="float-right">{data.countStaff}</span></ListGroup.Item>
+                <ListGroup.Item>Book<span className="float-right">{data.countBook}</span></ListGroup.Item>
+                <ListGroup.Item>Author<span className="float-right">{data.countAuthor}</span> </ListGroup.Item>
+                <ListGroup.Item>Publisher<span className="float-right">{data.countPublisher}</span></ListGroup.Item>
+                <ListGroup.Item>Category<span className="float-right">{data.countCategory}</span></ListGroup.Item>
+            </ListGroup>)
+        } else {
+            return (<ListGroup variant="flush">
+                <ListGroup.Item>Cannot fetch data</ListGroup.Item>
+            </ListGroup>)
+        }
+    };
+
+    // console.log(loading)
+    // console.log(data)
+    // console.log(error)
     if (loading) return <LoadingSpinner/>;
-    if (error) return <p>Error :( {error}</p>;
+    // if (error) window.alert("Backend failed")
     return (
         <Container>
             <h1>Welcome to library system</h1>
+            <NotificationAlert failure={!!error} success={false} failureText={"Backend connection failed. Maybe the server is down?"}/>
             <InputGroup className="mb-3">
                 <FormControl
                     onChange={search.onChange}
@@ -112,14 +133,7 @@ const Landing = (props) => {
             <br/>
             <Card>
                 <Card.Header as="h5">Our library statistic</Card.Header>
-                <ListGroup variant="flush">
-                    <ListGroup.Item>User<span className="float-right">{data.countUser}</span> </ListGroup.Item>
-                    <ListGroup.Item>Staff<span className="float-right">{data.countStaff}</span></ListGroup.Item>
-                    <ListGroup.Item>Book<span className="float-right">{data.countBook}</span></ListGroup.Item>
-                    <ListGroup.Item>Author<span className="float-right">{data.countAuthor}</span> </ListGroup.Item>
-                    <ListGroup.Item>Publisher<span className="float-right">{data.countPublisher}</span></ListGroup.Item>
-                    <ListGroup.Item>Category<span className="float-right">{data.countCategory}</span></ListGroup.Item>
-                </ListGroup>
+                {showStatistic()}
             </Card>
             <br/>
             <Carousel>

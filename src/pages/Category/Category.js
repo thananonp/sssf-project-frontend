@@ -1,8 +1,9 @@
 import {useParams} from "react-router";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
-import {LoadingSpinner} from "../Components";
+import {ErrorMessage, LoadingSpinner} from "../Components";
 import {Container, ListGroup} from "react-bootstrap";
+import React from "react";
 
 const CATEGORY = gql`
     query Category($id:ID!){
@@ -28,9 +29,8 @@ const Category = (props) => {
     const id = useParams().id
     const {loading, error, data} = useQuery(CATEGORY, {variables: {id}})
 
-    if (loading) return <LoadingSpinner/>;
-    if (error) return <p>Error :( {error}</p>;
-    // console.log(data)
+    if (loading) return (<LoadingSpinner/>);
+    if (error) return <ErrorMessage error={error}/>
     return (
         <Container>
             <img alt="Profile" className="profileImage" src={data.category.imageUrl}/>

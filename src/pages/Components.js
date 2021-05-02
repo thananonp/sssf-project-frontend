@@ -21,9 +21,23 @@ export const ReturnUser = () => {
 export const LoadingSpinner = () => {
     return (
         <div>
-            <Spinner className={"centered"} animation="border" role="status">
+            <Spinner className={"centeredSpinner"} animation="border" role="status">
                 <span className="sr-only">Loading...</span>
             </Spinner>
+        </div>)
+}
+
+export const ErrorMessage = (error) => {
+    console.log(error)
+    return (
+        <div>
+            <div className={"centered"}>
+                <Alert variant="danger">
+                    <Alert.Heading>Backend Server not available.</Alert.Heading>
+                    <p>Cause {error.error.toString()}</p>
+                    <p>Please try again later.</p>
+                </Alert>
+            </div>
         </div>)
 }
 

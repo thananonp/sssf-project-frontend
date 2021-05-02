@@ -1,11 +1,11 @@
 import {connect} from "react-redux";
 import {newSearchQuery, searchScope} from "../reducers/searchQueryReducer";
 import {Button, Container, Form, FormControl, InputGroup, Table} from "react-bootstrap";
-import {useState} from "react";
+import React, {useState} from "react";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
 import {Link} from "react-router-dom";
-import {LoadingSpinner} from "./Components";
+import {ErrorMessage, LoadingSpinner} from "./Components";
 
 const SEARCHBOOKS = gql`
     query SearchBooks($query:String, $scope:String){
@@ -60,9 +60,8 @@ const Search = (props) => {
         props.searchScope(e.target.value)
     }
 
-    console.log(data)
     if (loading) return (<LoadingSpinner/>);
-    if (error) return <p>Error :( {error}</p>;
+    if (error) return <ErrorMessage error={error}/>
     return (
         <div>
             <Container>

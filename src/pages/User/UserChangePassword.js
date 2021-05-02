@@ -8,6 +8,7 @@ import {logInWithCredential, logoutWithoutCredential} from "../../reducers/login
 import {connect} from "react-redux";
 import {ReturnUser} from "../Components";
 import {CHANGE_PASSWORD_USER} from "../../helpers/gql";
+import {requireUser} from "../../helpers/utils";
 
 const USER_COMPARE_PASSWORD = gql`
     query UserComparePassword($id:ID!,$password:String!){
@@ -68,43 +69,39 @@ const UserSetting = (props) => {
         confirmPassword.reset()
     }
 
-    if (props.login.login) {
-        return (
-            <Container>
-                <ReturnUser/>
-                <h1>User Setting</h1>
-                <Form onSubmit={updateInfo} onReset={resetForm}>
+    requireUser(props, history)
+    return (
+        <Container>
+            <ReturnUser/>
+            <h1>User Setting</h1>
+            <Form onSubmit={updateInfo} onReset={resetForm}>
 
-                    <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Old Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" value={oldPassword.value}
-                                      onChange={oldPassword.onChange}/>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" value={password.value}
-                                      onChange={password.onChange}/>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicPasswordCheck">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" value={confirmPassword.value}
-                                      onChange={confirmPassword.onChange}/>
-                    </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Old Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" value={oldPassword.value}
+                                  onChange={oldPassword.onChange}/>
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" value={password.value}
+                                  onChange={password.onChange}/>
+                </Form.Group>
+                <Form.Group controlId="formBasicPasswordCheck">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" value={confirmPassword.value}
+                                  onChange={confirmPassword.onChange}/>
+                </Form.Group>
 
-                    <Button variant="primary" type="submit">
-                        Submit
-                    </Button>
-                    <Button variant="secondary" type="reset">
-                        Reset
-                    </Button>
-                </Form>
-            </Container>
-        )
-    } else {
-        alert("Please log in first!")
-        history.push('/')
-        return null
-    }
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
+                <Button variant="secondary" type="reset">
+                    Reset
+                </Button>
+            </Form>
+        </Container>
+    )
+
 }
 const mapDispatchToProps = {
     logoutWithoutCredential, logInWithCredential
