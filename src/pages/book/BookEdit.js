@@ -1,6 +1,6 @@
 import {useHistory} from "react-router";
 import {useField, useFile} from "../../hooks";
-import {Button, Container, Form, Modal, Table} from "react-bootstrap";
+import {Button, Container, Dropdown, Form, Modal, Pagination, Table} from "react-bootstrap";
 import React, {useState} from "react";
 import {gql, useMutation, useQuery} from "@apollo/client";
 import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
@@ -116,6 +116,26 @@ const BookEdit = (props) => {
     const {loading, error, data} = useQuery(getBooks)
     const [editBook] = useMutation(EDITBOOK)
     const [deleteBook] = useMutation(DELETEBOOK)
+
+
+    const numberOfQuery = useField(null,10)
+    let active = useField(null, 1)
+    let items = [];
+    for (let number = 1; number <= 5; number++) {
+        if (number === active.value) {
+            items.push(
+                <Pagination.Item key={number} active={true}>
+                    WIP:{number}
+                </Pagination.Item>,
+            );
+        } else {
+            items.push(
+                <Pagination.Item onClick={active.onClick} key={number} active={false}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+    }
 
 
     const deleteBookFun = async (id, title) => {
@@ -333,7 +353,26 @@ const BookEdit = (props) => {
             <ReturnStaff/>
             <h1>Manage Book</h1>
             <p>There are total of {data.books.length} books.</p>
+            <Dropdown className={"float-left"}>
+                WIP: Show
+                <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                  {numberOfQuery.value}
+                </Dropdown.Toggle>
+                 entries
 
+
+                <Dropdown.Menu>
+                    <Dropdown.Header>Select the numbers of entries</Dropdown.Header>
+                    <Dropdown.Item onClick={numberOfQuery.onClick}>10</Dropdown.Item>
+                    <Dropdown.Item onClick={numberOfQuery.onClick}>25</Dropdown.Item>
+                    <Dropdown.Item onClick={numberOfQuery.onClick}>50</Dropdown.Item>
+                    <Dropdown.Item onClick={numberOfQuery.onClick}>100</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+            <Pagination className={"float-right"}>
+                {items}
+            </Pagination>
+            <br/>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
             <Table responsive striped bordered hover>
@@ -380,6 +419,10 @@ const BookEdit = (props) => {
                 })}
                 </tbody>
             </Table>
+
+            <br/>
+
+
 
 
         </Container>

@@ -33,30 +33,60 @@ const Landing = (props) => {
         if (props.login.login) {
             if (props.login.user.type === "user") {
                 return (
-                    <Card style={{width: '18rem'}}>
-                        <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>
-                        <Card.Body>
-                            <Card.Title>Click here to go to your user page.
-                                <br/>
-                                <Link to="/user/home"><Button>User page</Button></Link>
-                            </Card.Title>
-                        </Card.Body>
-                    </Card>
+                    <CardDeck>
+                        <Card>
+                            <Card.Header as="h5">Opening times</Card.Header>
+                            <ListGroup variant="flush">
+                                <ListGroup.Item>Mon - Fri<span className="float-right">8 - 18</span></ListGroup.Item>
+                                <ListGroup.Item>Sat<span className="float-right">10 -  18</span></ListGroup.Item>
+                                <ListGroup.Item>Sun<span className="float-right">Closed</span></ListGroup.Item>
+                            </ListGroup>
+                        </Card>
+                        <Card>
+                            <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>
+                            <Card.Body>
+                                <Card.Title>Click here to go to your user page.
+                                    <br/>
+                                    <Link to="/user/home"><Button>User page</Button></Link>
+                                </Card.Title>
+                            </Card.Body>
+                        </Card>
+                    </CardDeck>
                 )
             } else if (props.login.user.type === "staff") {
-                return (<Card style={{width: '18rem'}}>
-                    <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>
-                    <Card.Body>
-                        <Card.Title>Click here to go to your staff page
-                            <Link to="/staff/home"><Button>Staff page</Button></Link>
-                        </Card.Title>
-                    </Card.Body>
-                </Card>)
+                return (
+                    <CardDeck>
+                        <Card>
+                            <Card.Header as="h5">Opening times</Card.Header>
+                            <ListGroup variant="flush">
+                                <ListGroup.Item>Mon - Fri<span className="float-right">8 - 18</span></ListGroup.Item>
+                                <ListGroup.Item>Sat<span className="float-right">10 -  18</span></ListGroup.Item>
+                                <ListGroup.Item>Sun<span className="float-right">Closed</span></ListGroup.Item>
+                            </ListGroup>
+                        </Card>
+                        <Card>
+                            <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>
+                            <Card.Body>
+                                <Card.Title>Click here to go to your staff page
+                                    <Link to="/staff/home"><Button>Staff page</Button></Link>
+                                </Card.Title>
+                            </Card.Body>
+                        </Card>
+                    </CardDeck>
+                )
             }
         } else {
             return (
-                < >
-                    <Card style={{width: '18rem'}}>
+                <CardDeck>
+                    <Card>
+                        <Card.Header as="h5">Opening times</Card.Header>
+                        <ListGroup variant="flush">
+                            <ListGroup.Item>Mon - Fri<span className="float-right">8 - 18</span></ListGroup.Item>
+                            <ListGroup.Item>Sat<span className="float-right">10 -  18</span></ListGroup.Item>
+                            <ListGroup.Item>Sun<span className="float-right">Closed</span></ListGroup.Item>
+                        </ListGroup>
+                    </Card>
+                    <Card>
                         <Card.Header as="h5">New user</Card.Header>
                         <Card.Body>
                             <Card.Title>Are you new to the library website</Card.Title>
@@ -69,13 +99,13 @@ const Landing = (props) => {
                             </div>
                         </Card.Body>
                     </Card>
-                    <Card style={{width: '18rem'}}>
+                    <Card>
                         <Card.Header as="h5">Staff</Card.Header>
                         <Card.Body>
                             <Card.Title>Free candy for staff here</Card.Title>
                             <Link to="/staff"><Button>Staff login</Button></Link></Card.Body>
                     </Card>
-                </>
+                </CardDeck>
             )
         }
     };
@@ -91,9 +121,10 @@ const Landing = (props) => {
                 <ListGroup.Item>Category<span className="float-right">{data.countCategory}</span></ListGroup.Item>
             </ListGroup>)
         } else {
-            return (<ListGroup variant="flush">
-                <ListGroup.Item>Cannot fetch data</ListGroup.Item>
-            </ListGroup>)
+            return (
+                <ListGroup variant="flush">
+                    <ListGroup.Item>Cannot fetch data</ListGroup.Item>
+                </ListGroup>)
         }
     };
 
@@ -120,17 +151,10 @@ const Landing = (props) => {
                 </InputGroup.Append>
             </InputGroup>
             <br/>
-            <CardDeck>
-                <Card>
-                    <Card.Header as="h5">Opening times</Card.Header>
-                    <ListGroup variant="flush">
-                        <ListGroup.Item>Mon - Fri<span className="float-right">8 - 18</span></ListGroup.Item>
-                        <ListGroup.Item>Sat<span className="float-right">10 -  18</span></ListGroup.Item>
-                        <ListGroup.Item>Sun<span className="float-right">Closed</span></ListGroup.Item>
-                    </ListGroup>
-                </Card>
-                {showCard()}
-            </CardDeck>
+
+
+            {showCard()}
+
             <br/>
             <Card>
                 <Card.Header as="h5">Our library statistic</Card.Header>

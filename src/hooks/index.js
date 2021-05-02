@@ -7,6 +7,11 @@ const useField = (type, predata) => {
         setValue(event.target.value)
     }
 
+    const onClick = (event) => {
+        // console.log(event)
+        setValue(Number(event.target.text))
+    }
+
     const reset = () => {
         setValue('')
     }
@@ -15,6 +20,7 @@ const useField = (type, predata) => {
         type,
         value,
         onChange,
+        onClick,
         reset,
         setValue
     }

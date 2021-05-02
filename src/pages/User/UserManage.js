@@ -1,6 +1,6 @@
 import {useHistory} from "react-router";
 import {useField} from "../../hooks";
-import {Button, Container, Form, Modal, Table} from "react-bootstrap";
+import {Button, Container, Dropdown, Form, Modal, Pagination, Table} from "react-bootstrap";
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
@@ -63,6 +63,25 @@ const UserManage = (props) => {
     const [deleteUser] = useMutation(DELETE_USER)
     const {loading, error, data} = useQuery(USERS)
     const [editId, setEditId] = useState('')
+
+    const numberOfQuery = useField(null,10)
+    let active = useField(null, 1)
+    let items = [];
+    for (let number = 1; number <= 5; number++) {
+        if (number === active.value) {
+            items.push(
+                <Pagination.Item key={number} active={true}>
+                    WIP:{number}
+                </Pagination.Item>,
+            );
+        } else {
+            items.push(
+                <Pagination.Item onClick={active.onClick} key={number} active={false}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+    }
 
     const deleteUserFun = async (id, name) => {
         if (window.confirm(`Are you sure you want to delete user: ${name}`)) {
@@ -233,6 +252,26 @@ const UserManage = (props) => {
             <PasswordModal show={passwordModalShow} onHide={() => setPasswordModalShow(false)}/>
 
             <p>There are total of {data.users.length} users.</p>
+            <Dropdown className={"float-left"}>
+                WIP: Show
+                <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                    {numberOfQuery.value}
+                </Dropdown.Toggle>
+                entries
+
+
+                <Dropdown.Menu>
+                    <Dropdown.Header>Select the numbers of entries</Dropdown.Header>
+                    <Dropdown.Item onClick={numberOfQuery.onClick}>10</Dropdown.Item>
+                    <Dropdown.Item onClick={numberOfQuery.onClick}>25</Dropdown.Item>
+                    <Dropdown.Item onClick={numberOfQuery.onClick}>50</Dropdown.Item>
+                    <Dropdown.Item onClick={numberOfQuery.onClick}>100</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+            <Pagination className={"float-right"}>
+                {items}
+            </Pagination>
+            <br/>
             <Table responsive  striped bordered hover>
                 <thead>
                 <tr>
