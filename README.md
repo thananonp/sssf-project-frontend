@@ -1,6 +1,6 @@
 # Library Management System Frontend
 
-[Backend Repo](https://github.com/thananonp/sssf-project-frontend)
+[Backend Repo](https://github.com/thananonp/server-side-scripting-project-backend)
 
 [Deployed Frontend](https://sssf-frontend.web.app/)
 

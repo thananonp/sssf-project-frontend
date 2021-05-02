@@ -188,33 +188,25 @@ const BookEdit = (props) => {
 
         const handleSubmit = (e) => {
             e.preventDefault()
-            // if (category.value.length === undefined) {
-            //     editedCategory = category.value.id
-            //     // console.log("fuck")
-            // } else {
-            //     editedCategory = category.value
-            //     // console.log("fuck")
-            // }
-            //
-            // if (author.value.length === undefined) {
-            //     editedAuthor = author.value.id
-            // } else {
-            //     editedAuthor = author.value
-            // }
-            //
-            // if (publisher.value.length === undefined) {
-            //     editedPublisher = publisher.value.id
-            // } else {
-            //     editedPublisher = publisher.value
-            // }
+            console.log({
+                id: editId,
+                title: title.value,
+                category: category.value,
+                author: author.value,
+                publisher: publisher.value,
+                dateOfPublication: dateOfPublication.value,
+                pageCount: Number(pageCount.value),
+                description: description.value,
+                file: file.value
+            })
             if (category.value && author.value && publisher.value) {
                 editBook({
                     variables: {
                         id: editId,
                         title: title.value,
-                        category: editedCategory,
-                        author: editedAuthor,
-                        publisher: editedPublisher,
+                        category: category.value,
+                        author: author.value,
+                        publisher: publisher.value,
                         dateOfPublication: dateOfPublication.value,
                         pageCount: Number(pageCount.value),
                         description: description.value,

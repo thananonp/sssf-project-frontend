@@ -1,11 +1,12 @@
 import {connect} from "react-redux";
 import {newSearchQuery, searchScope} from "../reducers/searchQueryReducer";
-import {Button, Container, Form, FormControl, InputGroup, Table} from "react-bootstrap";
+import {Button, Container, Dropdown, Form, FormControl, InputGroup, Pagination, Table} from "react-bootstrap";
 import React, {useState} from "react";
 import {gql} from "@apollo/client/core";
 import {useQuery} from "@apollo/client";
 import {Link} from "react-router-dom";
 import {ErrorMessage, LoadingSpinner} from "./Components";
+import {useField} from "../hooks";
 
 const SEARCHBOOKS = gql`
     query SearchBooks($query:String, $scope:String){
@@ -46,6 +47,25 @@ const Search = (props) => {
             scope: props.searchQuery.scope
         }
     })
+
+    const numberOfQuery = useField(null,10)
+    let active = useField(null, 1)
+    let items = [];
+    for (let number = 1; number <= 5; number++) {
+        if (number === active.value) {
+            items.push(
+                <Pagination.Item key={number} active={true}>
+                    WIP:{number}
+                </Pagination.Item>,
+            );
+        } else {
+            items.push(
+                <Pagination.Item onClick={active.onClick} key={number} active={false}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+    }
 
     const handleSearch = (e) => {
         setSearch(e.target.value)
@@ -93,6 +113,26 @@ const Search = (props) => {
                 </Form>
 
                 <p>Found {data.searchBooks.length} search results</p>
+                <Dropdown className={"float-left"}>
+                    WIP: Show
+                    <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                        {numberOfQuery.value}
+                    </Dropdown.Toggle>
+                    entries
+
+
+                    <Dropdown.Menu>
+                        <Dropdown.Header>Select the numbers of entries</Dropdown.Header>
+                        <Dropdown.Item onClick={numberOfQuery.onClick}>10</Dropdown.Item>
+                        <Dropdown.Item onClick={numberOfQuery.onClick}>25</Dropdown.Item>
+                        <Dropdown.Item onClick={numberOfQuery.onClick}>50</Dropdown.Item>
+                        <Dropdown.Item onClick={numberOfQuery.onClick}>100</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+                <Pagination className={"float-right"}>
+                    {items}
+                </Pagination>
+                <br/>
 
                 <Table responsive striped bordered hover>
                     <thead>

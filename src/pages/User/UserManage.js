@@ -38,6 +38,7 @@ const EDIT_USER = gql`
             id
             email
             firstName
+            lastName
         }
     }
 `

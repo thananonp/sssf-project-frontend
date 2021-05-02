@@ -211,11 +211,11 @@ const BookBorrow = (props) => {
                                     // console.log(book)
                                     let bookName
                                     if (book.author) {
-                                        bookName = book.title + ' by ' + book.author.name
+                                        bookName = book.title + ' by ' + book.author.name + 'borrowed by ' + book.borrowedBy.firstName
                                         return <option key={index}
                                                        value={book.id}>{bookName}</option>
                                     } else {
-                                        bookName = book.title + ' by deleted author'
+                                        bookName = book.title + ' by deleted author' + 'borrowed by ' + book.borrowedBy.firstName
                                         return <option key={index}
                                                        value={book.id}>{bookName}</option>
                                     }
