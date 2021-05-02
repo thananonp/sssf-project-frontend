@@ -105,7 +105,8 @@ const Landing = (props) => {
     return (
         <Container>
             <h1>Welcome to library system</h1>
-            <NotificationAlert failure={!!error} success={false} failureText={"Backend connection failed. Maybe the server is down?"}/>
+            <NotificationAlert failure={!!error} success={false}
+                               failureText={"Backend connection failed. Maybe the server is down?"}/>
             <InputGroup className="mb-3">
                 <FormControl
                     onChange={search.onChange}

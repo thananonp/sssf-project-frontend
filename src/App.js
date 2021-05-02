@@ -34,6 +34,7 @@ import BookBorrow from "./pages/book/BookBorrow";
 import {getToken} from "./helpers/utils";
 import StaffPreferenceEdit from "./pages/Staff/StaffPreferenceEdit";
 
+
 function App(props) {
 
     const jwtToken = getToken()
@@ -45,7 +46,7 @@ function App(props) {
 
     return (
         <Router>
-            <div>
+            <div className="body-font">
                 <NavBar/>
 
                 <Switch>
@@ -158,11 +159,10 @@ function App(props) {
                         <Landing/>
                     </Route>
                 </Switch>
-                {/*<footer>*/}
-                {/*    <p>Thananon Pongsuwan, Picture from unsplash and Made for Server side scripting framework</p>*/}
-                {/*</footer>*/}
+
             </div>
         </Router>
+
     );
 }
 

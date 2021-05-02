@@ -168,7 +168,7 @@ const AuthorEdit = (props) => {
             <h1>Manage Author</h1>
             <p>There are total of {data.authors.length} authors.</p>
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
-            <Table striped bordered hover>
+            <Table responsive striped bordered hover>
                 <thead>
                 <tr>
                     <th>Image</th>

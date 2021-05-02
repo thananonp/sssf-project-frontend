@@ -94,7 +94,7 @@ const Search = (props) => {
 
                 <p>Found {data.searchBooks.length} search results</p>
 
-                <Table striped bordered hover>
+                <Table responsive striped bordered hover>
                     <thead>
                     <tr>
                         <th>#</th>

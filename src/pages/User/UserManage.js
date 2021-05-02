@@ -233,7 +233,7 @@ const UserManage = (props) => {
             <PasswordModal show={passwordModalShow} onHide={() => setPasswordModalShow(false)}/>
 
             <p>There are total of {data.users.length} users.</p>
-            <Table striped bordered hover>
+            <Table responsive  striped bordered hover>
                 <thead>
                 <tr>
                     <th>#</th>

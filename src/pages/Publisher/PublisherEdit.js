@@ -183,7 +183,7 @@ const PublisherEdit = (props) => {
 
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
 
-            <Table striped bordered hover>
+            <Table responsive striped bordered hover>
                 <thead>
                 <tr>
                     <th>#</th>
