@@ -9,8 +9,8 @@ import {STAFF_LOGIN} from "../../helpers/gql";
 import {NotificationAlert} from "../Components";
 
 const StaffLogin = (props) => {
-    const email = useField('email', "staff1@staff.com")
-    const password = useField('password', "passwordstaff1")
+    const email = useField('email')
+    const password = useField('password')
     const history = useHistory()
     const notification = useNotification()
 

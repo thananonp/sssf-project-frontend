@@ -10,8 +10,8 @@ import {USER_LOGIN} from "../helpers/gql";
 
 const NavBar = (props) => {
     const history = useHistory()
-    const email = useField('email', "user1@user.com")
-    const password = useField('password', "passworduser11")
+    const email = useField('email')
+    const password = useField('password')
     let [LoginUser] = useLazyQuery(USER_LOGIN, {
         onCompleted: (data) => {
             console.log(data)
