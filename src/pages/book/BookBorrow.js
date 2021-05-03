@@ -156,7 +156,7 @@ const BookBorrow = (props) => {
                     <h3>Borrow</h3>
                     <Form onSubmit={handleSubmitBorrow} onReset={resetFormBorrow}>
                         <Form.Group controlId="formSelectbook">
-                            <Form.Label>User</Form.Label>
+                            <Form.Label>Book</Form.Label>
 
                             <Form.Control as="select" onChange={bookBorrow.onChange}>
                                 <option>Select book</option>
@@ -178,7 +178,7 @@ const BookBorrow = (props) => {
                             </Form.Control>
                         </Form.Group>
                         <Form.Group controlId="formBasicuser">
-                            <Form.Label>Book</Form.Label>
+                            <Form.Label>User</Form.Label>
                             <Form.Control as="select" onChange={userBorrow.onChange}>
                                 <option>Select user</option>
                                 {data.notBorrowedUsers.map((user, index) => {
