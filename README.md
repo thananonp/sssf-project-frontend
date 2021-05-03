@@ -8,7 +8,10 @@
 
 This project is made for server-side scripting service. This is the frontend part.
 
-![img](sssf-frontent.png)
+![img](picture/sssf-frontent.png)
+![img1](picture/sssf-frontend-2.png)
+![img1](picture/sssf-frontend-3.png)
+![img1](picture/sssf-frontend-4.png)
 
 This project is made using these libraries
 
@@ -29,13 +32,14 @@ This project is made using these libraries
     │   ├── hooks         # For creating React hooks
     │   ├── pages         # For pages to be display
     │   ├── reducers      # For create Redux reducer
-    │   ├── App.js       
+    │   ├── App.js        # Main app component
+    │   ├── App.css       # Stylesheet for the application
     ├── LICENSE
     └── README.md
 
 ## Sources Components
 
-Components contain React components that is display in more than one page. Eg. LoadingSpinner Landing is the homepage
+Components contain React components that is display in more than one page. E.g. LoadingSpinner Landing is the homepage
 where user will land on. NavBar will show base on the login state. Search is the search page.
 
 Author, Book, Category, Publisher will have
@@ -54,6 +58,10 @@ User and Staff will have
 
 ## Overview
 
+#### Register
+
+The user input all the required information. The frontend validates the input and send the information to the backend, and the user is created.
+
 ##### Login
 
 When the user or the staff log in. The website sends the login credentials to the backend via GraphQL. The server then
@@ -61,7 +69,7 @@ will authenticate and send the token back to the frontend. The token is kept in 
 
 ##### Logout
 
-When the user or staff click logout. The state and Local Storage will be cleared.
+When the user or staff click logout. The redux state and Local Storage will be cleared.
 
 ##### Permission Lock
 
