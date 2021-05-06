@@ -2,6 +2,14 @@ import {Link} from "react-router-dom";
 import React from "react";
 import {Alert, Spinner} from "react-bootstrap";
 
+export const ReturnLanding = () => {
+    return (
+        <div>
+            <Link to='/'><p> ← Back to home</p></Link>
+        </div>
+    )
+}
+
 export const ReturnStaff = () => {
     return (
         <div>

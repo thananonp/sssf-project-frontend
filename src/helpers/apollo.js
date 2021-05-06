@@ -5,8 +5,8 @@ import {getToken} from "./utils";
 
 const link = createUploadLink({
     // credentials: 'include'
-    // uri: process.env.REACT_APP_BACKEND_GRAPHQL_URL,
-    uri:"https://thananonp-test.jelastic.metropolia.fi/graphql"
+    uri: process.env.REACT_APP_BACKEND_GRAPHQL_URL,
+    // uri:"https://thananonp-test.jelastic.metropolia.fi/graphql"
 });
 
 const authLink = setContext((_, {headers}) => {

@@ -94,17 +94,16 @@ const UserHome = (props) => {
     if (error) return <ErrorMessage error={error}/>
     return (
         <Container>
-            <Row>
+            <Row className={'my-3'}>
                 {props.login.login ? <Col><h2>Welcome {props.login.user.user.firstName}</h2></Col> : null}
                 <Col>
                     <div className="float-right">
-                        <Button onClick={changePassword}>Change Password</Button>
-                        <Button onClick={editUser}>Setting</Button>
-                        <Button onClick={logout}>Logout</Button>
+                        <Button variant="outline-primary" className='ml-3' onClick={changePassword}>Change Password</Button>
+                        <Button variant="outline-primary" className='ml-3' onClick={editUser}>Setting</Button>
+                        <Button variant="outline-danger" className='ml-3' onClick={logout}>Logout</Button>
                     </div>
                 </Col>
             </Row>
-            <br/>
             <InputGroup className="mb-3">
                 <FormControl
                     onChange={handleSearch}
@@ -117,7 +116,7 @@ const UserHome = (props) => {
                 </InputGroup.Append>
             </InputGroup>
 
-            <h3>Currently Borrowed Book</h3>
+            <h3 className={'my-3'}>Currently Borrowed Book</h3>
             <Table striped bordered hover>
                 <thead>
                 <tr>

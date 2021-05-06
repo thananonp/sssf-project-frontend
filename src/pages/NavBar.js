@@ -7,6 +7,7 @@ import {useField} from "../hooks";
 import {login} from "../helpers/utils";
 import {useLazyQuery} from "@apollo/client";
 import {USER_LOGIN} from "../helpers/gql";
+import {Link} from "react-router-dom";
 
 const NavBar = (props) => {
     const history = useHistory()
@@ -16,7 +17,7 @@ const NavBar = (props) => {
         onCompleted: (data) => {
             console.log(data)
             login(history, props, data)
-        },onError: (error) => {
+        }, onError: (error) => {
             window.alert(error)
         }
     })
@@ -77,7 +78,7 @@ const NavBar = (props) => {
     // console.log(props.login)
 
     return (
-        <Navbar  sticky="top" bg="light" expand="lg">
+        <Navbar sticky="top" bg="light" expand="lg">
             <Navbar.Brand href="/">📖Library</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
@@ -87,26 +88,29 @@ const NavBar = (props) => {
                     {renderNav()}
                 </Nav>
                 {props.login.login
-                    ? <Row>
-                        <p>Welcome {props.login.user.user.firstName}</p>
-                        <Button onClick={logoutUser}>Logout</Button>
+                    ? <Row className={'mr-3'}>
+                        <p className={'mx-3'}>Welcome {props.login.user.user.firstName}</p>
+                        <Button variant={'outline-danger'} onClick={logoutUser}>Logout</Button>
                     </Row>
                     : <Form inline onSubmit={loginUser} >
                             <Form.Group controlId="formBasicEmail">
-                                <Form.Label column="sm">Email</Form.Label>
+                                <Form.Label column="sm">User Email</Form.Label>
                                 <Form.Control size="sm" required type={email.type} value={email.value}
-                                              onChange={email.onChange}/>
+                                              onChange={email.onChange} placeholder="Enter email"/>
                             </Form.Group>
 
                             <Form.Group controlId="formBasicPassword">
                                 <Form.Label column="sm">Password</Form.Label>
                                 <Form.Control size="sm" required type={password.type} value={password.value}
-                                              onChange={password.onChange}/>
+                                              onChange={password.onChange} placeholder="Enter password"/>
                             </Form.Group>
-                            <Button variant="primary" type="submit">
-                                Submit
+                            <Button className='float-right ml-3' variant={"outline-primary"} type="submit">
+                                Login
                             </Button>
-                    </Form>}
+                            <Link to="/user/register"><Button variant="outline-secondary" className='m-2'>Register
+                                here</Button></Link>
+
+                        </Form>}
             </Navbar.Collapse>
         </Navbar>
 

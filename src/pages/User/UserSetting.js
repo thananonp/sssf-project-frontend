@@ -129,27 +129,20 @@ const UserSetting = (props) => {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Label>Confirm Password  (*)</Form.Label>
                     <Form.Control required type="password" placeholder="Password" value={oldPassword.value}
                                   onChange={oldPassword.onChange}/>
                 </Form.Group>
-                {/*<Form.Group controlId="formBasicPassword">*/}
-                {/*    <Form.Label>Password</Form.Label>*/}
-                {/*    <Form.Control type="password" placeholder="Password" value={password.value}*/}
-                {/*                  onChange={password.onChange}/>*/}
-                {/*</Form.Group>*/}
-                {/*<Form.Group controlId="formBasicPasswordCheck">*/}
-                {/*    <Form.Label>Confirm Password</Form.Label>*/}
-                {/*    <Form.Control type="password" placeholder="Password" value={confirmPassword.value}*/}
-                {/*                  onChange={confirmPassword.onChange}/>*/}
-                {/*</Form.Group>*/}
-
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-                <Button variant="secondary" type="reset">
-                    Reset
-                </Button>
+                <p>Unedited field will not edit any information.</p>
+                <p>(*) means the field is required</p>
+                <div className={"float-right"}>
+                    <Button className='ml-3' variant="outline-primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button className='ml-3' variant="outline-secondary" type="reset">
+                        Reset
+                    </Button>
+                </div>
             </Form>
         </Container>
     )

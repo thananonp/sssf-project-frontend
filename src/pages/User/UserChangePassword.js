@@ -73,31 +73,34 @@ const UserSetting = (props) => {
     return (
         <Container>
             <ReturnUser/>
-            <h1>User Setting</h1>
+            <h1>Change user password</h1>
             <Form onSubmit={updateInfo} onReset={resetForm}>
 
                 <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Old Password</Form.Label>
+                    <Form.Label>Old Password (*)</Form.Label>
                     <Form.Control type="password" placeholder="Password" value={oldPassword.value}
                                   onChange={oldPassword.onChange}/>
                 </Form.Group>
                 <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label>Password  (*)</Form.Label>
                     <Form.Control type="password" placeholder="Password" value={password.value}
                                   onChange={password.onChange}/>
                 </Form.Group>
                 <Form.Group controlId="formBasicPasswordCheck">
-                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Label>Confirm Password  (*)</Form.Label>
                     <Form.Control type="password" placeholder="Password" value={confirmPassword.value}
                                   onChange={confirmPassword.onChange}/>
                 </Form.Group>
+                <p>(*) means the field is required</p>
+                <div className={"float-right"}>
+                    <Button className='ml-3' variant="outline-primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button className='ml-3' variant="outline-secondary" type="reset">
+                        Reset
+                    </Button>
+                </div>
 
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-                <Button variant="secondary" type="reset">
-                    Reset
-                </Button>
             </Form>
         </Container>
     )

@@ -6,7 +6,7 @@ import {logInWithCredential} from "../../reducers/loginReducer";
 import {login, userChecker} from "../../helpers/utils";
 import {useLazyQuery} from "@apollo/client";
 import {USER_LOGIN} from "../../helpers/gql";
-import {NotificationAlert} from "../Components";
+import {NotificationAlert, ReturnLanding} from "../Components";
 
 
 const UserLogin = (props) => {
@@ -32,31 +32,49 @@ const UserLogin = (props) => {
             return false
         }
         LoginUser({variables: {email: email.value, password: password.value}})
-
     }
+
+    const resetForm = () => {
+        email.reset()
+        password.reset()
+    }
+
 
     userChecker(props, history)
     return (
         <Container>
-            <h1>User Login</h1>
+            <ReturnLanding/>
+            <h1 className={"mt-2"}>User Login</h1>
             <NotificationAlert success={notification.success} failure={notification.failure}
                                successText={notification.successText} failureText={notification.failureText}/>
-            <Form onSubmit={loginUser}>
+            <Form onSubmit={loginUser} onReset={resetForm}>
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control required type={email.type} value={email.value} onChange={email.onChange}/>
+                    <Form.Label>Email address (*)</Form.Label>
+                    <Form.Control required type={email.type} value={email.value} onChange={email.onChange}
+                                  placeholder={"Enter your email"}/>
+                    <Form.Text>Email address must follow the format of xxx@xxx.</Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control required type={password.type} value={password.value} onChange={password.onChange}/>
+                    <Form.Label>Password (*)</Form.Label>
+                    <Form.Control required type={password.type} value={password.value} onChange={password.onChange}
+                                  placeholder={"Enter your password"}/>
+                    <Form.Text>Password must be at least 8 characters.</Form.Text>
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
+                <p>Does not have an account? Click <a href={"register"}>here</a> to go to register page.</p>
+                <p>(*) means the field is required</p>
+                <div className={"float-right"}>
+                    <Button className='ml-3' variant="outline-primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button className='ml-3' variant="outline-secondary" type="reset">
+                        Reset
+                    </Button>
+                </div>
+
             </Form>
         </Container>
-    )
+    );
 }
 
 const mapDispatchToProps = {

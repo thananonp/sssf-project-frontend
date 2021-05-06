@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import {gql} from "@apollo/client/core";
 import {useMutation} from "@apollo/client";
 import {checkIfPasswordIsTheSameAsConfirmPassword, staffChecker, userChecker} from "../../helpers/utils";
-import {NotificationAlert} from "../Components";
+import {NotificationAlert, ReturnLanding} from "../Components";
 
 const ADD_USER = gql`
     mutation AddUser(
@@ -72,50 +72,58 @@ const UserRegister = (props) => {
     userChecker(props, history)
     return (
         <Container>
-            <h1>Register New User</h1>
+            <ReturnLanding/>
+            <h1 className={"mt-2"}>Register New User</h1>
             <NotificationAlert success={notification.success} failure={notification.failure}
                                successText={notification.successText} failureText={notification.failureText}/>
             <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address (*)</Form.Label>
-                    <Form.Control required type={email.type} placeholder="Enter email" value={email.value}
+                    <Form.Control required type={email.type} placeholder="Enter your email" value={email.value}
                                   onChange={email.onChange}/>
+                    <Form.Text>Email address must follow the format of xxx@xxx.</Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicFirstName">
                     <Form.Label>First Name (*)</Form.Label>
-                    <Form.Control required type={firstName.type} placeholder="Enter first name"
+                    <Form.Control required type={firstName.type} placeholder="Enter your first name"
                                   value={firstName.value}
                                   onChange={firstName.onChange}/>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicSurname">
                     <Form.Label>Last Name (*)</Form.Label>
-                    <Form.Control required type={lastName.type} placeholder="Enter last name" value={lastName.value}
+                    <Form.Control required type={lastName.type} placeholder="Enter your last name" value={lastName.value}
                                   onChange={lastName.onChange}/>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password (*)</Form.Label>
-                    <Form.Control required minlength="8" type={password.type} placeholder="Password"
+                    <Form.Control required minlength="8" type={password.type} placeholder="Enter your password"
                                   value={password.value}
                                   onChange={password.onChange}/>
+                    <Form.Text>Password must be at least 8 characters.</Form.Text>
+
                 </Form.Group>
 
                 <Form.Group controlId="formBasicConfirmPassword">
                     <Form.Label>Confirm Password (*)</Form.Label>
-                    <Form.Control required minlength="8" type={confirmPassword.type} placeholder="Password"
+                    <Form.Control required minlength="8" type={confirmPassword.type} placeholder="Confirm your password"
                                   value={confirmPassword.value}
                                   onChange={confirmPassword.onChange}/>
-                    <Form.Control.Feedback type="invalid">
-                        Please choose a username.
-                    </Form.Control.Feedback>
-                </Form.Group>
-                <Button type="submit">Submit</Button>
+                    <Form.Text>Password must be at least 8 characters at must match the password.</Form.Text>
 
-                <Button variant="secondary" type="reset">
-                    Reset
-                </Button>
+                </Form.Group>
+                <p>Already have an account? Click <a href={"login"}>here</a> to go to login page.</p>
+                <p>(*) means the field is required</p>
+                <div className={"float-right"}>
+                    <Button className='ml-3 mb-3' variant="primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button className='ml-3 mb-3' variant="secondary" type="reset">
+                        Reset
+                    </Button>
+                </div>
             </Form>
         </Container>
     )

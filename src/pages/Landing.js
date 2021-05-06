@@ -47,7 +47,7 @@ const Landing = (props) => {
                             <Card.Body>
                                 <Card.Title>Click here to go to your user page.
                                     <br/>
-                                    <Link to="/user/home"><Button>User page</Button></Link>
+                                    <Link to="/user/home"><Button className='ml-3'>User page</Button></Link>
                                 </Card.Title>
                             </Card.Body>
                         </Card>
@@ -68,7 +68,7 @@ const Landing = (props) => {
                             <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>
                             <Card.Body>
                                 <Card.Title>Click here to go to your staff page
-                                    <Link to="/staff/home"><Button>Staff page</Button></Link>
+                                    <Link to="/staff/home"><Button className='ml-2'>Staff page</Button></Link>
                                 </Card.Title>
                             </Card.Body>
                         </Card>
@@ -91,11 +91,11 @@ const Landing = (props) => {
                         <Card.Body>
                             <Card.Title>Are you new to the library website</Card.Title>
                             <div>Already has an account
-                                <span><Link to="/user/login"><Button>Login</Button></Link></span>
+                                <span><Link to="/user/login"><Button variant={"outline-primary"} className='m-2'>Login</Button></Link></span>
                             </div>
                             <div>
                                 No account?
-                                <Link to="/user/register"><Button>Register here</Button></Link>
+                                <Link to="/user/register"><Button variant={"outline-primary"}  className='m-2'>Register here</Button></Link>
                             </div>
                         </Card.Body>
                     </Card>
@@ -103,7 +103,7 @@ const Landing = (props) => {
                         <Card.Header as="h5">Staff</Card.Header>
                         <Card.Body>
                             <Card.Title>Free candy for staff here</Card.Title>
-                            <Link to="/staff"><Button>Staff login</Button></Link></Card.Body>
+                            <Link to="/staff"><Button variant={"outline-primary"}>Staff login</Button></Link></Card.Body>
                     </Card>
                 </CardDeck>
             )
@@ -135,7 +135,7 @@ const Landing = (props) => {
     // if (error) window.alert("Backend failed")
     return (
         <Container>
-            <h1>Welcome to library system</h1>
+            <h1 className={'mt-3'}>Welcome to library system</h1>
             <NotificationAlert failure={!!error} success={false}
                                failureText={"Backend connection failed. Maybe the server is down?"}/>
             <InputGroup className="mb-3">
