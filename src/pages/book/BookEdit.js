@@ -8,8 +8,11 @@ import {getToday, requireStaff} from "../../helpers/utils";
 import {connect} from "react-redux";
 
 const getBooks = gql`
-    query{
-        books{
+    query($limit:Int, $skip:Int){
+        countBook
+        books(
+            limit:$limit,
+            skip:$skip){
             id
             title
             category{
@@ -110,32 +113,19 @@ const DELETEBOOK = gql`
 `
 
 const BookEdit = (props) => {
+    const limit = useField(null, 10)
+    let active = useField(null, 1)
     const [modalShow, setModalShow] = useState(false);
     const [editId, setEditId] = useState(0)
     const history = useHistory()
-    const {loading, error, data} = useQuery(getBooks)
+    const {loading, error, data} = useQuery(getBooks, {
+        variables: {
+            limit: Number(limit.value),
+            skip: Number(active.value - 1) * 10
+        }
+    })
     const [editBook] = useMutation(EDITBOOK)
     const [deleteBook] = useMutation(DELETEBOOK)
-
-
-    const numberOfQuery = useField(null,10)
-    let active = useField(null, 1)
-    let items = [];
-    for (let number = 1; number <= 5; number++) {
-        if (number === active.value) {
-            items.push(
-                <Pagination.Item key={number} active={true}>
-                    WIP:{number}
-                </Pagination.Item>,
-            );
-        } else {
-            items.push(
-                <Pagination.Item onClick={active.onClick} key={number} active={false}>
-                    {number}
-                </Pagination.Item>,
-            );
-        }
-    }
 
 
     const deleteBookFun = async (id, title) => {
@@ -217,8 +207,7 @@ const BookEdit = (props) => {
                 }).catch(e => {
                     window.alert(e)
                 })
-            }
-            else {
+            } else {
                 window.alert("Please fill in all the information")
             }
         }
@@ -328,25 +317,41 @@ const BookEdit = (props) => {
     if (loading) return (<LoadingSpinner/>);
     if (error) return <ErrorMessage error={error}/>
     requireStaff(props, history)
+    let items = [];
+    for (let number = 1; number <= (data.countBook / limit.value) + 1; number++) {
+        if (number === active.value) {
+            items.push(
+                <Pagination.Item key={number} active={true}>
+                    {number}
+                </Pagination.Item>,
+            );
+        } else {
+            items.push(
+                <Pagination.Item onClick={active.onClick} key={number} active={false}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+    }
     return (
         <Container>
             <ReturnStaff/>
             <h1>Manage Book</h1>
-            <p>There are total of {data.books.length} books.</p>
+            <p>There are total of {data.countBook} books.</p>
             <Dropdown className={"float-left"}>
-                WIP: Show
+                Show
                 <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
-                  {numberOfQuery.value}
+                    {limit.value}
                 </Dropdown.Toggle>
-                 entries
+                entries
 
 
                 <Dropdown.Menu>
                     <Dropdown.Header>Select the numbers of entries</Dropdown.Header>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>10</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>25</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>50</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>100</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>10</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>25</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>50</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>100</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             <Pagination className={"float-right"}>
@@ -375,7 +380,7 @@ const BookEdit = (props) => {
                     // console.log(book)
                     return (
                         <tr>
-                            <td>{index + 1}</td>
+                            <td>{(active.value-1) * 10 + index + 1}</td>
                             {book.imageUrl ?
                                 <td><img className="smallAvatar" src={book.imageUrl} alt={book.name}/></td> : <td/>}
                             <td>{book.title}</td>
@@ -401,8 +406,6 @@ const BookEdit = (props) => {
             </Table>
 
             <br/>
-
-
 
 
         </Container>

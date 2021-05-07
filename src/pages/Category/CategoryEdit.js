@@ -9,8 +9,11 @@ import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
 import {requireStaff} from "../../helpers/utils";
 
 const CATEGORIES = gql`
-    query{
-        categories{
+    query($limit:Int, $skip:Int){
+        countCategory
+        categories(
+            limit:$limit,
+            skip:$skip){
             id
             title
             imageUrl
@@ -45,32 +48,19 @@ const DELETE_CATEGORY = gql`
 `
 
 const CategoryEdit = (props) => {
+    const limit = useField(null, 10)
+    let active = useField(null, 1)
     const [modalShow, setModalShow] = useState(false);
     const [editId, setEditId] = useState(0)
-
     const history = useHistory()
-    const {loading, error, data} = useQuery(CATEGORIES)
+    const {loading, error, data} = useQuery(CATEGORIES, {
+        variables: {
+            limit: Number(limit.value),
+            skip: Number(active.value - 1) * 10
+        }
+    })
     const [editCategory] = useMutation(EDIT_CATEGORY)
     const [deleteCategory] = useMutation(DELETE_CATEGORY)
-    // console.log(data)
-    const numberOfQuery = useField(null,10)
-    let active = useField(null, 1)
-    let items = [];
-    for (let number = 1; number <= 5; number++) {
-        if (number === active.value) {
-            items.push(
-                <Pagination.Item key={number} active={true}>
-                    WIP:{number}
-                </Pagination.Item>,
-            );
-        } else {
-            items.push(
-                <Pagination.Item onClick={active.onClick} key={number} active={false}>
-                    {number}
-                </Pagination.Item>,
-            );
-        }
-    }
 
     const deletePublisherFun = async (id, name) => {
         if (window.confirm(`Are you sure you want to delete category: ${name}`)) {
@@ -81,16 +71,6 @@ const CategoryEdit = (props) => {
                 window.alert(e)
             }
         }
-        //
-        // alert(`delete ${id}`)
-        // deleteCategory({variables: {id}}).then(result => {
-        //     console.log(result)
-        //     window.location.reload(false);
-        //     setModalShow(false)
-        // }).catch(e => {
-        //     alert(e)
-        //     console.error(e)
-        // })
     }
 
     const EditModal = (props) => {
@@ -178,30 +158,46 @@ const CategoryEdit = (props) => {
     }
 
 
-    requireStaff(props, history)
     if (loading) return (<LoadingSpinner/>);
     if (error) return <ErrorMessage error={error}/>
+    requireStaff(props, history)
+    let items = [];
+    for (let number = 1; number <= (data.countCategory / limit.value) + 1; number++) {
+        if (number === active.value) {
+            items.push(
+                <Pagination.Item key={number} active={true}>
+                    {number}
+                </Pagination.Item>,
+            );
+        } else {
+            items.push(
+                <Pagination.Item onClick={active.onClick} key={number} active={false}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+    }
     return (
         <Container>
             <ReturnStaff/>
             <h1>Manage Category</h1>
-            <p>There are total of {data.categories.length} categories.</p>
+            <p>There are total of {data.countCategory} categories.</p>
 
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
             <Dropdown className={"float-left"}>
-                WIP: Show
+                Show
                 <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
-                    {numberOfQuery.value}
+                    {limit.value}
                 </Dropdown.Toggle>
                 entries
 
 
                 <Dropdown.Menu>
                     <Dropdown.Header>Select the numbers of entries</Dropdown.Header>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>10</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>25</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>50</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>100</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>10</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>25</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>50</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>100</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             <Pagination className={"float-right"}>
@@ -221,7 +217,7 @@ const CategoryEdit = (props) => {
                 {data.categories.map((category, index) => {
                     return (
                         <tr>
-                            <td>{index + 1}</td>
+                            <td>{(active.value - 1) * 10 + index + 1}</td>
                             {category.imageUrl ?
                                 <td><img className="smallAvatar" src={category.imageUrl} alt={category.name}/></td> :
                                 <td/>}

@@ -9,8 +9,11 @@ import {connect} from "react-redux";
 import {requireStaff} from "../../helpers/utils";
 
 const PUBLISHERS = gql`
-    query{
-        publishers{
+    query($limit:Int, $skip:Int){
+        countPublisher
+        publishers(
+            limit:$limit,
+            skip:$skip){
             id
             name
             description
@@ -50,31 +53,20 @@ const DELETE_PUBLISHER = gql`
 `
 
 const PublisherEdit = (props) => {
+    const limit = useField(null, 10)
+    let active = useField(null, 1)
     const [modalShow, setModalShow] = useState(false);
     const [editId, setEditId] = useState(0)
     const history = useHistory()
-    const {loading, error, data} = useQuery(PUBLISHERS)
+    const {loading, error, data} = useQuery(PUBLISHERS, {
+        variables: {
+            limit: Number(limit.value),
+            skip: Number(active.value - 1) * 10
+        }
+    })
     const [editPublisher] = useMutation(EDIT_PUBLISHER)
     const [deletePublisher] = useMutation(DELETE_PUBLISHER)
-    // console.log(data)
-    const numberOfQuery = useField(null,10)
-    let active = useField(null, 1)
-    let items = [];
-    for (let number = 1; number <= 5; number++) {
-        if (number === active.value) {
-            items.push(
-                <Pagination.Item key={number} active={true}>
-                    WIP:{number}
-                </Pagination.Item>,
-            );
-        } else {
-            items.push(
-                <Pagination.Item onClick={active.onClick} key={number} active={false}>
-                    {number}
-                </Pagination.Item>,
-            );
-        }
-    }
+
 
     const deletePublisherFun = async (id, name) => {
         if (window.confirm(`Are you sure you want to delete publisher: ${name}`)) {
@@ -187,29 +179,48 @@ const PublisherEdit = (props) => {
     if (loading) return (<LoadingSpinner/>);
     if (error) return <ErrorMessage error={error}/>
     requireStaff(props, history)
+    let items = [];
+    for (let number = 1; number <= (data.countAuthor / limit.value) + 1; number++) {
+        if (number === active.value) {
+            items.push(
+                <Pagination.Item key={number} active={true}>
+                    {number}
+                </Pagination.Item>,
+            );
+        } else {
+            items.push(
+                <Pagination.Item onClick={active.onClick} key={number} active={false}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+    }
     return (
         <Container>
             <ReturnStaff/>
             <h1>Manage Publisher</h1>
-            <p>There are total of {data.publishers.length} publisher.</p>
+            <p>There are total of {data.countPublisher} publisher.</p>
 
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
             <Dropdown className={"float-left"}>
-                WIP: Show
+                Show
                 <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
-                    {numberOfQuery.value}
+                    {limit.value}
                 </Dropdown.Toggle>
                 entries
 
 
                 <Dropdown.Menu>
                     <Dropdown.Header>Select the numbers of entries</Dropdown.Header>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>10</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>25</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>50</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>100</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>10</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>25</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>50</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>100</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
+            <Pagination className={"float-right"}>
+                {items}
+            </Pagination>
             <Pagination className={"float-right"}>
                 {items}
             </Pagination>
@@ -228,7 +239,7 @@ const PublisherEdit = (props) => {
                 {data.publishers.map((publisher, index) => {
                     return (
                         <tr>
-                            <td>{index + 1}</td>
+                            <td>{(active.value - 1) * 10 + index + 1}</td>
                             {publisher.imageUrl ?
                                 <td><img className="smallAvatar" src={publisher.imageUrl} alt={publisher.name}/></td> :
                                 <td/>}

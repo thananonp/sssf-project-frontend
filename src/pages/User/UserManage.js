@@ -10,8 +10,11 @@ import {connect} from "react-redux";
 import {CHANGE_PASSWORD_USER} from "../../helpers/gql";
 
 const USERS = gql`
-    query{
-        users{
+    query ($limit:Int, $skip:Int){
+        countUser
+        users(
+            limit:$limit,
+            skip:$skip){
             id
             email
             firstName
@@ -55,33 +58,22 @@ const DELETE_USER = gql`
     }
 `
 const UserManage = (props) => {
+    const limit = useField(null, 10)
+    let active = useField(null, 1)
     const [modalShow, setModalShow] = useState(false);
     const [passwordModalShow, setPasswordModalShow] = useState(false);
     const history = useHistory()
     const [changePasswordUser] = useMutation(CHANGE_PASSWORD_USER)
     const [editUser] = useMutation(EDIT_USER)
     const [deleteUser] = useMutation(DELETE_USER)
-    const {loading, error, data} = useQuery(USERS)
+    const {loading, error, data} = useQuery(USERS, {
+        variables: {
+            limit: Number(limit.value),
+            skip: Number(active.value - 1) * 10
+        }
+    })
     const [editId, setEditId] = useState('')
 
-    const numberOfQuery = useField(null,10)
-    let active = useField(null, 1)
-    let items = [];
-    for (let number = 1; number <= 5; number++) {
-        if (number === active.value) {
-            items.push(
-                <Pagination.Item key={number} active={true}>
-                    WIP:{number}
-                </Pagination.Item>,
-            );
-        } else {
-            items.push(
-                <Pagination.Item onClick={active.onClick} key={number} active={false}>
-                    {number}
-                </Pagination.Item>,
-            );
-        }
-    }
 
     const deleteUserFun = async (id, name) => {
         if (window.confirm(`Are you sure you want to delete user: ${name}`)) {
@@ -137,7 +129,7 @@ const UserManage = (props) => {
 
         return (
             <Modal {...props}
-                className='font'
+                   className='font'
                    aria-labelledby="contained-modal-title-vcenter"
                    size="lg"
                    backdrop="static"
@@ -244,9 +236,25 @@ const UserManage = (props) => {
         );
     }
 
-    requireStaff(props, history)
     if (loading) return (<LoadingSpinner/>);
     if (error) return <ErrorMessage error={error}/>
+    requireStaff(props, history)
+    let items = [];
+    for (let number = 1; number <= (data.countUser / limit.value) + 1; number++) {
+        if (number === active.value) {
+            items.push(
+                <Pagination.Item key={number} active={true}>
+                    {number}
+                </Pagination.Item>,
+            );
+        } else {
+            items.push(
+                <Pagination.Item onClick={active.onClick} key={number} active={false}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+    }
     return (
         <Container>
             <ReturnStaff/>
@@ -254,28 +262,28 @@ const UserManage = (props) => {
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
             <PasswordModal show={passwordModalShow} onHide={() => setPasswordModalShow(false)}/>
 
-            <p>There are total of {data.users.length} users.</p>
+            <p>There are total of {data.countUser} users.</p>
             <Dropdown className={"float-left"}>
-                WIP: Show
+                Show
                 <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
-                    {numberOfQuery.value}
+                    {limit.value}
                 </Dropdown.Toggle>
                 entries
 
 
                 <Dropdown.Menu>
                     <Dropdown.Header>Select the numbers of entries</Dropdown.Header>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>10</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>25</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>50</Dropdown.Item>
-                    <Dropdown.Item onClick={numberOfQuery.onClick}>100</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>10</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>25</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>50</Dropdown.Item>
+                    <Dropdown.Item onClick={limit.onClick}>100</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             <Pagination className={"float-right"}>
                 {items}
             </Pagination>
             <br/>
-            <Table responsive  striped bordered hover>
+            <Table responsive striped bordered hover>
                 <thead>
                 <tr>
                     <th>#</th>
@@ -289,7 +297,7 @@ const UserManage = (props) => {
                 {data.users.map((user, index) => {
                     return (
                         <tr>
-                            <td>{index + 1}</td>
+                            <td>{(active.value - 1) * 10 + index + 1}</td>
                             <td>{user.firstName}</td>
                             <td>{user.lastName}</td>
                             <td>{user.email}</td>
