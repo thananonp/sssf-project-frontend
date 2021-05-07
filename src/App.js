@@ -33,6 +33,7 @@ import StaffChangePassword from "./pages/Staff/StaffChangePassword";
 import BookBorrow from "./pages/book/BookBorrow";
 import {getToken} from "./helpers/utils";
 import StaffPreferenceEdit from "./pages/Staff/StaffPreferenceEdit";
+import StaffManage from "./pages/Staff/StaffManage";
 
 
 function App(props) {
@@ -117,6 +118,10 @@ function App(props) {
                         <StaffRegister/>
                     </Route>
 
+
+                    <Route path="/staff/manage">
+                        <StaffManage/>
+                    </Route>
                     <Route path="/staff/home">
                         <StaffHome/>
                     </Route>

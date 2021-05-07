@@ -37,3 +37,17 @@ export const CHANGE_PASSWORD_USER = gql`
         }
     }
 `
+export const CHANGE_PASSWORD_STAFF = gql`
+    mutation ChangePasswordStaff(
+        $id: ID!,
+        $password: String!
+    ){
+        changePasswordStaff(
+            id:  $id,
+            password:  $password
+        ) {
+            id
+            email
+        }
+    }
+`

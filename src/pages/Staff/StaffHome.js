@@ -149,8 +149,8 @@ const UserHome = (props) => {
                         <Card.Title>Staff</Card.Title>
                     </Card.Body>
                     <ListGroup className="list-group-flush">
-                        <Link to="/publisher/add"><ListGroupItem>Add</ListGroupItem></Link>
-                        <Link to="/publisher/edit"><ListGroupItem>Manage</ListGroupItem></Link>
+                        <Link to="/staff/register"><ListGroupItem>Register</ListGroupItem></Link>
+                        <Link to="/staff/manage"><ListGroupItem>Manage</ListGroupItem></Link>
                     </ListGroup>
                 </Card>
 
