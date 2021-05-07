@@ -68,28 +68,31 @@ const AuthorAdd = (props) => {
 
             <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicFirstName">
-                    <Form.Label>Author Name</Form.Label>
-                    <Form.Control required value={name.value} type={name.type} onChange={name.onChange}/>
+                    <Form.Label>Author Name (*)</Form.Label>
+                    <Form.Control required value={name.value} type={name.type} onChange={name.onChange} placeholder={"Enter Author Name"}/>
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Biography</Form.Label>
-                    <Form.Control required value={biography.value} type={biography.type} onChange={biography.onChange}
+                    <Form.Label>Author Biography (*)</Form.Label>
+                    <Form.Control required value={biography.value} type={biography.type} onChange={biography.onChange} placeholder={"Enter Author Biography"}
                                   as="textarea" rows={3}/>
                 </Form.Group>
                 <Form.Group>
                     <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                accept="image/*"
-                               label="Example file input"/>
+                               label="Author Picture"/>
                     {file.url
                         ? <img className="imagePreview" alt="input" src={file.url}/>
                         : null}
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-                <Button variant="secondary" type="reset">
-                    Reset
-                </Button>
+                <p>(*) means the field is required</p>
+                <div className={"float-right"}>
+                    <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                        Reset
+                    </Button>
+                </div>
             </Form>
         </Container>
     )

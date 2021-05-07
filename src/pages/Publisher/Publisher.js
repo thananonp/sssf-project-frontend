@@ -33,14 +33,18 @@ const Publisher = (props) => {
     return (
         <Container>
             <img alt="Profile" className="profileImage" src={data.publisher.imageUrl}/>
-            <h1>Publisher: {data.publisher.name}</h1>
+            <h1 className='mt-3'>Publisher: {data.publisher.name}</h1>
             <p>{data.publisher.description}</p>
             <h5>List of books by this Publisher</h5>
-            <ListGroup>
+            <ListGroup className='mb-3'>
                 {data.books.length ? data.books.map((book, index) => {
-                    return (
-                        <ListGroup.Item>{book.title + ' by ' + book.author.name}</ListGroup.Item>
-                    )
+                    if (book.author) {
+                        return <ListGroup.Item><a href={`/book/${book.id}`}>{book.title}</a> by <a href={`/author/${book.author.id}`}>{book.author.name}</a></ListGroup.Item>
+                    } else {
+                        return (
+                            <ListGroup.Item>{book.title + ' by deleted author'}</ListGroup.Item>
+                        )
+                    }
                 }) : <ListGroup.Item>No book in this category yet.</ListGroup.Item>}
             </ListGroup>
         </Container>

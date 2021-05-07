@@ -150,9 +150,6 @@ const BookEdit = (props) => {
     }
 
     const EditModal = (props) => {
-        let editedCategory
-        let editedAuthor
-        let editedPublisher
         const title = useField('text')
         const category = useField('text', '')
         const author = useField('text', '')
@@ -221,19 +218,6 @@ const BookEdit = (props) => {
                     window.alert(e)
                 })
             }
-                // console.log(editedCategory)
-                // console.log(editedAuthor)
-                // console.log(editedPublisher)
-                // console.log("Edit", {
-                //     id: editId,
-                //     title: title.value,
-                //     category: editedCategory,
-                //     author: editedAuthor,
-                //     publisher: editedPublisher,
-                //     dateOfPublication: dateOfPublication.value,
-                //     pageCount: Number(pageCount.value),
-                //     description: description.value
-            // })
             else {
                 window.alert("Please fill in all the information")
             }
@@ -241,6 +225,7 @@ const BookEdit = (props) => {
 
         return (
             <Modal {...props}
+                   className='font'
                    aria-labelledby="contained-modal-title-vcenter"
                    dialogClassName="modal-90w"
                    onEnter={() => {
@@ -257,11 +242,11 @@ const BookEdit = (props) => {
                     <Form onReset={resetForm} onSubmit={handleSubmit}>
                         <img className="mediumAvatar" src={fileHolder.value} alt={title.value}/>
                         <Form.Group controlId="formBasicTitle">
-                            <Form.Label>Title</Form.Label>
+                            <Form.Label>Title (*)</Form.Label>
                             <Form.Control required value={title.value} type={title.type} onChange={title.onChange}/>
                         </Form.Group>
                         <Form.Group controlId="formSelectCategory">
-                            <Form.Label>Category</Form.Label>
+                            <Form.Label>Category (*)</Form.Label>
                             <Form.Control required as="select" value={category.value} onChange={category.onChange}>
                                 <option>Select category</option>
                                 console.log(category.value)
@@ -273,7 +258,7 @@ const BookEdit = (props) => {
                         </Form.Group>
 
                         <Form.Group controlId="formBasicAuthor">
-                            <Form.Label>Author</Form.Label>
+                            <Form.Label>Author (*)</Form.Label>
                             <Form.Control required as="select" value={author.value} onChange={author.onChange}>
                                 <option>Select author</option>
                                 {data.authors.map(authorMap => {
@@ -283,7 +268,7 @@ const BookEdit = (props) => {
                             <Form.Text>Default: {editData ? editData.author ? editData.author.name : null : null}</Form.Text>
                         </Form.Group>
                         <Form.Group controlId="formBasicPublisher">
-                            <Form.Label>Publisher</Form.Label>
+                            <Form.Label>Publisher (*)</Form.Label>
                             <Form.Control required value={publisher.value} as="select" onChange={publisher.onChange}>
                                 <option>Select publisher</option>
                                 {data.publishers.map(publisherMap => {
@@ -294,18 +279,20 @@ const BookEdit = (props) => {
 
                         </Form.Group>
                         <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Date of Publication</Form.Label>
+                            <Form.Label>Date of Publication (*)</Form.Label>
                             <Form.Control required max={getToday()} value={dateOfPublication.value}
                                           type={dateOfPublication.type}
                                           onChange={dateOfPublication.onChange}/>
+                            <Form.Text>The date must be before today.</Form.Text>
                         </Form.Group>
                         <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Page Count</Form.Label>
+                            <Form.Label>Page Count (*)</Form.Label>
                             <Form.Control required min="1" value={pageCount.value} type="number"
                                           onChange={pageCount.onChange}/>
+                            <Form.Text>Minimum page number is 1</Form.Text>
                         </Form.Group>
                         <Form.Group controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Description</Form.Label>
+                            <Form.Label>Description (*)</Form.Label>
                             <Form.Control required value={description.value} onChange={description.onChange}
                                           as="textarea"
                                           rows={3}/>
@@ -315,7 +302,7 @@ const BookEdit = (props) => {
                                 the old one will be used.</Form.Text>
                             <Form.File type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                        accept="image/*"
-                                       label="Example file input"/>
+                                       label="Book cover"/>
                             {file.url
                                 ?
                                 <>
@@ -323,12 +310,13 @@ const BookEdit = (props) => {
                                     <img className="imagePreview" alt="input" src={file.url}/></>
                                 : null}
                         </Form.Group>
-                        <div className="float-right">
-                            <Button variant="secondary" type="reset">
-                                Reset
-                            </Button>
-                            <Button variant="primary" type="submit">
+                        <p>(*) means the field is required</p>
+                        <div className={"float-right"}>
+                            <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
                                 Submit
+                            </Button>
+                            <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                                Reset
                             </Button>
                         </div>
                     </Form>
@@ -399,11 +387,11 @@ const BookEdit = (props) => {
                             <td>{book.dateOfPublication}</td>
                             <td>{book.pageCount}</td>
                             {book.borrowedBy ? <td>{book.borrowedBy.firstName}</td> : <td>-</td>}
-                            <td><Button variant="link" onClick={() => {
+                            <td><Button variant="outline-warning" onClick={() => {
                                 setEditId(book.id)
                                 setModalShow(true)
                             }}>Edit</Button></td>
-                            <td><Button variant="link" onClick={() => {
+                            <td><Button variant="outline-danger" onClick={() => {
                                 deleteBookFun(book.id, book.title)
                             }}>Delete</Button></td>
                         </tr>

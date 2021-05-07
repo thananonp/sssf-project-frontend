@@ -31,6 +31,8 @@ const BOOK_USERS = gql`
             borrowedBy {
                 id
                 firstName
+                lastName
+                email
             }
         }
         borrowedBooks : books (borrowed: true){
@@ -54,6 +56,8 @@ const BOOK_USERS = gql`
             borrowedBy {
                 id
                 firstName
+                email
+                lastName
             }
         }
         borrowedUsers : users(borrowed: true){
@@ -164,11 +168,11 @@ const BookBorrow = (props) => {
                                     // console.log(book)
                                     let bookName
                                     if (book.author) {
-                                        bookName = book.title + ' by ' + book.author.name
+                                        bookName = book.title + ' - ' + book.author.name
                                         return <option key={index}
                                                        value={book.id}>{bookName}</option>
                                     } else {
-                                        bookName = book.title + ' by deleted author'
+                                        bookName = book.title + ' - deleted author'
                                         return <option key={index}
                                                        value={book.id}>{bookName}</option>
                                     }
@@ -191,14 +195,15 @@ const BookBorrow = (props) => {
                             </Form.Control>
                         </Form.Group>
 
-                        <Button variant="primary" type="submit">
+                        <Button className='mr-3' variant="outline-primary" type="submit">
                             Submit
                         </Button>
-                        <Button variant="secondary" type="reset">
+                        <Button className='mr-3' variant="outline-secondary" type="reset">
                             Reset
                         </Button>
                     </Form>
                 </ListGroup.Item>
+                <br/>
                 <ListGroup.Item>
                     <h3>Return</h3>
                     <Form onSubmit={handleSubmitReturn} onReset={resetFormReturn}>
@@ -208,14 +213,13 @@ const BookBorrow = (props) => {
                             <Form.Control as="select" onChange={bookReturn.onChange}>
                                 <option>Select book</option>
                                 {data.borrowedBooks.map((book, index) => {
-                                    // console.log(book)
                                     let bookName
                                     if (book.author) {
-                                        bookName = book.title + ' by ' + book.author.name + 'borrowed by ' + book.borrowedBy.firstName
+                                        bookName = book.title + ' - ' + book.author.name + ' borrowed by ' + book.borrowedBy.firstName + ' ' + book.borrowedBy.email
                                         return <option key={index}
                                                        value={book.id}>{bookName}</option>
                                     } else {
-                                        bookName = book.title + ' by deleted author' + 'borrowed by ' + book.borrowedBy.firstName
+                                        bookName = book.title + ' by deleted author' + ' borrowed by ' + book.borrowedBy.firstName
                                         return <option key={index}
                                                        value={book.id}>{bookName}</option>
                                     }
@@ -226,10 +230,10 @@ const BookBorrow = (props) => {
                             </Form.Control>
                         </Form.Group>
 
-                        <Button variant="primary" type="submit">
+                        <Button className='mr-3' variant="outline-primary" type="submit">
                             Submit
                         </Button>
-                        <Button variant="secondary" type="reset">
+                        <Button className='mr-3'  variant="outline-secondary" type="reset">
                             Reset
                         </Button>
                     </Form></ListGroup.Item>

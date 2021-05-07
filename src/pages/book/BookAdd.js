@@ -119,12 +119,11 @@ const BookAdd = (props) => {
 
             <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicTitle">
-                    <Form.Label>Title</Form.Label>
+                    <Form.Label>Title (*)</Form.Label>
                     <Form.Control required value={title.value} type={title.type} onChange={title.onChange}/>
                 </Form.Group>
                 <Form.Group required controlId="formSelectCategory">
-                    <Form.Label>Category</Form.Label>
-
+                    <Form.Label>Category (*)</Form.Label>
                     <Form.Control as="select" onChange={category.onChange}>
                         <option>Select category</option>
                         {data.categories.map(category => {
@@ -134,9 +133,10 @@ const BookAdd = (props) => {
                             )
                         })}
                     </Form.Control>
+                    <Form.Text>Select one category from the list. To create a new category click <a href={'/category/add'}>here.</a></Form.Text>
                 </Form.Group>
                 <Form.Group controlId="formBasicAuthor">
-                    <Form.Label>Author</Form.Label>
+                    <Form.Label>Author (*)</Form.Label>
                     <Form.Control as="select" onChange={author.onChange}>
                         <option>Select author</option>
                         {data.authors.map(author => {
@@ -146,9 +146,10 @@ const BookAdd = (props) => {
                             )
                         })}
                     </Form.Control>
+                    <Form.Text>Select one author from the list. To create a new author click <a href={'/author/add'}>here.</a></Form.Text>
                 </Form.Group>
                 <Form.Group controlId="formBasicPublisher">
-                    <Form.Label>Publisher</Form.Label>
+                    <Form.Label>Publisher (*)</Form.Label>
                     <Form.Control as="select" onChange={publisher.onChange}>
                         <option>Select publisher</option>
                         {data.publishers.map(publisher => {
@@ -158,39 +159,43 @@ const BookAdd = (props) => {
                             )
                         })}
                     </Form.Control>
+                    <Form.Text>Select one publisher from the list. To create a new publisher click <a href={'/publisher/add'}>here.</a></Form.Text>
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Date of Publication</Form.Label>
+                    <Form.Label>Date of Publication (*)</Form.Label>
                     <Form.Control required max={getToday()} value={dateOfPublication.value}
                                   type={dateOfPublication.type}
                                   onChange={dateOfPublication.onChange}/>
                     <Form.Text>The date must be before today.</Form.Text>
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Page Count</Form.Label>
+                    <Form.Label>Page Count (*)</Form.Label>
                     <Form.Control required min="1" value={pageCount.value} type="number"
                                   onChange={pageCount.onChange}/>
                     <Form.Text>Minimum page number is 1</Form.Text>
                 </Form.Group>
                 <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Description</Form.Label>
+                    <Form.Label>Description (*)</Form.Label>
                     <Form.Control required value={description.value} onChange={description.onChange} as="textarea"
                                   rows={3}/>
                 </Form.Group>
                 <Form.Group>
                     <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                accept="image/*"
-                               label="Example file input"/>
+                               label="Book cover"/>
                     {file.url
                         ? <img className="imagePreview" alt="input" src={file.url}/>
                         : null}
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-                <Button variant="secondary" type="reset">
-                    Reset
-                </Button>
+                <p>(*) means the field is required</p>
+                <div className={"float-right"}>
+                    <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                        Reset
+                    </Button>
+                </div>
             </Form>
         </Container>
     )

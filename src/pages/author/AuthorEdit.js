@@ -128,6 +128,7 @@ const AuthorEdit = (props) => {
                    size="lg"
                    backdrop="static"
                    keyboard={false}
+                   className='font'
                    onEnter={() => {
                        populateData()
                    }
@@ -143,12 +144,12 @@ const AuthorEdit = (props) => {
                         <Form onReset={resetForm} onSubmit={handleSubmit}>
                             <img className="mediumAvatar" src={fileHolder.value} alt={name.value}/>
                             <Form.Group controlId="formBasicFirstName">
-                                <Form.Label>Author Name</Form.Label>
+                                <Form.Label>Author Name (*)</Form.Label>
                                 <Form.Control required value={name.value} type={name.type}
                                               onChange={name.onChange}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicLastName">
-                                <Form.Label>Biography</Form.Label>
+                                <Form.Label>Biography (*)</Form.Label>
                                 <Form.Control required value={biography.value} type={biography.type}
                                               onChange={biography.onChange} as="textarea" rows={3}/>
                             </Form.Group>
@@ -157,17 +158,18 @@ const AuthorEdit = (props) => {
                                     the old one will be used.</Form.Text>
                                 <Form.File type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                            accept="image/*"
-                                           label="Example file input"/>
+                                           label="Author Picture"/>
                                 {file.url
                                     ? <img className="imagePreview" alt="input" src={file.url}/>
                                     : null}
                             </Form.Group>
-                            <div className="float-right">
-                                <Button variant="secondary" type="reset">
-                                    Reset
-                                </Button>
-                                <Button variant="primary" type="submit">
+                            <p>(*) means the field is required</p>
+                            <div className={"float-right"}>
+                                <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
                                     Submit
+                                </Button>
+                                <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                                    Reset
                                 </Button>
                             </div>
                         </Form>
@@ -210,6 +212,7 @@ const AuthorEdit = (props) => {
             <Table responsive striped bordered hover>
                 <thead>
                 <tr>
+                    <th>#</th>
                     <th>Image</th>
                     <th>Name</th>
                     <th>Biography</th>
@@ -217,21 +220,22 @@ const AuthorEdit = (props) => {
                 </tr>
                 </thead>
                 <tbody>
-                {data.authors.map(author => {
+                {data.authors.map((author,index) => {
                     return (
                         <tr>
+                            <td>{index + 1}</td>
                             {author.imageUrl ?
                                 <td><img className="smallAvatar" src={author.imageUrl} alt={author.name}/></td> : <td/>}
                             <td>{author.name}</td>
                             <td>{author.biography}</td>
-                            <td><Button variant="link" onClick={() => {
+                            <td><Button variant="outline-warning" onClick={() => {
                                 setEditId(author.id)
                                 setModalShow(true)
                             }}>
                                 Edit
                             </Button>
                             </td>
-                            <td><Button variant="link" onClick={() =>
+                            <td><Button variant="outline-danger" onClick={() =>
                                 deleteAuthorFun(author.id, author.name)
                             }>
                                 Delete

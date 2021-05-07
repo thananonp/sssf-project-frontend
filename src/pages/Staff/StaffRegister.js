@@ -76,40 +76,50 @@ const StaffRegister = (props) => {
                                    successText={notification.successText} failureText={notification.failureText}/>
                 <Form onSubmit={handleSubmit} onReset={resetForm}>
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
+                        <Form.Label>Email address (*)</Form.Label>
                         <Form.Control required type={email.type} placeholder="Enter email" value={email.value}
                                       onChange={email.onChange}/>
+                        <Form.Text>Email address must follow the format of xxx@xxx.</Form.Text>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicFirstName">
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control required type={firstName.type} placeholder="Enter first name"
+                        <Form.Label>First Name (*)</Form.Label>
+                        <Form.Control required type={firstName.type} placeholder="Enter First Name"
                                       value={firstName.value}
                                       onChange={firstName.onChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicSurname">
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control required type={lastName.type} placeholder="Enter last name" value={lastName.value}
+                        <Form.Label>Last Name (*)</Form.Label>
+                        <Form.Control required type={lastName.type} placeholder="Enter Last Name" value={lastName.value}
                                       onChange={lastName.onChange}/>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control required minlength="8" type={password.type} placeholder="Password"
+                        <Form.Label>Password (*)</Form.Label>
+                        <Form.Control required minlength="8" type={password.type} placeholder="Enter Password"
                                       value={password.value}
                                       onChange={password.onChange}/>
+                        <Form.Text>Password must be at least 8 characters.</Form.Text>
+
                     </Form.Group>
                     <Form.Group controlId="formBasicConfirmPassword">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control required minlength="8" type={confirmPassword.type} placeholder="Password"
+                        <Form.Label>Confirm Password (*)</Form.Label>
+                        <Form.Control required minlength="8" type={confirmPassword.type} placeholder="Enter Confirm Password"
                                       value={confirmPassword.value}
                                       onChange={confirmPassword.onChange}/>
+                        <Form.Text>Password must be at least 8 characters at must match the password.</Form.Text>
+
                     </Form.Group>
-                    <Button type="submit">Submit</Button>
-                    <Button variant="secondary" type="reset">
-                        Reset
-                    </Button>
+                    <p>(*) means the field is required</p>
+                    <div className={"float-right"}>
+                        <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
+                            Submit
+                        </Button>
+                        <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                            Reset
+                        </Button>
+                    </div>
                 </Form>
             </Container>
         </div>

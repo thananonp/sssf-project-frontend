@@ -6,7 +6,8 @@ import {logInWithCredential} from "../../reducers/loginReducer";
 import {login, userChecker} from "../../helpers/utils";
 import {useLazyQuery} from "@apollo/client";
 import {USER_LOGIN} from "../../helpers/gql";
-import {NotificationAlert, ReturnLanding} from "../Components";
+import {LoadingSpinner, NotificationAlert, ReturnLanding} from "../Components";
+import React from "react";
 
 
 const UserLogin = (props) => {
@@ -15,12 +16,12 @@ const UserLogin = (props) => {
     const history = useHistory()
     const notification = useNotification()
 
-    let [LoginUser] = useLazyQuery(USER_LOGIN, {
+    let [LoginUser, { loading, data }] = useLazyQuery(USER_LOGIN, {
         onCompleted: (data) => {
             // console.log(data)
             login(history, props, data)
         }, onError: (error) => {
-            window.alert(error)
+            notification.alertFailure(error.toString())
         }, fetchPolicy: "no-cache"
     })
 
@@ -39,11 +40,12 @@ const UserLogin = (props) => {
         password.reset()
     }
 
-
     userChecker(props, history)
+
     return (
         <Container>
             <ReturnLanding/>
+            {loading? <LoadingSpinner/> : null}
             <h1 className={"mt-2"}>User Login</h1>
             <NotificationAlert success={notification.success} failure={notification.failure}
                                successText={notification.successText} failureText={notification.failureText}/>

@@ -19,6 +19,7 @@ const CATEGORY = gql`
                 title
             }
             author{
+                id
                 name
             }
         }
@@ -34,13 +35,12 @@ const Category = (props) => {
     return (
         <Container>
             <img alt="Profile" className="profileImage" src={data.category.imageUrl}/>
-            <h1>Category: {data.category.title}</h1>
+            <h1 className='mt-3'>Category: {data.category.title}</h1>
             <h5>List of books in this category</h5>
-            <ListGroup>
+            <ListGroup className='mb-3'>
                 {data.books.length ? data.books.map((book, index) => {
                     if (book.author) {
-                        return <ListGroup.Item>{book.title + ' by ' + book.author.name}</ListGroup.Item>
-
+                        return <ListGroup.Item><a href={`/book/${book.id}`}>{book.title}</a> by <a href={`/author/${book.author.id}`}>{book.author.name}</a></ListGroup.Item>
                     } else {
                         return (
                             <ListGroup.Item>{book.title + ' by deleted author'}</ListGroup.Item>

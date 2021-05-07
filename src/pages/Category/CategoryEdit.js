@@ -128,6 +128,7 @@ const CategoryEdit = (props) => {
                    aria-labelledby="contained-modal-title-vcenter"
                    size="lg"
                    backdrop="static"
+                   className='font'
                    onEnter={() => {
                        const editData = data.categories.find(category => category.id === editId)
                        title.setValue(editData.title)
@@ -144,13 +145,13 @@ const CategoryEdit = (props) => {
                     <Form onReset={resetForm} onSubmit={handleSubmit}>
                         <img className="imageBanner" src={fileHolder.value} alt={title.value}/>
                         <Form.Group controlId="formBasicFirstName">
-                            <Form.Label>Category title</Form.Label>
+                            <Form.Label>Category title (*)</Form.Label>
                             <Form.Control required value={title.value} type={title.type} onChange={title.onChange}/>
                         </Form.Group>
                         <Form.Group>
                             <Form.File type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                        accept="image/*"
-                                       label="Example file input"/>
+                                       label="Category Image"/>
                             <Form.Text>To update the picture upload a new file. If you don't upload the new picture,
                                 the old one will be used.</Form.Text>
                             {file.url
@@ -160,12 +161,13 @@ const CategoryEdit = (props) => {
                                     <img className="imagePreview" alt="input" src={file.url}/></>
                                 : null}
                         </Form.Group>
-                        <div className="float-right">
-                            <Button variant="secondary" type="reset">
-                                Reset
-                            </Button>
-                            <Button variant="primary" type="submit">
+                        <p>(*) means the field is required</p>
+                        <div className={"float-right"}>
+                            <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
                                 Submit
+                            </Button>
+                            <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                                Reset
                             </Button>
                         </div>
 
@@ -182,7 +184,7 @@ const CategoryEdit = (props) => {
     return (
         <Container>
             <ReturnStaff/>
-            <h1>View, Edit and Delete Category</h1>
+            <h1>Manage Category</h1>
             <p>There are total of {data.categories.length} categories.</p>
 
             <EditModal show={modalShow} onHide={() => setModalShow(false)}/>
@@ -224,7 +226,7 @@ const CategoryEdit = (props) => {
                                 <td><img className="smallAvatar" src={category.imageUrl} alt={category.name}/></td> :
                                 <td/>}
                             <td>{category.title}</td>
-                            <td><Button variant="link" onClick={() => {
+                            <td><Button variant="outline-warning" onClick={() => {
                                 setEditId(category.id)
                                 setModalShow(true)
                             }}>
@@ -232,7 +234,7 @@ const CategoryEdit = (props) => {
                             </Button>
                             </td>
                             <td>
-                                <Button variant="link" onClick={() =>
+                                <Button variant="outline-danger" onClick={() =>
                                     deletePublisherFun(category.id, category.title)
                                 }>Delete</Button>
                             </td>

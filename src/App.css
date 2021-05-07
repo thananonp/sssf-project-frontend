@@ -8,6 +8,9 @@
 .body-font {
   font-family: 'Work Sans', sans-serif;
 }
+.font {
+  font-family: 'Work Sans', sans-serif;
+}
 
 .App-logo {
   height: 40vmin;
@@ -52,8 +55,8 @@ footer {
 }
 
 .profileImage{
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 300px;
   border-radius: 50%;
   margin: 20px;
   float: left;

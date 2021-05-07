@@ -34,11 +34,6 @@ const PublisherAdd = (props) => {
 
     const history = useHistory()
     const handleSubmit = (e) => {
-        //
-        // console.log({
-        //     name:name.value,
-        //     description: description.value
-        // })
         e.preventDefault()
         addPublisher({
             variables:{
@@ -54,7 +49,6 @@ const PublisherAdd = (props) => {
             notification.alertFailure(String(e))
             console.error(e)
         })
-        // history.push('/staff/home')
     }
     const resetForm = () => {
         name.reset()
@@ -70,28 +64,31 @@ const PublisherAdd = (props) => {
             <NotificationAlert success={notification.success} failure={notification.failure} successText={notification.successText} failureText={notification.failureText}/>
             <Form onSubmit={handleSubmit} onReset={resetForm}>
                 <Form.Group controlId="formBasicFirstName">
-                    <Form.Label>Publisher Name</Form.Label>
-                    <Form.Control required value={name.value} type={name.type} onChange={name.onChange}/>
+                    <Form.Label>Publisher Name (*)</Form.Label>
+                    <Form.Control required value={name.value} type={name.type} onChange={name.onChange} placeholder={"Enter Publisher Name"}/>
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Publisher Description</Form.Label>
-                    <Form.Control required value={description.value} type={description.type} onChange={description.onChange}
+                    <Form.Label>Publisher Description (*)</Form.Label>
+                    <Form.Control required value={description.value} type={description.type} onChange={description.onChange} placeholder={"Enter Publisher Description"}
                                   as="textarea" rows={3}/>
                 </Form.Group>
                 <Form.Group>
                     <Form.File required type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                accept="image/*"
-                               label="Example file input"/>
+                               label="Publisher Image"/>
                     {file.url
                         ? <img className="imagePreview" alt="input" src={file.url}/>
                         : null}
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-                <Button variant="secondary" type="reset">
-                    Reset
-                </Button>
+                <p>(*) means the field is required</p>
+                <div className={"float-right"}>
+                    <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                        Reset
+                    </Button>
+                </div>
             </Form>
         </Container>
     )

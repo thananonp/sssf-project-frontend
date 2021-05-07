@@ -2,7 +2,6 @@ import {useHistory} from "react-router";
 import {useField, useFile} from "../../hooks";
 import {Button, Container, Dropdown, Form, Modal, Pagination, Table} from "react-bootstrap";
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
 import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
@@ -78,15 +77,6 @@ const PublisherEdit = (props) => {
     }
 
     const deletePublisherFun = async (id, name) => {
-        // alert(`delete ${id}`)
-        // deletePublisher({variables: {id}}).then(result => {
-        //     console.log(result)
-        //     window.location.reload(false);
-        //     setModalShow(false)
-        // }).catch(e => {
-        //     alert(e)
-        //     console.error(e)
-        // })
         if (window.confirm(`Are you sure you want to delete publisher: ${name}`)) {
             try {
                 await deletePublisher({variables: {id}})
@@ -139,6 +129,7 @@ const PublisherEdit = (props) => {
                    aria-labelledby="contained-modal-title-vcenter"
                    size="lg"
                    backdrop="static"
+                   className='font'
                    onEnter={() => {
                        populateData()
                    }
@@ -154,11 +145,11 @@ const PublisherEdit = (props) => {
                         <Form onReset={resetForm} onSubmit={handleSubmit}>
                             <img className="mediumAvatar" src={fileHolder.value} alt={name.value}/>
                             <Form.Group controlId="formBasicFirstName">
-                                <Form.Label>Publisher Name</Form.Label>
+                                <Form.Label>Publisher Name (*)</Form.Label>
                                 <Form.Control required value={name.value} type={name.type} onChange={name.onChange}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Publisher Description</Form.Label>
+                                <Form.Label>Publisher Description (*)</Form.Label>
                                 <Form.Control required value={description.value} type={description.type}
                                               onChange={description.onChange}/>
                             </Form.Group>
@@ -167,7 +158,7 @@ const PublisherEdit = (props) => {
                                     the old one will be used.</Form.Text>
                                 <Form.File type="file" onChange={file.onChange} id="exampleFormControlFile1"
                                            accept="image/*"
-                                           label="Example file input"/>
+                                           label="Publisher Image"/>
                                 {file.url
                                     ?
                                     <>
@@ -175,12 +166,15 @@ const PublisherEdit = (props) => {
                                         <img className="imagePreview" alt="input" src={file.url}/></>
                                     : null}
                             </Form.Group>
-                            <Button variant="secondary" type="reset">
-                                Reset
-                            </Button>
-                            <Button variant="primary" type="submit">
-                                Submit
-                            </Button>
+                            <p>(*) means the field is required</p>
+                            <div className={"float-right"}>
+                                <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
+                                    Submit
+                                </Button>
+                                <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                                    Reset
+                                </Button>
+                            </div>
                         </Form>
                     </Container>
                 </Modal.Body>
@@ -240,18 +234,18 @@ const PublisherEdit = (props) => {
                                 <td/>}
                             <td>{publisher.name}</td>
                             <td>{publisher.description}</td>
-                            <td><Link onClick={() => {
+                            <td><Button variant="outline-warning" onClick={() => {
                                 setEditId(publisher.id)
                                 setModalShow(true)
                             }}>
                                 Edit
-                            </Link>
+                            </Button>
                             </td>
-                            <td><Link onClick={() =>
+                            <td><Button variant="outline-danger" onClick={() =>
                                 deletePublisherFun(publisher.id, publisher.name)
                             }>
                                 Delete
-                            </Link>
+                            </Button>
                             </td>
                         </tr>
                     )

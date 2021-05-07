@@ -47,7 +47,7 @@ const Landing = (props) => {
                             <Card.Body>
                                 <Card.Title>Click here to go to your user page.
                                     <br/>
-                                    <Link to="/user/home"><Button className='ml-3'>User page</Button></Link>
+                                    <Link to="/user/home"><Button variant='outline-primary' className='my-3'>User page</Button></Link>
                                 </Card.Title>
                             </Card.Body>
                         </Card>
@@ -67,8 +67,9 @@ const Landing = (props) => {
                         <Card>
                             <Card.Header as="h5">Welcome {props.login.user.user.firstName}</Card.Header>
                             <Card.Body>
-                                <Card.Title>Click here to go to your staff page
-                                    <Link to="/staff/home"><Button className='ml-2'>Staff page</Button></Link>
+                                <Card.Title>Click here to go to your staff page.
+                                    <br/>
+                                    <Link to="/staff/home"><Button variant='outline-primary' className='my-3'>Staff page</Button></Link>
                                 </Card.Title>
                             </Card.Body>
                         </Card>

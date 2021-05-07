@@ -117,10 +117,10 @@ const UserRegister = (props) => {
                 <p>Already have an account? Click <a href={"login"}>here</a> to go to login page.</p>
                 <p>(*) means the field is required</p>
                 <div className={"float-right"}>
-                    <Button className='ml-3 mb-3' variant="primary" type="submit">
+                    <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
                         Submit
                     </Button>
-                    <Button className='ml-3 mb-3' variant="secondary" type="reset">
+                    <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
                         Reset
                     </Button>
                 </div>

@@ -102,12 +102,14 @@ const StaffPreferenceEdit = (props) => {
                                   onChange={borrowableDay.onChange}/>
                     <Form.Label>Minimum day = 1 , Maximum day = 7</Form.Label>
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-                <Button variant="secondary" type="reset">
-                    Reset
-                </Button>
+                <div className={"float-right"}>
+                    <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                        Reset
+                    </Button>
+                </div>
             </Form>
         </Container>
     )

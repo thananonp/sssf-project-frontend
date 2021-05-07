@@ -45,10 +45,10 @@ const Book = () => {
     return (
         <Container>
             <img alt="Profile" className="profileImage" src={data.book.imageUrl}/>
-            <h1>{data.book.title}</h1>
+            <h1 className='mt-3'>{data.book.title}</h1>
             <br/>
             <p>{data.book.description}</p>
-            <ListGroup>
+            <ListGroup className='mb-3'>
                 <ListGroup.Item>Category<span
                     className="float-right">
                     {data.book.category
@@ -60,7 +60,7 @@ const Book = () => {
                 <ListGroup.Item>Written by<span
                     className="float-right">
                     {data.book.author
-                        ? <Link to={`/book/${data.book.author.id}`}> {data.book.author.name} </Link>
+                        ? <Link to={`/author/${data.book.author.id}`}> {data.book.author.name} </Link>
                         : "Deleted author"
                     }
                 </span>

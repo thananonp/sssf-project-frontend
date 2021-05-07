@@ -76,32 +76,39 @@ const StaffChangePassword = (props) => {
     return (
         <Container>
             <ReturnStaff/>
-            <h1>Staff Setting</h1>
+            <h1>Change Staff Password</h1>
             <Form onSubmit={updateInfo} onReset={resetForm}>
                 <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Old Password</Form.Label>
+                    <Form.Label>Old Password (*)</Form.Label>
                     <Form.Control required minLength="8" type="password" placeholder="Password"
                                   value={oldPassword.value}
                                   onChange={oldPassword.onChange}/>
+                    <Form.Text>Password must be at least 8 characters.</Form.Text>
+
                 </Form.Group>
                 <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label>Password (*)</Form.Label>
                     <Form.Control required minLength="8" type="password" placeholder="Password" value={password.value}
                                   onChange={password.onChange}/>
+                    <Form.Text>Password must be at least 8 characters.</Form.Text>
+
                 </Form.Group>
                 <Form.Group controlId="formBasicPasswordCheck">
-                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Label>Confirm Password (*)</Form.Label>
                     <Form.Control required minLength="8" type="password" placeholder="Password"
                                   value={confirmPassword.value}
                                   onChange={confirmPassword.onChange}/>
-                </Form.Group>
+                    <Form.Text>Password must be at least 8 characters at must match the password.</Form.Text>
 
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-                <Button variant="secondary" type="reset">
-                    Reset
-                </Button>
+                </Form.Group>
+                <div className={"float-right"}>
+                    <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                        Reset
+                    </Button>
+                </div>
             </Form>
         </Container>
     )

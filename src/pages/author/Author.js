@@ -18,6 +18,7 @@ const AUTHOR = gql`
             id
             title
             publisher{
+                id
                 name
             }
         }
@@ -33,13 +34,19 @@ const Author = () => {
     return (
         <Container>
             <img alt="Profile" className="profileImage" src={data.author.imageUrl}/>
-            <h1>Author: {data.author.name}</h1>
+            <h1 className='mt-3'>Author: {data.author.name}</h1>
             <h5>List of books in by this author</h5>
-            <ListGroup>
+            <ListGroup className='mb-3'>
                 {data.books.length ? data.books.map((book, index) => {
-                    return (
-                        <ListGroup.Item>{book.title + ' published by ' + book.publisher.name}</ListGroup.Item>
-                    )
+                    if(book.publisher){
+                        return (
+                            <ListGroup.Item><a href={`/book/${book.id}`}>{book.title}</a> published by <a href={`/publisher/${book.publisher.id}`}>{book.publisher.name}</a></ListGroup.Item>
+                        )
+                    }else {
+                        return (
+                            <ListGroup.Item>{book.title + ' published by deleted publisher'}</ListGroup.Item>
+                        )
+                    }
                 }) : <ListGroup.Item>No book by this author yet.</ListGroup.Item>}
             </ListGroup>
         </Container>

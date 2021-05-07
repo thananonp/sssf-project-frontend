@@ -2,7 +2,6 @@ import {useHistory} from "react-router";
 import {useField} from "../../hooks";
 import {Button, Container, Dropdown, Form, Modal, Pagination, Table} from "react-bootstrap";
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
 import {ErrorMessage, LoadingSpinner, ReturnStaff} from "../Components";
 import {gql} from "@apollo/client/core";
 import {useMutation, useQuery} from "@apollo/client";
@@ -138,6 +137,7 @@ const UserManage = (props) => {
 
         return (
             <Modal {...props}
+                className='font'
                    aria-labelledby="contained-modal-title-vcenter"
                    size="lg"
                    backdrop="static"
@@ -155,30 +155,31 @@ const UserManage = (props) => {
                     <Container>
                         <Form onReset={resetForm} onSubmit={handleSubmit}>
                             <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Email address</Form.Label>
+                                <Form.Label>Email address (*)</Form.Label>
                                 <Form.Control required type={email.type} placeholder="Enter email" value={email.value}
                                               onChange={email.onChange}/>
                             </Form.Group>
 
                             <Form.Group controlId="formBasicFirstName">
-                                <Form.Label>First Name</Form.Label>
+                                <Form.Label>First Name (*)</Form.Label>
                                 <Form.Control required type={firstName.type} placeholder="Enter first name"
                                               value={firstName.value}
                                               onChange={firstName.onChange}/>
                             </Form.Group>
 
                             <Form.Group controlId="formBasicSurname">
-                                <Form.Label>Last Name</Form.Label>
+                                <Form.Label>Last Name (*)</Form.Label>
                                 <Form.Control required type={lastName.type} placeholder="Enter last name"
                                               value={lastName.value}
                                               onChange={lastName.onChange}/>
                             </Form.Group>
-                            <div className="float-right">
-                                <Button variant="secondary" type="reset">
-                                    Reset
-                                </Button>
-                                <Button variant="primary" type="submit">
+                            <p>(*) means the field is required</p>
+                            <div className={"float-right"}>
+                                <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
                                     Submit
+                                </Button>
+                                <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                                    Reset
                                 </Button>
                             </div>
                         </Form>
@@ -221,18 +222,19 @@ const UserManage = (props) => {
                     <Container>
                         <Form onReset={resetForm} onSubmit={handleSubmit}>
                             <Form.Group controlId="formBasicPassword">
-                                <Form.Label>Password</Form.Label>
+                                <Form.Label>Password (*)</Form.Label>
                                 <Form.Text>The password must be more than 8 characters.</Form.Text>
                                 <Form.Control required minLength="8" type={password.type} placeholder="Password"
                                               value={password.value}
                                               onChange={password.onChange}/>
                             </Form.Group>
-                            <div className="float-right">
-                                <Button variant="secondary" type="reset">
-                                    Reset
-                                </Button>
-                                <Button variant="primary" type="submit">
+                            <p>(*) means the field is required</p>
+                            <div className={"float-right"}>
+                                <Button className='ml-3 mb-3' variant="outline-primary" type="submit">
                                     Submit
+                                </Button>
+                                <Button className='ml-3 mb-3' variant="outline-secondary" type="reset">
+                                    Reset
                                 </Button>
                             </div>
                         </Form>
@@ -291,25 +293,25 @@ const UserManage = (props) => {
                             <td>{user.firstName}</td>
                             <td>{user.lastName}</td>
                             <td>{user.email}</td>
-                            <td><Link onClick={() => {
+                            <td><Button variant="outline-warning" onClick={() => {
                                 setEditId(user.id)
                                 setModalShow(true)
                             }}>
                                 Edit
-                            </Link>
+                            </Button>
                             </td>
-                            <td><Link onClick={() => {
+                            <td><Button variant="outline-warning" onClick={() => {
                                 setEditId(user.id)
                                 setPasswordModalShow(true)
                             }}>
                                 Change Password
-                            </Link>
+                            </Button>
                             </td>
-                            <td><Link onClick={() =>
+                            <td><Button variant="outline-danger" onClick={() =>
                                 deleteUserFun(user.id, user.firstName)
                             }>
                                 Delete
-                            </Link>
+                            </Button>
                             </td>
                         </tr>
                     )
