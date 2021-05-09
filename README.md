@@ -6,6 +6,13 @@
 
 ## About
 
+### What have changed from the presentation
+1. The pagination now work in every table.
+2. Fix button and other element margin.
+3. Change the button to their outlined variant.
+4. Improve search page to include the number of result.
+5. Add the missing staff manage page.
+
 This project is made for server-side scripting service. This is the frontend part.
 
 ![img](picture/sssf-frontent.png)
